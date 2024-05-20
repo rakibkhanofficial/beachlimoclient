@@ -76,7 +76,7 @@ const FooterComponent = () => {
           <div className=" flex items-center justify-center gap-1 ">
             <TiArrowRepeatOutline />
 
-            <h1>Builder State</h1>
+            <h1>Beach Limo</h1>
           </div>
           <div className=" flex items-center justify-center gap-1 ">
             <h1>&copy;{currentYear} </h1>

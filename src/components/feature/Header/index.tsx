@@ -6,10 +6,10 @@ import {
   NavbarItem,
   Link,
   Button,
-  DropdownItem,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
+  // DropdownItem,
+  // DropdownTrigger,
+  // Dropdown,
+  // DropdownMenu,
 } from "@nextui-org/react";
 import {
   ChevronDown,
@@ -34,13 +34,26 @@ const HomeComponent = () => {
     user: <TagUser className="text-danger" fill="currentColor" size={30} />,
   };
 
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    const href = e.currentTarget.href;
+    const targetId = href.replace(/.*\#/, "");
+    const elem = document.getElementById(targetId);
+    if (elem) {
+      window.scrollTo({
+        top: elem.getBoundingClientRect().top + window.scrollY - 100,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <Navbar>
+    <Navbar className="bg-gray-100 text-black">
       <NavbarBrand>
-        <p className="font-bold text-inherit">Builder State</p>
+        <p className="font-bold text-inherit">Beach Limo</p>
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-        <Dropdown>
+        {/* <Dropdown>
           <NavbarItem>
             <DropdownTrigger>
               <Button
@@ -97,20 +110,30 @@ const HomeComponent = () => {
               +Supreme Support
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
         <NavbarItem>
-          <Link href="#" color="foreground">
-            Customers
+          <Link className="text-black" onClick={handleScroll} href="#home" color="foreground">
+            Home
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
+          <Link className="text-black" color="foreground" onClick={handleScroll} href="#brand">
+            Brands
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
-            About Us
+          <Link className="text-black" onClick={handleScroll} color="foreground" href="#services">
+            Services
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-black" onClick={handleScroll} color="foreground" href="#whychoose">
+            Why Choose
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-black" onClick={handleScroll} color="foreground" href="#download">
+            Why Choose
           </Link>
         </NavbarItem>
       </NavbarContent>
