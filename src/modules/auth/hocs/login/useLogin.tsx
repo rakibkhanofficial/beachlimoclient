@@ -70,7 +70,7 @@ export const useLogin = () => {
       },
     })
       .then(async (response) => {
-        const responseData = response?.data;
+        const responseData = response?.data?.user;
         if (responseData) {
           await signIn("credentials", {
             ...responseData,

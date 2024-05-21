@@ -29,24 +29,24 @@ const UserLogin = () => {
   } = useLogin();
 
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (session?.user) {
       // @ts-expect-error type error is not solved
-      if (session?.user?.role === "Customer") {
-        router.replace("/userdashboard");
+      if (session?.user?.isAdmin === "false") {
+        router.push("/userdashboard");
         // @ts-expect-error type error is not solved
-      } else if (session?.user?.role === "Admin") {
-        router.replace("/admindashboard");
+      } else if (session?.user?.isAdmin === "true") {
+        router.push("/admindashboard");
         // @ts-expect-error type error is not solved
-      } else if (session?.user?.role === "Service-man") {
-        router.replace("/servicemandashboard");
+      } else if (session?.user?.isAdmin === "Service-man") {
+        router.push("/servicemandashboard");
       }
     }
-  }, [status, session, router]);
+  }, [session, router]);
 
-  console.log(session)
+  console.log(session?.user)
 
   return (
     <div className=" w-full dark:bg-slate-900 dark:text-white bg-white text-black min-h-screen">
@@ -65,7 +65,7 @@ const UserLogin = () => {
               priority={true}
               style={{ width: "200px", height: "100px", objectFit: "contain" }}
             />
-            <h1 className=" text-2xl font-medium text-white ">Demo Register</h1>
+            <h1 className=" text-2xl font-medium text-white "> Register Here For Booking</h1>
           </div>
           <h1>
             {`Don't have account?`}
