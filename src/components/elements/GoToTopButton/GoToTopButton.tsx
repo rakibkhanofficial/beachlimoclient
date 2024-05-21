@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { FaRegArrowAltCircleUp } from "react-icons/fa";
-import { Button } from "@nextui-org/react";
-
 
 const GoToTopButton = () => {
   const [showButton, setShowButton] = useState(false);
@@ -29,11 +27,12 @@ const GoToTopButton = () => {
   return (
     <>
       {showButton && (
-        <Button
+        <button
+        className="bg-red-800 p-5 rounded-full fixed bottom-10 ml-10 hover:bg-green-800 "
           onClick={handleClick}
         >
           <FaRegArrowAltCircleUp fontSize="large" />
-        </Button>
+        </button>
       )}
     </>
   );
