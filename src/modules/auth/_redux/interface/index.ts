@@ -8,6 +8,7 @@ export interface IAuthReducer {
     // firstName: string;
     // lastName: string;
     username: string;
+    retypepassword: string
     // phone: string;
   };
 }

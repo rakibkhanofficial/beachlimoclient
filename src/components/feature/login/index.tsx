@@ -57,7 +57,7 @@ const UserLogin = () => {
         <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center">
           <div>
             <Image
-              src="/logo.png"
+              src="/BeachLimo.png"
               alt="Logo"
               width={0}
               height={0}

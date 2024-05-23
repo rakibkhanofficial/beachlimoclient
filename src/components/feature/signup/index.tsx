@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import Link from "next/link";
 import { Checkbox } from "@nextui-org/react";
 import { IoIosArrowForward } from "react-icons/io";
@@ -19,11 +19,13 @@ const UserSignUp = () => {
     signUpError,
     isVisible,
     password,
+    retypepassword,
     phone,
     firstname,
     lastname,
     username,
     toggleVisibility,
+    toggleVisibilityRetype,
     handleSignUp,
     isInvalidPassword,
     isInvalidusername,
@@ -34,10 +36,13 @@ const UserSignUp = () => {
     handleSignUpwithMicrosoft,
     isSubmitting,
     isSignup,
+    isVisibleretype,
   } = useSignup();
 
   const router = useRouter();
   const { data: session, status } = useSession();
+
+  const isPasswordNotMatched = retypepassword !== password;
 
   useEffect(() => {
     if (session?.user) {
@@ -54,7 +59,7 @@ const UserSignUp = () => {
     }
   }, [status, session, router]);
 
-  console.log(session)
+  console.log(session);
 
   return (
     <div className="w-full">
@@ -62,19 +67,21 @@ const UserSignUp = () => {
         <Link href="/">Go Back</Link>
       </div>
       <div className=" flex items-center justify-center pb-20">
-        <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center sm:min-w-max md:p-0">
+        <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center">
           <div>
             <Image
-              src="/logo.png"
+              src="/BeachLimo.png"
               alt="Logo"
               width={0}
               height={0}
               sizes="100vw"
               style={{ width: "200px", height: "100px", objectFit: "contain" }}
             />
-            <h1 className=" text-2xl font-medium text-black ">Demo Login</h1>
+            <h1 className=" text-2xl font-medium text-white ">
+              {" "}
+              Register Here For Booking
+            </h1>
           </div>
-
           <h1>
             {`have an account?`}
             <span className="pl-1">
@@ -108,30 +115,6 @@ const UserSignUp = () => {
               size="lg"
               handleChange={handleChangeRegisterInput}
             />
-            {/* <TextInput
-              type="text"
-              isInvalid={isInvalidLastName}
-              color={isInvalidLastName ? "danger" : "default"}
-              errorMessage={"Enter your Last Name"}
-              name="lastname"
-              variant="underlined"
-              label="Last Name"
-              value={lastname}
-              size="lg"
-              handleChange={handleChangeRegisterInput}
-            />
-            <TextInput
-              type="text"
-              isInvalid={isInvalidPhone}
-              color={isInvalidPhone ? "danger" : "default"}
-              errorMessage={"Enter your Phone Number"}
-              name="phone"
-              variant="underlined"
-              label="Phone Number"
-              value={phone}
-              size="lg"
-              handleChange={handleChangeRegisterInput}
-            /> */}
             <TextInput
               type="email"
               isInvalid={isInvalid}
@@ -145,7 +128,7 @@ const UserSignUp = () => {
               handleChange={handleChangeRegisterInput}
             />
             <TextInput
-              type={isInvalidPassword ? "text" : "password"}
+              type={isVisible ? "text" : "password"}
               label="Password"
               color={isInvalidPassword ? "danger" : "default"}
               isInvalid={isInvalidPassword}
@@ -169,6 +152,31 @@ const UserSignUp = () => {
                 </button>
               }
             />
+            <TextInput
+              type={isVisibleretype ? "text" : "password"}
+              label="Re-Type Password"
+              color={isInvalidPassword ? "danger" : "default"}
+              isInvalid={isInvalidPassword}
+              errorMessage="Please enter valid Password"
+              name="retypepassword"
+              variant="underlined"
+              value={retypepassword}
+              handleChange={handleChangeRegisterInput}
+              size="lg"
+              endContent={
+                <button
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibilityRetype}
+                >
+                  {isVisibleretype ? (
+                    <FaEye className="pointer-events-none text-2xl text-default-400" />
+                  ) : (
+                    <FaEyeSlash className="pointer-events-none text-2xl text-default-400" />
+                  )}
+                </button>
+              }
+            />
           </form>
           <div className="flex w-full">
             <Checkbox>Remember Me</Checkbox>
@@ -181,16 +189,20 @@ const UserSignUp = () => {
               !isInvalid &&
               !isInvalidPassword &&
               email !== "" &&
-              password !== ""
+              password !== "" &&
+              firstname !== "" &&
+              !isPasswordNotMatched
                 ? "bg-[#3f2de2] text-white"
                 : "cursor-not-allowed"
             }`}
             disabled={
               isSignup ||
               isInvalid ||
-              isInvalidPassword ||
-              email == "" ||
-              password == "" ||
+              (isInvalidPassword &&
+                firstname === "" &&
+                email == "" &&
+                password == "" &&
+                isPasswordNotMatched === false) ||
               isSubmitting
             }
             endContent={

@@ -16,11 +16,12 @@ import { useRouter } from "next/navigation";
 
 export const useSignup = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisibleretype, setIsVisibleRetype] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const { signUpError } = useAppSelector(
     (state) => state?.authReducer?.auth?.errors,
   );
-  const { email, password, phone, firstname, lastname, username } =
+  const { email, password, phone, firstname, lastname, username, retypepassword } =
     useAppSelector((state) => state?.authReducer?.auth?.registerInput);
 
   const isSubmitting = useAppSelector(
@@ -29,6 +30,7 @@ export const useSignup = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const toggleVisibility = () => setIsVisible(!isVisible);
+  const toggleVisibilityRetype = () => setIsVisibleRetype(!isVisibleretype);
 
   const validateUserName = (username: string) => {
     const hasUppercase = /[A-Z]/.test(username);
@@ -176,5 +178,8 @@ export const useSignup = () => {
     email,
     password,
     isSignup,
+    retypepassword,
+    toggleVisibilityRetype,
+    isVisibleretype
   };
 };
