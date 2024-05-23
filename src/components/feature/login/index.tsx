@@ -40,7 +40,7 @@ const UserLogin = () => {
       } else if (session?.user?.isAdmin === "true") {
         router.push("/admindashboard");
         // @ts-expect-error type error is not solved
-      } else if (session?.user?.isAdmin === "Service-man") {
+      } else if (session?.user?.isAdmin === "driver") {
         router.push("/servicemandashboard");
       }
     }
@@ -54,7 +54,7 @@ const UserLogin = () => {
         <Link href="/">Go Back</Link>
       </div>
       <div className=" flex items-center justify-center pb-20">
-        <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center sm:min-w-max md:p-0">
+        <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center">
           <div>
             <Image
               src="/logo.png"
@@ -65,7 +65,7 @@ const UserLogin = () => {
               priority={true}
               style={{ width: "200px", height: "100px", objectFit: "contain" }}
             />
-            <h1 className=" text-2xl font-medium text-white "> Register Here For Booking</h1>
+            <h1 className=" text-2xl font-medium text-white "> Log In Here For Booking</h1>
           </div>
           <h1>
             {`Don't have account?`}
@@ -80,10 +80,10 @@ const UserLogin = () => {
               type="text"
               isInvalid={isInvalid}
               color={isInvalid ? "danger" : "default"}
-              errorMessage={"Please enter email or Phone"}
+              errorMessage={"Please enter email"}
               name="emailorphone"
               variant="underlined"
-              label="Email Or Phone"
+              label="Email"
               value={emailorphone}
               size="lg"
               handleChange={handleChangeLogInput}
