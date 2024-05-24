@@ -10,11 +10,12 @@ import {
 import React from "react";
 import { useSession } from "next-auth/react";
 import UseLogout from "~@/modules/auth/hocs/logout";
+import { usePathname } from "next/navigation";
 
 export const UserDropdown = () => {
-  const { handleSignOut} = UseLogout()
+  const { handleSignOut } = UseLogout();
   const { data: session } = useSession();
-
+  const pathname = usePathname();
 
   return (
     <div>
@@ -59,12 +60,20 @@ export const UserDropdown = () => {
               key="profile"
               className="flex w-full flex-col items-start justify-start"
             >
-              <p>Signed in as</p>
-              <p>{session?.user?.email}</p>
+              <p className=" text-black dark:text-white ">Signed in as</p>
+              <p className=" text-black dark:text-white ">{session?.user?.email}</p>
             </DropdownItem>
-            <DropdownItem href="/profile" key="settings">
-              My Profile
-            </DropdownItem>
+            {pathname !== "/userdashboard" &&
+            pathname !== "/admindashboard" &&
+            session?.user?.isAdmin === "false" ? (
+              <DropdownItem href="/userdashboard" key="dashboard">
+                <p className=" text-black dark:text-white "> Go to Dashbaord</p>
+              </DropdownItem>
+            ) : (
+              <DropdownItem href="/admindashboard" key="dashboard">
+                <p className=" text-black dark:text-white "> Go to Dashbaord</p>
+              </DropdownItem>
+            )}
             <DropdownItem
               onClick={handleSignOut}
               key="logout"

@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 import Image from "next/image";
 import { Button, Spinner } from "@nextui-org/react";
 import Link from "next/link";
@@ -10,7 +9,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import TextInput from "../../../components/elements/input";
 import { useLogin } from "../../../modules/auth/hocs/login/useLogin";
 import { handleChangeLogInput } from "../../../modules/auth/_redux/actions/login-auth-actions";
-import { useSession } from "next-auth/react";
 
 const UserLogin = () => {
   const {
@@ -27,26 +25,6 @@ const UserLogin = () => {
     isSubmitting,
     isLogin,
   } = useLogin();
-
-  const router = useRouter();
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    if (session?.user) {
-      // @ts-expect-error type error is not solved
-      if (session?.user?.isAdmin === "false") {
-        router.push("/userdashboard");
-        // @ts-expect-error type error is not solved
-      } else if (session?.user?.isAdmin === "true") {
-        router.push("/admindashboard");
-        // @ts-expect-error type error is not solved
-      } else if (session?.user?.isAdmin === "driver") {
-        router.push("/servicemandashboard");
-      }
-    }
-  }, [session, router]);
-
-  console.log(session?.user)
 
   return (
     <div className=" w-full dark:bg-slate-900 dark:text-white bg-white text-black min-h-screen">

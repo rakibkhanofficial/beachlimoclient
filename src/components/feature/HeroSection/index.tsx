@@ -1,18 +1,19 @@
 "use client";
 import React, { useContext } from "react";
-import Search from "../Search";
+// import Search from "../Search";
 import Image from "next/image";
 import { motion, easeInOut } from "framer-motion";
-import { SearchContext } from "~@/context/search";
+// import { SearchContext } from "~@/context/search";
 import { fadeIn } from "../../../../variant";
+import OurService from "../OurService";
 
 const HeroSection = () => {
-  const searchActive = useContext(SearchContext);
+  // const searchActive = useContext(SearchContext);
   return (
-    <section className="h-screen xl:h-[90vh] bg-[#b2b7c2]/10 " id="home">
-      <div className="container mx-auto h-full ">
-        <div className="flex flex-col xl:flex-row justify-center items-center xl:justify-start h-full">
-          <div className="text-center xl:max-w-xl xl:text-left mt-16 xl:mt-0">
+    <section className="h-screen xl:h-[70vh] bg-[#b2b7c2]/10 " id="home">
+      <div className="container mx-auto ">
+        <div className="flex flex-col xl:flex-row justify-center items-center xl:justify-center">
+          <div className="text-center xl:max-w-xl xl:text-left xl:mt-0">
             <motion.h1
               variants={fadeIn("down", 0.2)}
               initial="hidden"
@@ -77,8 +78,11 @@ const HeroSection = () => {
             />
           </motion.div>
         </div>
+        <div className=" mt-10 ">
+        <OurService/>
+        </div>
       </div>
-      {searchActive ? (
+      {/* {searchActive ? (
         <motion.div
           initial={{ y: "-100%" }}
           animate={{ y: 0 }}
@@ -98,7 +102,7 @@ const HeroSection = () => {
             <Search />
           </motion.div>
         </div>
-      )}
+      )} */}
     </section>
   );
 };

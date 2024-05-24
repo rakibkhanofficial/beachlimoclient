@@ -1,12 +1,12 @@
 import Head from "next/head";
 import FooterComponent from "~@/components/feature/Footer";
-import HomeComponent from "~@/components/feature/Header";
+import HeaderLandingPage from "~@/components/feature/Header";
 import metaData from "../../public/meta.json";
 import Main from "~@/Layouts/Main";
 import GoToTopButton from "~@/components/elements/GoToTopButton/GoToTopButton";
 import WhatsAppChatbot from "~@/components/feature/WhatsAppChatbot/WhatsAppChatbot";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <Head>
@@ -41,7 +41,7 @@ export default function Home() {
           />
         </Head>
       </Head>
-      <HomeComponent />
+      <HeaderLandingPage />
       <main>
         <Main />
         <GoToTopButton />
@@ -50,4 +50,6 @@ export default function Home() {
       <FooterComponent />
     </>
   );
-}
+};
+
+export default Home;
