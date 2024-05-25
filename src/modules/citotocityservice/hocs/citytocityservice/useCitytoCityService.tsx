@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
-import { handleCitytoCityInputChange } from "../../_redux/actions/citytocityActions";
+import { handleCitytoCityInputChange, handleCitytocityStepNext } from "../../_redux/actions/citytocityActions";
 
 const UseCityToCity = () => {
   const dispatch = useAppDispatch();
@@ -21,11 +21,17 @@ const UseCityToCity = () => {
     adressdescription = "",
   } = cityToCityInput || {};
 
-  console.log("distance",distance)
-
   const handleInputChange = (name: string, value: string) => {
     dispatch(handleCitytoCityInputChange(name, value));
   };
+
+  const step: number = useAppSelector(
+    (state) => state?.cityTocityServiceReducer?.citytocity?.step,
+  );
+
+  const handleCitytoCityNext = () => {
+    dispatch(handleCitytocityStepNext(step + 1));
+  }
 
   return {
     handleInputChange,
@@ -33,7 +39,9 @@ const UseCityToCity = () => {
     pickupAddress,
     dropoffLocation,
     dropoffAddress,
+    distance,
     adress,
+    handleCitytoCityNext
   };
 };
 
