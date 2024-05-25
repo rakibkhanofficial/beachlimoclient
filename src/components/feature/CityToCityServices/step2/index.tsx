@@ -9,6 +9,7 @@ const LocationSelection = () => {
 
   return (
     <div className=" text-black dark:text-white ">
+      <h1 className=" my-10 text-xl text-center font-semibold "> Select Your Pickup and DropOff Location</h1>
       <div>
         <div className=" my-5 grid grid-cols-2 items-center justify-center gap-4 px-10 py-5 ">
           <div>
@@ -35,9 +36,15 @@ const LocationSelection = () => {
             />
           </div>
         </div>
-        <Button color="success" onClick={handleCitytoCityNext}>
+        <div className=" flex items-center justify-center ">
+        <Button
+          className=" w-[40%] "
+          color="success"
+          onClick={handleCitytoCityNext}
+        >
           Next
         </Button>
+      </div>
       </div>
     </div>
   );

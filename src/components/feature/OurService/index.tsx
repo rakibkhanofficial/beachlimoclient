@@ -11,7 +11,7 @@ const OurService = () => {
       </h1>
       <div className=" grid grid-cols-4 justify-center items-center my-4 px-10 py-3 gap-10 ">
         {Servicedata?.map((data, index) => (
-          <div className="border border-gray-400 cursor-pointer rounded-xl" key={index}>
+          <div className="border hover:bg-gray-200 border-gray-400 cursor-pointer rounded-xl" key={index}>
             <Link
               className=" my-2 flex flex-col items-center justify-center p-2 "
               href={data?.url}
