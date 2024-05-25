@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/useCitytoCityService";
 import useGoogleMaps from "./googlemaps";
 
-/// <reference types="@types/google.maps" />
-
 const GoogleMap: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const googleMaps = useGoogleMaps();
@@ -22,6 +20,8 @@ const GoogleMap: React.FC = () => {
         zoom: zoomLevel,
       });
 
+      const directionsService = new googleMaps.DirectionsService();
+
       const handleMapClick = (event: google.maps.MapMouseEvent) => {
         if (event.latLng) {
           const clickedLocation = event.latLng.toJSON();
@@ -33,7 +33,7 @@ const GoogleMap: React.FC = () => {
               const locationLink = `https://maps.app.goo.gl/?q=${encodeURIComponent(formattedAddress)}`;
 
               if (isPickup) {
-                if (pickupMarker) pickupMarker.setMap(null); // Remove the old marker if exists
+                if (pickupMarker) pickupMarker.setMap(null);
                 const marker = new googleMaps.Marker({
                   position: clickedLocation,
                   map: map,
@@ -43,7 +43,7 @@ const GoogleMap: React.FC = () => {
                 handleInputChange("pickupLocation", locationLink);
                 handleInputChange("pickupAddress", formattedAddress);
               } else {
-                if (dropoffMarker) dropoffMarker.setMap(null); // Remove the old marker if exists
+                if (dropoffMarker) dropoffMarker.setMap(null);
                 const marker = new googleMaps.Marker({
                   position: clickedLocation,
                   map: map,
@@ -52,8 +52,35 @@ const GoogleMap: React.FC = () => {
                 setDropoffMarker(marker);
                 handleInputChange("dropoffLocation", locationLink);
                 handleInputChange("dropoffAddress", formattedAddress);
+
+                // Calculate and display route between pickup and drop-off locations
+                if (pickupMarker) {
+                  const pickupLatLng = pickupMarker.getPosition();
+                  if (pickupLatLng) {
+                    directionsService.route(
+                      {
+                        origin: pickupLatLng,
+                        destination: clickedLocation,
+                        travelMode: googleMaps.TravelMode.DRIVING,
+                      },
+                      (result, status) => {
+                        if (status === googleMaps.DirectionsStatus.OK) {
+                          const route = result.routes[0];
+                          const distance = route.legs[0].distance?.text;
+                          handleInputChange("distance", distance || "");
+                          const directionsRenderer = new googleMaps.DirectionsRenderer({
+                            map,
+                            directions: result,
+                          });
+                        } else {
+                          console.error("Directions request failed due to " + status);
+                        }
+                      }
+                    );
+                  }
+                }
               }
-              setIsPickup(!isPickup); // Toggle between pickup and drop-off
+              setIsPickup(!isPickup);
             } else {
               console.error("No results found");
             }
@@ -61,7 +88,11 @@ const GoogleMap: React.FC = () => {
         }
       };
 
-      map.addListener('click', handleMapClick);
+      const clickListener = map.addListener('click', handleMapClick);
+
+      return () => {
+        clickListener.remove(); // Remove the click listener
+      };
     }
   }, [googleMaps, handleInputChange, isPickup, pickupMarker, dropoffMarker]);
 

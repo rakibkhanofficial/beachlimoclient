@@ -16,9 +16,12 @@ const UseCityToCity = () => {
     pickupAddress = "",
     dropoffLocation = "",
     dropoffAddress = "",
+    distance = "",
     adress = "",
     adressdescription = "",
   } = cityToCityInput || {};
+
+  console.log(distance)
 
   const handleInputChange = (name: string, value: string) => {
     dispatch(handleCitytoCityInputChange(name, value));

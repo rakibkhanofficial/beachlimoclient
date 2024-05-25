@@ -8,6 +8,7 @@ export interface ICitytoCityCreateReducer {
       pickupAddress: string,
       dropoffLocation: string,
       dropoffAddress: string,
+      distance: string
       adress: string,
       adressdescription: string,
     };

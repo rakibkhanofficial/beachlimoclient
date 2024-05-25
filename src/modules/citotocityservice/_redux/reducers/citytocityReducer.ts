@@ -11,6 +11,7 @@ const initialState: ICitytoCityCreateReducer = {
     pickupAddress: "",
     dropoffLocation: "",
     dropoffAddress: "",
+    distance: "",
     adress: "",
     adressdescription: "",
   },
