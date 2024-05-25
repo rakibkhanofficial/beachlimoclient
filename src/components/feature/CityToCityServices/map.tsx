@@ -3,30 +3,29 @@ import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/u
 
 const GoogleMap: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [googleMaps, setGoogleMaps] = useState(null);
+  const [googleMaps, setGoogleMaps] = useState<any>(null);
   const { handleInputChange } = UseCityToCity();
   const [pickupMarker, setPickupMarker] = useState<google.maps.Marker | null>(null);
   const [dropoffMarker, setDropoffMarker] = useState<google.maps.Marker | null>(null);
   const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
-console.log(directionsRenderer)
 
-useEffect(() => {
-  const initGoogleMaps = () => {
-    if (!window.google) {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
-      document.head.append(script);
+  useEffect(() => {
+    const initGoogleMaps = () => {
+      if (!window.google) {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
+        document.head.append(script);
 
-      script.addEventListener('load', () => {
+        script.addEventListener('load', () => {
+          setGoogleMaps(window.google.maps);
+        });
+      } else {
         setGoogleMaps(window.google.maps);
-      });
-    } else {
-      setGoogleMaps(window.google.maps);
-    }
-  };
+      }
+    };
 
-  initGoogleMaps();
-}, []);
+    initGoogleMaps();
+  }, []);
 
   useEffect(() => {
     if (googleMaps && mapRef.current) {
@@ -47,23 +46,36 @@ useEffect(() => {
               const formattedAddress = results[0].formatted_address;
               const locationLink = `https://maps.app.goo.gl/?q=${encodeURIComponent(formattedAddress)}`;
 
-              const marker = new googleMaps.Marker({
-                position: clickedLocation,
-                map: map,
-              });
-
               if (!pickupMarker) {
+                const marker = new googleMaps.Marker({
+                  position: clickedLocation,
+                  map: map,
+                  icon: {
+                    url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png', // Green marker icon
+                  }
+                });
                 setPickupMarker(marker);
                 handleInputChange("pickupLocation", locationLink);
                 handleInputChange("pickupAddress", formattedAddress);
               } else if (!dropoffMarker) {
+                const marker = new googleMaps.Marker({
+                  position: clickedLocation,
+                  map: map,
+                  icon: {
+                    url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red marker icon
+                  }
+                });
                 setDropoffMarker(marker);
                 handleInputChange("dropoffLocation", locationLink);
                 handleInputChange("dropoffAddress", formattedAddress);
 
+                if (directionsRenderer) {
+                  directionsRenderer.setMap(null); // Clear existing directions
+                }
+
                 directionsService.route(
                   {
-                    origin: pickupMarker.getPosition()!,
+                    origin: pickupMarker.getPosition(),
                     destination: clickedLocation,
                     travelMode: googleMaps.TravelMode.DRIVING,
                   },
@@ -72,6 +84,9 @@ useEffect(() => {
                       const renderer = new googleMaps.DirectionsRenderer({
                         map,
                         directions: result,
+                        polylineOptions: {
+                          strokeColor: 'blue', // Blue direction line
+                        }
                       });
                       setDirectionsRenderer(renderer);
 
@@ -91,11 +106,11 @@ useEffect(() => {
         }
       };
 
-      const clickListener = googleMaps.event?.addListener(map, 'click', handleMapClick);
+      const clickListener = googleMaps.event.addListener(map, 'click', handleMapClick);
 
       return () => {
         if (clickListener) {
-          googleMaps.event?.removeListener(clickListener);
+          googleMaps.event.removeListener(clickListener);
         }
       };
     }
