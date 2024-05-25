@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/useCitytoCityService";
 import useGoogleMaps from "./googlemaps";
+import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/useCitytoCityService";
 
 const GoogleMap: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -8,6 +8,7 @@ const GoogleMap: React.FC = () => {
   const { handleInputChange } = UseCityToCity();
   const [pickupMarker, setPickupMarker] = useState<google.maps.Marker | null>(null);
   const [dropoffMarker, setDropoffMarker] = useState<google.maps.Marker | null>(null);
+  const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
   const [isPickup, setIsPickup] = useState(true);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const GoogleMap: React.FC = () => {
 
       const directionsService = new googleMaps.DirectionsService();
 
-      const handleMapClick = (event: google.maps.MapMouseEvent) => {
+      const handleMapClick = (event: google.maps.MouseEvent) => {
         if (event.latLng) {
           const clickedLocation = event.latLng.toJSON();
           const geocoder = new googleMaps.Geocoder();
@@ -65,13 +66,18 @@ const GoogleMap: React.FC = () => {
                       },
                       (result, status) => {
                         if (status === googleMaps.DirectionsStatus.OK) {
+                          if (directionsRenderer) {
+                            directionsRenderer.setDirections(result);
+                          } else {
+                            const renderer = new googleMaps.DirectionsRenderer({
+                              map,
+                              directions: result,
+                            });
+                            setDirectionsRenderer(renderer);
+                          }
                           const route = result.routes[0];
                           const distance = route.legs[0].distance?.text;
                           handleInputChange("distance", distance || "");
-                          const directionsRenderer = new googleMaps.DirectionsRenderer({
-                            map,
-                            directions: result,
-                          });
                         } else {
                           console.error("Directions request failed due to " + status);
                         }
@@ -88,13 +94,17 @@ const GoogleMap: React.FC = () => {
         }
       };
 
-      const clickListener = map.addListener('click', handleMapClick);
+      const clickListener = googleMaps.event && googleMaps.event.addListener
+        ? googleMaps.event.addListener(map, 'click', handleMapClick)
+        : null;
 
       return () => {
-        clickListener.remove(); // Remove the click listener
+        if (clickListener && googleMaps.event && googleMaps.event.removeListener) {
+          googleMaps.event.removeListener(clickListener);
+        }
       };
     }
-  }, [googleMaps, handleInputChange, isPickup, pickupMarker, dropoffMarker]);
+  }, [googleMaps, handleInputChange, isPickup, pickupMarker, dropoffMarker, directionsRenderer]);
 
   return (
     <div ref={mapRef} className="h-[450px] w-full rounded-xl"></div>

@@ -21,7 +21,7 @@ const UseCityToCity = () => {
     adressdescription = "",
   } = cityToCityInput || {};
 
-  console.log(distance)
+  console.log("distance",distance)
 
   const handleInputChange = (name: string, value: string) => {
     dispatch(handleCitytoCityInputChange(name, value));
