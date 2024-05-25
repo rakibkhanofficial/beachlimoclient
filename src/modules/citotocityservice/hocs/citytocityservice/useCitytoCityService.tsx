@@ -12,7 +12,10 @@ const UseCityToCity = () => {
     branchname = "",
     city = "",
     area = "",
-    maplink = "",
+    pickupLocation = "",
+    pickupAddress = "",
+    dropoffLocation = "",
+    dropoffAddress = "",
     adress = "",
     adressdescription = "",
   } = cityToCityInput || {};
@@ -23,7 +26,10 @@ const UseCityToCity = () => {
 
   return {
     handleInputChange,
-    maplink,
+    pickupLocation,
+    pickupAddress,
+    dropoffLocation,
+    dropoffAddress,
     adress,
   };
 };

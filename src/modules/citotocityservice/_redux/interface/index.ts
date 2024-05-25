@@ -4,7 +4,10 @@ export interface ICitytoCityCreateReducer {
       branchname: string,
       city: string,
       area: string,
-      maplink: string,
+      pickupLocation: string,
+      pickupAddress: string,
+      dropoffLocation: string,
+      dropoffAddress: string,
       adress: string,
       adressdescription: string,
     };
