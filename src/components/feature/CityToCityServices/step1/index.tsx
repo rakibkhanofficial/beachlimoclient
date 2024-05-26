@@ -6,20 +6,9 @@ import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/u
 import { MdArrowBackIos } from "react-icons/md";
 import Link from "next/link";
 
-type selectedCarType = {
-  Carname: string;
-  image: string;
-};
-
 const CarSelection = () => {
-  const { handleCitytoCityNext } = UseCityToCity();
-  const [selectedCar, setSelectedCar] = useState<selectedCarType | null>(null);
-
-  const handleCarSelection = (car: selectedCarType) => {
-    setSelectedCar(car);
-  };
-
-  console.log(selectedCar);
+  const { handleCitytoCityNext, handleSelectedcar, SelectedCarData } =
+    UseCityToCity();
 
   return (
     <div className="w-full">
@@ -40,11 +29,11 @@ const CarSelection = () => {
           <div
             key={index}
             className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border border-gray-400 py-3 ${
-              selectedCar?.Carname === data.Carname
+              SelectedCarData?.Carname === data.Carname
                 ? "bg-gray-200 dark:bg-slate-800"
                 : "hover:bg-gray-200 dark:hover:bg-zinc-800"
             }`}
-            onClick={() => handleCarSelection(data)}
+            onClick={() => handleSelectedcar(data)}
           >
             <Image
               width={200}
@@ -61,9 +50,9 @@ const CarSelection = () => {
       </div>
       <div className="flex items-center justify-center">
         <Button
-          className={`w-[40%] ${!selectedCar ? "cursor-not-allowed bg-gray-100 text-black" : " bg-blue-800 text-white "}`}
+          className={`w-[40%] ${!SelectedCarData ? "cursor-not-allowed bg-gray-100 text-black" : " bg-blue-800 text-white "}`}
           onClick={handleCitytoCityNext}
-          isDisabled={!selectedCar}
+          isDisabled={!SelectedCarData}
         >
           Next
         </Button>

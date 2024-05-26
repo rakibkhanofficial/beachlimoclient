@@ -9,6 +9,7 @@ import { themeRootReducer } from "../reducers/counters/themeReducer/_themeRootRe
 import { authRootReducer } from "../../modules/auth/_redux/reducers/_authRootreducer";
 import { loginauthRootReducer } from "../../modules/auth/_redux/reducers/_loginauthRootreducer";
 import { citytocityRootReducer } from "~@/modules/citotocityservice/_redux/reducers/citytocityRootReducer";
+import { selectedCarDataRootReducer } from "~@/modules/citotocityservice/_redux/reducers/selectedcarrootreducer";
 
 // Define the RootState type correctly
 export type RootState = ReturnType<typeof rootReducer>;
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   loginauthReducer: combineReducers(loginauthRootReducer),
   theme: combineReducers(themeRootReducer),
   cityTocityServiceReducer: combineReducers(citytocityRootReducer),
+  selectedCarDataReducer: combineReducers(selectedCarDataRootReducer)
   // Add more modules as needed
 });
 
