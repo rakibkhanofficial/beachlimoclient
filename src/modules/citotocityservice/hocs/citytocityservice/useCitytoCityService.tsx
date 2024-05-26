@@ -33,6 +33,10 @@ const UseCityToCity = () => {
     dispatch(handleCitytocityStepNext(step + 1));
   }
 
+  const handleCitytoCityBack = () => {
+    dispatch(handleCitytocityStepNext(step - 1));
+  }
+
   return {
     handleInputChange,
     pickupLocation,
@@ -41,7 +45,8 @@ const UseCityToCity = () => {
     dropoffAddress,
     distance,
     adress,
-    handleCitytoCityNext
+    handleCitytoCityNext,
+    handleCitytoCityBack
   };
 };
 

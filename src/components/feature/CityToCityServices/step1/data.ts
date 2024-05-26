@@ -34,7 +34,7 @@ export const Cardata = [
   },
   {
     id: 4,
-    Carname: "GMC Yukon XL ",
+    Carname: "GMC Yukon XL 2012 ",
     Model: "2012",
     image: "/carimages/GMCYoukon2012.png",
     perhourPrice: 60,
