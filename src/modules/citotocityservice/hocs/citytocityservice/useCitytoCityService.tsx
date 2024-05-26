@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
 import { handleCitytoCityInputChange, handleCitytocityStepNext, handleSelectedcarData } from "../../_redux/actions/citytocityActions";
-import { useState } from "react";
 
 type selectedCarType = {
   Carname: string;
@@ -16,7 +15,6 @@ const UseCityToCity = () => {
     (state) =>
       state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
-  console.log("selected car",SelectedCarData)
 
   const cityToCityInput = useAppSelector(
     (state) =>
@@ -56,6 +54,12 @@ const UseCityToCity = () => {
     dispatch(handleCitytocityStepNext(step - 1));
   }
 
+  // Remove 'km' and convert the distance to a number
+  const numericDistance = parseFloat(distance.replace(' km', ''));
+
+  const FarePriceCalculationBykilometer = (numericDistance * SelectedCarData.perKiloPrice).toString();
+
+
   return {
     handleInputChange,
     pickupLocation,
@@ -67,7 +71,8 @@ const UseCityToCity = () => {
     handleCitytoCityNext,
     handleCitytoCityBack,
     handleSelectedcar,
-    SelectedCarData
+    SelectedCarData,
+    FarePriceCalculationBykilometer
   };
 };
 

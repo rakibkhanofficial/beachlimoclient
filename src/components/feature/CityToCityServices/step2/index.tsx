@@ -11,6 +11,7 @@ const LocationSelection = () => {
     distance,
     handleCitytoCityNext,
     handleCitytoCityBack,
+    FarePriceCalculationBykilometer
   } = UseCityToCity();
 
   return (
@@ -52,7 +53,13 @@ const LocationSelection = () => {
               label="Distance"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
-              value={distance}
+              value={(distance.replace(' km', ''))}
+            />
+            <Input
+              label="Fare Price"
+              placeholder="Select Pick Up Adress and Drop Off Adress From Map"
+              className="text-black dark:text-white"
+              value={FarePriceCalculationBykilometer !== "NaN" ?  FarePriceCalculationBykilometer : "Select Location"}
             />
           </div>
         </div>
@@ -60,6 +67,7 @@ const LocationSelection = () => {
           <Button
             className=" w-[40%] "
             color="success"
+            isDisabled={distance === ""}
             onClick={handleCitytoCityNext}
           >
             Next

@@ -30,7 +30,7 @@ const GoogleMap: React.FC = () => {
   useEffect(() => {
     if (googleMaps && mapRef.current) {
       const map = new googleMaps.Map(mapRef.current, {
-        center: { lat: 23.7697, lng: 90.4103 },
+        center: { lat: 28.5383, lng: -81.3792 },
         zoom: 14,
       });
 
