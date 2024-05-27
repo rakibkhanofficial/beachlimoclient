@@ -1,19 +1,22 @@
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
-import { handleCitytoCityInputChange, handleCitytocityStepNext, handleSelectedcarData } from "../../_redux/actions/citytocityActions";
+import {
+  handleCitytoCityInputChange,
+  handleCitytocityStepNext,
+  handleSelectedcarData,
+} from "../../_redux/actions/citytocityActions";
 
 type selectedCarType = {
   Carname: string;
   image: string;
-  Model: string
-  perKiloPrice: number
+  Model: string;
+  perKiloPrice: number;
 };
 
 const UseCityToCity = () => {
   const dispatch = useAppDispatch();
 
   const SelectedCarData = useAppSelector(
-    (state) =>
-      state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
+    (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
 
   const cityToCityInput = useAppSelector(
@@ -27,6 +30,8 @@ const UseCityToCity = () => {
     area = "",
     pickupLocation = "",
     pickupAddress = "",
+    pickupdate = "",
+    pickuptime = "",
     dropoffLocation = "",
     dropoffAddress = "",
     distance = "",
@@ -38,9 +43,9 @@ const UseCityToCity = () => {
     dispatch(handleCitytoCityInputChange(name, value));
   };
 
-  const handleSelectedcar = (value:selectedCarType) => {
-    dispatch(handleSelectedcarData(value))
-  }
+  const handleSelectedcar = (value: selectedCarType) => {
+    dispatch(handleSelectedcarData(value));
+  };
 
   const step: number = useAppSelector(
     (state) => state?.cityTocityServiceReducer?.citytocity?.step,
@@ -48,22 +53,28 @@ const UseCityToCity = () => {
 
   const handleCitytoCityNext = () => {
     dispatch(handleCitytocityStepNext(step + 1));
-  }
+  };
 
   const handleCitytoCityBack = () => {
     dispatch(handleCitytocityStepNext(step - 1));
-  }
+  };
+
+  console.log("pickupdate", pickupdate);
+  console.log("pickuptime", pickuptime);
 
   // Remove 'km' and convert the distance to a number
-  const numericDistance = parseFloat(distance.replace(' km', ''));
+  const numericDistance = parseFloat(distance.replace(" km", ""));
 
-  const FarePriceCalculationBykilometer = (numericDistance * SelectedCarData.perKiloPrice).toString();
-
+  const FarePriceCalculationBykilometer = (
+    numericDistance * SelectedCarData.perKiloPrice
+  ).toString();
 
   return {
     handleInputChange,
     pickupLocation,
     pickupAddress,
+    pickupdate,
+    pickuptime,
     dropoffLocation,
     dropoffAddress,
     distance,
@@ -72,7 +83,7 @@ const UseCityToCity = () => {
     handleCitytoCityBack,
     handleSelectedcar,
     SelectedCarData,
-    FarePriceCalculationBykilometer
+    FarePriceCalculationBykilometer,
   };
 };
 

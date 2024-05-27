@@ -9,6 +9,8 @@ const initialState: ICitytoCityCreateReducer = {
     area: "",
     pickupLocation: "",
     pickupAddress: "",
+    pickupdate: "",
+    pickuptime: "",
     dropoffLocation: "",
     dropoffAddress: "",
     distance: "",

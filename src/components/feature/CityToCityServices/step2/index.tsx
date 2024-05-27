@@ -3,14 +3,18 @@ import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/u
 import { Button, Input, TimeInput, DatePicker } from "@nextui-org/react";
 import { MdArrowBackIos } from "react-icons/md";
 import Googlemap from "./googlemap";
+import { CalendarDate, Time } from "@internationalized/date";
 
 const LocationSelection = () => {
   const {
     pickupAddress,
     dropoffAddress,
+    pickupdate,
+    pickuptime,
     distance,
     handleCitytoCityNext,
     handleCitytoCityBack,
+    handleInputChange,
     FarePriceCalculationBykilometer,
   } = UseCityToCity();
 
@@ -65,8 +69,21 @@ const LocationSelection = () => {
                   : "Select Location"
               }
             />
-            <TimeInput label="Pick Up Time" />
-            <DatePicker label="Birth date" className="w-full" />
+            <DatePicker
+              // value={new CalendarDate(pickupdate, pickupdate, pickupdate)}
+              onChange={(date) =>
+                handleInputChange("pickupdate", date?.toString())
+              }
+              label="Pick Up Date"
+              className="w-full"
+            />
+            <TimeInput
+              // value={new Time(pickuptime, pickuptime)}
+              onChange={(time) =>
+                handleInputChange("pickuptime", time?.toString())
+              }
+              label="Pick Up Time"
+            />
           </div>
         </div>
         <div className=" flex items-center justify-center ">
