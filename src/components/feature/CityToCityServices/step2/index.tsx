@@ -53,7 +53,7 @@ const LocationSelection = () => {
               label="Distance"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
-              value={distance.replace(" km", "")}
+              value={distance}
             />
             <Input
               label="Fare Price"
