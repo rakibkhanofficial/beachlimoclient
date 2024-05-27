@@ -16,7 +16,7 @@ const initialState: IAuthReducer = {
   errors: "",
 };
 
-const authReducer = (state = initialState, action: AnyAction) => {
+const RegisterauthReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case Types.CHANGE_REGISTER_INPUT:
       const registerInput = { ...state.registerInput };
@@ -36,4 +36,4 @@ const authReducer = (state = initialState, action: AnyAction) => {
   return state;
 };
 
-export default authReducer;
+export default RegisterauthReducer;

@@ -14,15 +14,16 @@ import { endPoints } from "../../../../utils/api/route";
 export const useLogin = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLogin, setIslogin] = useState(false);
+  
   const { loginError } = useAppSelector(
-    (state) => state?.loginauthReducer?.auth?.errors,
+    (state) => state?.loginauthReducer?.loginauth?.errors,
   );
   const { emailorphone, password } = useAppSelector(
-    (state) => state?.loginauthReducer?.auth?.loginInput,
+    (state) => state?.loginauthReducer?.loginauth?.loginInput,
   );
   // const { data: session } = useSession();
   const isSubmitting = useAppSelector(
-    (state) => state?.authReducer?.auth?.isSubmitting,
+    (state) => state?.loginauthReducer?.loginauth?.isSubmitting,
   );
   const dispatch = useAppDispatch();
   // const router = useRouter();

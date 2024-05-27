@@ -1,7 +1,7 @@
 import React from "react";
 import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/useCitytoCityService";
 import GoogleMap from "./map";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, TimeInput, DatePicker } from "@nextui-org/react";
 import { MdArrowBackIos } from "react-icons/md";
 
 const LocationSelection = () => {
@@ -11,7 +11,7 @@ const LocationSelection = () => {
     distance,
     handleCitytoCityNext,
     handleCitytoCityBack,
-    FarePriceCalculationBykilometer
+    FarePriceCalculationBykilometer,
   } = UseCityToCity();
 
   return (
@@ -20,7 +20,7 @@ const LocationSelection = () => {
         title="go back"
         type="button"
         onClick={handleCitytoCityBack}
-        className=" flex justify-center items-center gap-2 font-medium text-black hover:text-blue-700 dark:text-white "
+        className=" flex items-center justify-center gap-2 font-medium text-black hover:text-blue-700 dark:text-white "
       >
         <span>
           <MdArrowBackIos />
@@ -53,14 +53,20 @@ const LocationSelection = () => {
               label="Distance"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
-              value={(distance.replace(' km', ''))}
+              value={distance.replace(" km", "")}
             />
             <Input
               label="Fare Price"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
-              value={FarePriceCalculationBykilometer !== "NaN" ?  FarePriceCalculationBykilometer : "Select Location"}
+              value={
+                FarePriceCalculationBykilometer !== "NaN"
+                  ? FarePriceCalculationBykilometer
+                  : "Select Location"
+              }
             />
+            <TimeInput label="Pick Up Time" />
+            <DatePicker label="Birth date" className="w-full" />
           </div>
         </div>
         <div className=" flex items-center justify-center ">

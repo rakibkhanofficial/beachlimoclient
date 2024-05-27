@@ -6,7 +6,7 @@ import {
   type UnknownAction,
 } from "@reduxjs/toolkit";
 import { themeRootReducer } from "../reducers/counters/themeReducer/_themeRootReducer";
-import { authRootReducer } from "../../modules/auth/_redux/reducers/_authRootreducer";
+import { RegisterauthRootReducer } from "../../modules/auth/_redux/reducers/_authRootreducer";
 import { loginauthRootReducer } from "../../modules/auth/_redux/reducers/_loginauthRootreducer";
 import { citytocityRootReducer } from "~@/modules/citotocityservice/_redux/reducers/citytocityRootReducer";
 import { selectedCarDataRootReducer } from "~@/modules/citotocityservice/_redux/reducers/selectedcarrootreducer";
@@ -16,7 +16,7 @@ export type RootState = ReturnType<typeof rootReducer>;
 
 // Combine all module reducers into a single rootReducer
 const rootReducer = combineReducers({
-  authReducer: combineReducers(authRootReducer),
+  RegisterauthReducer: combineReducers(RegisterauthRootReducer),
   loginauthReducer: combineReducers(loginauthRootReducer),
   theme: combineReducers(themeRootReducer),
   cityTocityServiceReducer: combineReducers(citytocityRootReducer),

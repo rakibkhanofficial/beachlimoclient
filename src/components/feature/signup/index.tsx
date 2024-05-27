@@ -59,12 +59,10 @@ const UserSignUp = () => {
     }
   }, [status, session, router]);
 
-  console.log(session);
-
   return (
-    <div className="w-full">
+    <div className=" bg-white dark:bg-gray-800 w-full">
       <div className=" mt-5 px-20 underline ">
-        <Link href="/">Go Back</Link>
+        <Link className="text-black dark:text-white" href="/">Go Back</Link>
       </div>
       <div className=" flex items-center justify-center pb-20">
         <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center">
@@ -77,15 +75,14 @@ const UserSignUp = () => {
               sizes="100vw"
               style={{ width: "200px", height: "100px", objectFit: "contain" }}
             />
-            <h1 className=" text-2xl font-medium text-white ">
-              {" "}
+            <h1 className=" text-2xl text-black dark:text-white font-medium ">
               Register Here For Booking
             </h1>
           </div>
-          <h1>
+          <h1 className="text-black dark:text-white">
             {`have an account?`}
             <span className="pl-1">
-              <Link className="font-semibold hover:underline" href="/login">
+              <Link className="text-black dark:text-white font-semibold hover:underline" href="/login">
                 Log In
               </Link>
             </span>

@@ -1,5 +1,5 @@
-import authReducer from "./auth-reducer";
+import RegisterauthReducer from "./auth-reducer";
 
-export const authRootReducer: Record<string, typeof authReducer> = {
-  auth: authReducer,
+export const RegisterauthRootReducer: Record<string, typeof RegisterauthReducer> = {
+  registerauth: RegisterauthReducer,
 } as const;

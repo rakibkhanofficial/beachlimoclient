@@ -18,14 +18,15 @@ export const useSignup = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isVisibleretype, setIsVisibleRetype] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+
   const { signUpError } = useAppSelector(
-    (state) => state?.authReducer?.auth?.errors,
+    (state) => state?.RegisterauthReducer?.registerauth?.errors,
   );
   const { email, password, phone, firstname, lastname, username, retypepassword } =
-    useAppSelector((state) => state?.authReducer?.auth?.registerInput);
+    useAppSelector((state) => state?.RegisterauthReducer?.registerauth?.registerInput);
 
   const isSubmitting = useAppSelector(
-    (state) => state?.authReducer?.auth?.isSubmitting,
+    (state) => state?.RegisterauthReducer?.registerauth?.isSubmitting,
   );
   const dispatch = useAppDispatch();
   const router = useRouter();
