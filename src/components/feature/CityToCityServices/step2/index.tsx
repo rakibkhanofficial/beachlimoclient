@@ -3,7 +3,7 @@ import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/u
 import { Button, Input, TimeInput, DatePicker } from "@nextui-org/react";
 import { MdArrowBackIos } from "react-icons/md";
 import Googlemap from "./googlemap";
-import { CalendarDate, Time } from "@internationalized/date";
+// import { CalendarDate, Time } from "@internationalized/date";
 
 const LocationSelection = () => {
   const {
@@ -59,16 +59,12 @@ const LocationSelection = () => {
               className="text-black dark:text-white"
               value={distance}
             />
-            <Input
-              label="Fare Price"
-              placeholder="Select Pick Up Adress and Drop Off Adress From Map"
-              className="text-black dark:text-white"
-              value={
-                FarePriceCalculationBykilometer !== "NaN"
-                  ? FarePriceCalculationBykilometer
-                  : "Select Location"
-              }
-            />
+            <div className=" rounded-2xl text-gray-700 border bg-gray-200 px-3 py-4 dark:bg-slate-800 ">
+              {FarePriceCalculationBykilometer !== "NaN"
+                ? FarePriceCalculationBykilometer
+                : "Fair Price"}{" "}
+              $
+            </div>
             <DatePicker
               // value={new CalendarDate(pickupdate, pickupdate, pickupdate)}
               onChange={(date) =>

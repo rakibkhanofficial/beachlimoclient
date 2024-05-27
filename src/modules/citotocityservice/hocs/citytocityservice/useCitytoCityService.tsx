@@ -59,15 +59,15 @@ const UseCityToCity = () => {
     dispatch(handleCitytocityStepNext(step - 1));
   };
 
-  console.log("pickupdate", pickupdate);
-  console.log("pickuptime", pickuptime);
+  // console.log("pickupdate", pickupdate);
+  // console.log("pickuptime", pickuptime);
 
   // Remove 'km' and convert the distance to a number
   const numericDistance = parseFloat(distance.replace(" km", ""));
 
   const FarePriceCalculationBykilometer = (
     numericDistance * SelectedCarData.perKiloPrice
-  ).toString();
+  ).toFixed(2);
 
   return {
     handleInputChange,

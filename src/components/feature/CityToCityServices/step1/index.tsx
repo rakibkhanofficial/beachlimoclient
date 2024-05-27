@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import React, { useState } from "react";
+import React from "react";
 import { Cardata } from "./data";
 import Image from "next/image";
 import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/useCitytoCityService";
