@@ -19,7 +19,7 @@ const LocationSelection = () => {
   } = UseCityToCity();
 
   return (
-    <div className="w-full text-black dark:text-white ">
+    <div className="w-full text-black dark:text-white px-2 ">
       <button
         title="go back"
         type="button"
@@ -31,16 +31,15 @@ const LocationSelection = () => {
         </span>
         <span>Go Back</span>
       </button>
-      <h1 className=" my-10 text-center text-xl font-semibold ">
-        {" "}
+      <h1 className=" my-3 lg:my-10 text-center text-xl font-semibold ">
         Select Your Pickup and Drop Off Location
       </h1>
-      <div>
-        <div className=" my-5 grid grid-cols-2 items-center justify-center gap-4 px-10 py-5 ">
-          <div>
+      <div className="w-full">
+        <div className=" w-full lg:my-5 grid lg:grid-cols-2 items-center lg:justify-center gap-4 lg:px-10 lg:py-5 ">
+          <div className="w-full">
             <Googlemap />
           </div>
-          <div className=" flex flex-col gap-5 ">
+          <div className=" w-full flex flex-col gap-5 ">
             <Input
               label="Pick Up Location"
               placeholder="Select Pick Up Adress From Map"
@@ -82,9 +81,9 @@ const LocationSelection = () => {
             />
           </div>
         </div>
-        <div className=" flex items-center justify-center ">
+        <div className=" flex items-center justify-center my-4 ">
           <Button
-            className=" w-[40%] "
+            className=" lg:w-[40%] w-[80%] "
             color="success"
             isDisabled={distance === ""}
             onClick={handleCitytoCityNext}

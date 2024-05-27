@@ -1,7 +1,7 @@
 export const Cardata = [
   {
     id: 1,
-    Carname: "GMC Yukon XL ",
+    Carname: "GMC Yukon XL OLD ",
     Model: "2018",
     image: "/carimages/GMCYoukon2012.png",
     perhourPrice: 60,
@@ -23,7 +23,7 @@ export const Cardata = [
   },
   {
     id: 3,
-    Carname: "Toyota Land Cruiser Prado",
+    Carname: " Land Cruiser Prado",
     Model: "2017",
     image: "/carimages/ToyotaLandCruiserPrado.png",
     perhourPrice: 80,
@@ -34,7 +34,7 @@ export const Cardata = [
   },
   {
     id: 4,
-    Carname: "GMC Yukon XL 2012 ",
+    Carname: "GMC Yukon XL ",
     Model: "2012",
     image: "/carimages/GMCYoukon2012.png",
     perhourPrice: 60,
