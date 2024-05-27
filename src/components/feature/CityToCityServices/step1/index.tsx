@@ -50,7 +50,7 @@ const CarSelection = () => {
       </div>
       <div className="flex items-center justify-center">
         <Button
-          className={`w-[40%] ${SelectedCarData.Carname === "" ? "cursor-not-allowed bg-gray-100 text-black" : " bg-blue-800 text-white "}`}
+          className={`w-[40%] ${SelectedCarData.Carname === "" ? "cursor-not-allowed bg-gray-300 text-black" : " bg-blue-800 text-white "}`}
           onClick={handleCitytoCityNext}
           isDisabled={SelectedCarData.Carname === ""}
         >
