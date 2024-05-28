@@ -41,7 +41,7 @@ export const UserDropdown = () => {
                     />
                   </div>
                   <div className=" px-6 text-sm ">
-                    <p>{session?.user?.username}</p>
+                    <p className="text-black dark:text-white">{session?.user?.username}</p>
                     {session?.user?.isAdmin === "true" ? (
                       <p className=" font-base text-lg text-black dark:text-white ">Admin</p>
                     ) : (
@@ -95,8 +95,6 @@ export const UserDropdown = () => {
               placement="top-right"
             >
               <DropdownTrigger>
-                <div className=" flex px-3">
-                  <div>
                     <Avatar
                       isBordered
                       color="default"
@@ -105,16 +103,6 @@ export const UserDropdown = () => {
                         "https://i.ibb.co/dtt67mC/avathar.png"
                       }
                     />
-                  </div>
-                  <div className=" px-6 text-sm ">
-                    <p>{session?.user?.username}</p>
-                    {session?.user?.isAdmin === "true" ? (
-                      <p className=" font-base text-lg text-black dark:text-white ">Admin</p>
-                    ) : (
-                      <p className=" text-base font-medium text-black dark:text-white ">User</p>
-                    )}
-                  </div>
-                </div>
               </DropdownTrigger>
             </Badge>
           </NavbarItem>
