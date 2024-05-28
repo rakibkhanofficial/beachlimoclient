@@ -37,6 +37,10 @@ const UseCityToCity = () => {
     distance = "",
     adress = "",
     adressdescription = "",
+    name = "",
+    phone = "",
+    luggage = "",
+    children = ""
   } = cityToCityInput || {};
 
   const handleInputChange = (name: string, value: string) => {
@@ -84,6 +88,10 @@ const UseCityToCity = () => {
     handleSelectedcar,
     SelectedCarData,
     FarePriceCalculationBykilometer,
+    name,
+    phone,
+    luggage,
+    children
   };
 };
 

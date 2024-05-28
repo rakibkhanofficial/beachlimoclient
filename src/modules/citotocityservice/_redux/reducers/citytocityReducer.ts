@@ -16,6 +16,11 @@ const initialState: ICitytoCityCreateReducer = {
     distance: "",
     adress: "",
     adressdescription: "",
+    name: "",
+    phone: "",
+    luggage: "",
+    children: ""
+
   },
   isSubmitting: false,
   errors: "",

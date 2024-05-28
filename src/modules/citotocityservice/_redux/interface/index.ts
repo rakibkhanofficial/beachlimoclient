@@ -13,6 +13,10 @@ export interface ICitytoCityCreateReducer {
     distance: string;
     adress: string;
     adressdescription: string;
+    name: string;
+    phone: string;
+    luggage: string;
+    children: string
   };
   errors: string;
   step: number;

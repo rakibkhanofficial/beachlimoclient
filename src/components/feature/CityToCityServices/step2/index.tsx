@@ -58,7 +58,7 @@ const LocationSelection = () => {
               className="text-black dark:text-white"
               value={distance}
             />
-            <div className=" rounded-2xl text-gray-700 border bg-gray-200 px-3 py-4 dark:bg-slate-800 ">
+            <div className=" rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
               {FarePriceCalculationBykilometer !== "NaN"
                 ? FarePriceCalculationBykilometer
                 : "Fair Price"}{" "}

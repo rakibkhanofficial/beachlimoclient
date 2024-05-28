@@ -10,7 +10,7 @@ const CityToCityService = () => {
   return (
     <div className="bg-white text-black dark:bg-slate-900 dark:text-white ">
       <HeaderLandingPage />
-      <div className=" w-full lg:min-h-screen flex justify-center items-center px-2 lg:px-10 py-4 lg:py-10">
+      <div className=" w-full min-h-screen lg:min-h-[90vh] xl:min-h-[90vh] 2xl:min-h-[93vh] flex justify-center items-center px-4 lg:px-10 py-4 lg:py-10">
         {session?.user?.accessToken ? <CityToCity /> : <UserLogin />}
       </div>
     </div>

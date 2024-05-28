@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import lottie, { type AnimationItem } from "lottie-web"; // Import AnimationItem
 import Successlottie from "../Success.json";
 import { useRouter } from "next/navigation";
-import { Button, Divider } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useAppDispatch } from "~@/_redux/hooks/hooks";
 import { handleCitytocityStepNext } from "~@/modules/citotocityservice/_redux/actions/citytocityActions";
 
@@ -41,11 +41,16 @@ const CarBookingBycitytovitySucessFull = () => {
     dispatch(handleCitytocityStepNext(0));
   };
 
+  const handleGotodashboard = () => {
+    router.push("/userdashboard");
+    dispatch(handleCitytocityStepNext(0));
+  }
+
   return (
     <div className=" m-5 rounded p-2 lg:p-4">
-      <div>
+      {/* <div>
         <Divider />
-      </div>
+      </div> */}
       <div className=" flex min-h-[65vh] flex-col items-center justify-center ">
         <div className="flex h-[150px] w-[150px] items-center justify-center ">
           <div ref={parentContainer}>
@@ -61,13 +66,22 @@ const CarBookingBycitytovitySucessFull = () => {
             next button to continue
           </p>
         </div>
-        <div className="flex w-[50%] flex-col items-center justify-center py-2 ">
+        <div className="flex flex-col items-center justify-center py-2 ">
+          <Button
+            onClick={handleGotodashboard}
+            value="large"
+            color="primary"
+            className=" my-2 h-10  text-base font-semibold "
+          >
+            Go to Dashbaord
+          </Button>
           <Button
             onClick={handleNext}
             value="large"
-            className=" my-2 h-10 w-[60%] text-base font-semibold tracking-wider"
+            color="secondary"
+            className=" my-2 h-10 text-base font-semibold"
           >
-            Next
+            Back to Home
           </Button>
         </div>
       </div>

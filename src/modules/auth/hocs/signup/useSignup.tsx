@@ -22,8 +22,17 @@ export const useSignup = () => {
   const { signUpError } = useAppSelector(
     (state) => state?.RegisterauthReducer?.registerauth?.errors,
   );
-  const { email, password, phone, firstname, lastname, username, retypepassword } =
-    useAppSelector((state) => state?.RegisterauthReducer?.registerauth?.registerInput);
+  const {
+    email,
+    password,
+    phone,
+    firstname,
+    lastname,
+    username,
+    retypepassword,
+  } = useAppSelector(
+    (state) => state?.RegisterauthReducer?.registerauth?.registerInput,
+  );
 
   const isSubmitting = useAppSelector(
     (state) => state?.RegisterauthReducer?.registerauth?.isSubmitting,
@@ -115,43 +124,87 @@ export const useSignup = () => {
   const handleSignUp = async () => {
     setIsSignup(true);
     dispatch(handleSubmitting(true));
-    await postMethod({
-      route: endPoints.auth.register,
-      postData: {
-        email: email,
-        password: password,
-        name: firstname,
-        avatar: "noimage",
-        // strFirstName: firstname,
-        // strLastName: lastname,
-        // strPhone: phone,
-        // intConcernId: 1,
-      },
-    })
-      .then(async (response) => {
-        const responseData = response?.data;
-        if (responseData) {
-           await signIn("credentials", {
-            ...responseData,
+    try {
+      const response = await postMethod({
+        route: endPoints.auth.register,
+        postData: {
+          email: email,
+          password: password,
+          username: firstname,
+          image: "",
+          // strFirstName: firstname,
+          // strLastName: lastname,
+          // strPhone: phone,
+          // intConcernId: 1,
+        },
+      });
+      if (response?.data?.statusCode === 200) {
+        const loginresponse = await postMethod({
+          route: endPoints.auth.login,
+          postData: {
+            email: email,
+            password: password,
+          },
+        });
+        if (loginresponse?.data?.statusCode === 200) {
+          const loginresponseData = loginresponse?.data?.user;
+          await signIn("credentials", {
+            ...loginresponseData,
             redirect: false,
           });
         } else {
-          dispatch(handleErros("SignUpError", responseData?.error || responseData?.message));
-          toast.error(responseData.message, {
-            duration: 3000,
-            position: "top-center",
-          });
+          dispatch(handleErros("SignUpError", loginresponse.data.messgae));
         }
-        dispatch(handleSubmitting(false));
-      })
-      .catch((error) => {
-        console.error(error);
-        dispatch(handleSubmitting(false));
-      })
-      .finally(() => {
-        setIsSignup(false);
-      });
+      } else {
+        dispatch(handleErros("SignUpError", response.data.messgae));
+        toast.error("Erorr Create Account Try Again", {
+          duration: 3000,
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(handleSubmitting(false));
+    }
   };
+
+  // await postMethod({
+  //   route: endPoints.auth.register,
+  //   postData: {
+  //     email: email,
+  //     password: password,
+  //     username: firstname,
+  //     image: "",
+  //     // strFirstName: firstname,
+  //     // strLastName: lastname,
+  //     // strPhone: phone,
+  //     // intConcernId: 1,
+  //   },
+  // })
+  //   .then(async (response) => {
+  //     const responseData = response?.data;
+  //     if (responseData) {
+  //       //  await signIn("credentials", {
+  //       //   ...responseData,
+  //       //   redirect: false,
+  //       // });
+  //       router.push("/login")
+  //     } else {
+  //       dispatch(handleErros("SignUpError", responseData?.error || responseData?.message));
+  //       toast.error(responseData.message, {
+  //         duration: 3000,
+  //         position: "top-center",
+  //       });
+  //     }
+  //     dispatch(handleSubmitting(false));
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //     dispatch(handleSubmitting(false));
+  //   })
+  //   .finally(() => {
+  //     setIsSignup(false);
+  //   });
 
   // useEffect(() => {
   //   dispatch(handleNextPrev(0));
@@ -181,6 +234,6 @@ export const useSignup = () => {
     isSignup,
     retypepassword,
     toggleVisibilityRetype,
-    isVisibleretype
+    isVisibleretype,
   };
 };

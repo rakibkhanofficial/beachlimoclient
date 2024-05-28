@@ -55,10 +55,12 @@ const HeaderLandingPage = () => {
   };
 
   return (
-    <Navbar className="bg-gray-100 text-black">
+    <Navbar className="bg-gray-100 dark:bg-slate-800 text-black">
+
       <NavbarBrand>
-        <p className="font-bold text-inherit">Beach Limo</p>
+        <p className="font-bold text-black dark:text-white text-inherit">Beach Limo</p>
       </NavbarBrand>
+
       {session?.user?.accessToken && pathname !== "/" ? (
         <NavbarContent className="hidden gap-4 sm:flex" justify="center">
           <Link className="items-centers flex justify-center" href="/">
@@ -127,7 +129,7 @@ const HeaderLandingPage = () => {
                 </Dropdown> */}
           <NavbarItem>
             <Link
-              className="text-black"
+              className="text-black dark:text-white"
               onClick={handleScroll}
               href="#home"
               color="foreground"
@@ -137,7 +139,7 @@ const HeaderLandingPage = () => {
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="text-black"
+              className="text-black dark:text-white"
               color="foreground"
               onClick={handleScroll}
               href="#brand"
@@ -147,7 +149,7 @@ const HeaderLandingPage = () => {
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="text-black"
+              className="text-black dark:text-white"
               onClick={handleScroll}
               color="foreground"
               href="#services"
@@ -157,7 +159,7 @@ const HeaderLandingPage = () => {
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="text-black"
+              className="text-black dark:text-white"
               onClick={handleScroll}
               color="foreground"
               href="#whychoose"
@@ -167,7 +169,7 @@ const HeaderLandingPage = () => {
           </NavbarItem>
           <NavbarItem>
             <Link
-              className="text-black"
+              className="text-black dark:text-white"
               onClick={handleScroll}
               color="foreground"
               href="#download"
@@ -195,6 +197,7 @@ const HeaderLandingPage = () => {
           </NavbarItem>
         </NavbarContent>
       )}
+      
     </Navbar>
   );
 };
