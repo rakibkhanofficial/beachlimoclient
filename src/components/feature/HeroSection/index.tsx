@@ -10,16 +10,16 @@ import OurService from "../OurService";
 const HeroSection = () => {
   // const searchActive = useContext(SearchContext);
   return (
-    <section className="h-screen xl:h-[70vh] bg-[#b2b7c2]/10 " id="home">
+    <section className=" h-auto bg-[#b2b7c2]/10 xl:h-[70vh] " id="home">
       <div className="container mx-auto ">
-        <div className="flex flex-col xl:flex-row justify-center items-center xl:justify-center">
-          <div className="text-center xl:max-w-xl xl:text-left xl:mt-0">
+        <div className="flex flex-col items-center justify-center xl:flex-row xl:justify-center">
+          <div className="text-center xl:mt-0 xl:max-w-xl xl:text-left">
             <motion.h1
               variants={fadeIn("down", 0.2)}
               initial="hidden"
               whileInView={"show"}
               viewport={{ once: false, amount: 0.6 }}
-              className=" text-[3rem] md:text-[3rem] xl:text-[4rem] font-bold mb-2 "
+              className=" mb-2 text-[3rem] font-bold md:text-[3rem] xl:text-[4rem] "
             >
               Explore the Finest <span className="text-[#f11717]">Global</span>
               Offers
@@ -29,7 +29,7 @@ const HeroSection = () => {
               initial="hidden"
               whileInView={"show"}
               viewport={{ once: false, amount: 0.6 }}
-              className="description max-w-[550px] mx-auto xl:mx-0 mb-6 xl:mb-10 "
+              className="description mx-auto mb-6 max-w-[550px] xl:mx-0 xl:mb-10 "
             >
               Find your ideal ride for any adventure with our diverse range of
               affordable and dependable car rentals.
@@ -39,7 +39,7 @@ const HeroSection = () => {
               initial="hidden"
               whileInView={"show"}
               viewport={{ once: false, amount: 0.8 }}
-              className="flex gap-x-3 justify-center xl:justify-start "
+              className="flex justify-center gap-x-3 xl:justify-start "
             >
               <button type="button" title="button" className="btn-cta">
                 <Image
@@ -65,8 +65,8 @@ const HeroSection = () => {
             initial="hidden"
             whileInView={"show"}
             viewport={{ once: false, amount: 0.6 }}
-          //   className="relative w-full h-full max-h-[50vh] md:max-w-[70vw] xl:max-w-[860px] 
-          // xl:max-h-[542px] xl:absolute xl:-right-[100px] min-[1680px]:right-[120px] xl:top-48"
+            //   className="relative w-full h-full max-h-[50vh] md:max-w-[70vw] xl:max-w-[860px]
+            // xl:max-h-[542px] xl:absolute xl:-right-[100px] min-[1680px]:right-[120px] xl:top-48"
           >
             <Image
               src={"/images/limocars/carred.png"}
@@ -77,9 +77,6 @@ const HeroSection = () => {
               priority
             />
           </motion.div>
-        </div>
-        <div className=" mt-10 ">
-        <OurService/>
         </div>
       </div>
       {/* {searchActive ? (
@@ -103,6 +100,9 @@ const HeroSection = () => {
           </motion.div>
         </div>
       )} */}
+      <div className=" mt-10 ">
+        <OurService />
+      </div>
     </section>
   );
 };

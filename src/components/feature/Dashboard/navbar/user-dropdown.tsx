@@ -43,9 +43,9 @@ export const UserDropdown = () => {
                   <div className=" px-6 text-sm ">
                     <p>{session?.user?.username}</p>
                     {session?.user?.isAdmin === "true" ? (
-                      <p className=" font-base text-lg ">Admin</p>
+                      <p className=" font-base text-lg text-black dark:text-white ">Admin</p>
                     ) : (
-                      <p className=" text-base font-medium ">User</p>
+                      <p className=" text-base font-medium text-black dark:text-white ">User</p>
                     )}
                   </div>
                 </div>
@@ -58,7 +58,7 @@ export const UserDropdown = () => {
           >
             <DropdownItem
               key="profile"
-              className="flex w-full flex-col items-start justify-start"
+              className="flex w-full text-black dark:text-white flex-col items-start justify-start"
             >
               <p className=" text-black dark:text-white ">Signed in as</p>
               <p className=" text-black dark:text-white ">{session?.user?.email}</p>
@@ -86,23 +86,35 @@ export const UserDropdown = () => {
         </Dropdown>
       </div>
       <div className=" inline md:hidden ">
-        <Dropdown>
+      <Dropdown>
           <NavbarItem>
             <Badge
               content=""
               color="success"
               shape="circle"
-              placement="bottom-right"
+              placement="top-right"
             >
               <DropdownTrigger>
-                <Avatar
-                  isBordered
-                  color="default"
-                  src={
-                    session?.user?.image ||
-                    "https://i.ibb.co/dtt67mC/avathar.png"
-                  }
-                />
+                <div className=" flex px-3">
+                  <div>
+                    <Avatar
+                      isBordered
+                      color="default"
+                      src={
+                        session?.user?.image ||
+                        "https://i.ibb.co/dtt67mC/avathar.png"
+                      }
+                    />
+                  </div>
+                  <div className=" px-6 text-sm ">
+                    <p>{session?.user?.username}</p>
+                    {session?.user?.isAdmin === "true" ? (
+                      <p className=" font-base text-lg text-black dark:text-white ">Admin</p>
+                    ) : (
+                      <p className=" text-base font-medium text-black dark:text-white ">User</p>
+                    )}
+                  </div>
+                </div>
               </DropdownTrigger>
             </Badge>
           </NavbarItem>
@@ -112,14 +124,22 @@ export const UserDropdown = () => {
           >
             <DropdownItem
               key="profile"
-              className="flex w-full flex-col items-start justify-start"
+              className="flex w-full text-black dark:text-white flex-col items-start justify-start"
             >
-              <p>Signed in as</p>
-              <p>{session?.user?.email}</p>
+              <p className=" text-black dark:text-white ">Signed in as</p>
+              <p className=" text-black dark:text-white ">{session?.user?.email}</p>
             </DropdownItem>
-            <DropdownItem href="/profile" key="settings">
-              My Profile
-            </DropdownItem>
+            {pathname !== "/userdashboard" &&
+            pathname !== "/admindashboard" &&
+            session?.user?.isAdmin === "false" ? (
+              <DropdownItem href="/userdashboard" key="dashboard">
+                <p className=" text-black dark:text-white "> Go to Dashbaord</p>
+              </DropdownItem>
+            ) : (
+              <DropdownItem href="/admindashboard" key="dashboard">
+                <p className=" text-black dark:text-white "> Go to Dashbaord</p>
+              </DropdownItem>
+            )}
             <DropdownItem
               onClick={handleSignOut}
               key="logout"
