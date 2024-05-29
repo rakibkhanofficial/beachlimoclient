@@ -132,6 +132,7 @@ export const useSignup = () => {
           password: password,
           username: firstname,
           image: "",
+          role: "Customer"
           // strFirstName: firstname,
           // strLastName: lastname,
           // strPhone: phone,

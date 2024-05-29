@@ -5,7 +5,7 @@ export const endPoints = {
     register: 'users/signup',
     login: 'users/login',
     updatePassword: 'auth/update-password',
-    logout: 'auth/logout',
+    logout: 'users/logout',
   },
   Customer: {
     CreateBooking: "carrents/createCarRental",
