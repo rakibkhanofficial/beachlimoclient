@@ -1,8 +1,8 @@
 export interface ICitytoCityCreateReducer {
   isSubmitting: boolean;
   CitytoCityServiceInput: {
-    branchname: string;
-    city: string;
+    airportname: string;
+    flightno: string;
     area: string;
     pickupLocation: string;
     pickupAddress: string;
@@ -16,7 +16,8 @@ export interface ICitytoCityCreateReducer {
     name: string;
     phone: string;
     luggage: string;
-    children: string
+    passenger: string;
+    triptype: string
   };
   errors: string;
   step: number;
@@ -30,6 +31,7 @@ export type selectedCarType = {
     perKiloPrice: number;
     perhourPrice: number;
     totalseat: number;
-    isWifi: boolean
+    isWifi: boolean;
+    childSeat: boolean
   };
 };

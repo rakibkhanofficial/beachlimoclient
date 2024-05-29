@@ -4,9 +4,10 @@ import type { AnyAction } from "@reduxjs/toolkit";
 
 const initialState: ICitytoCityCreateReducer = {
   CitytoCityServiceInput: {
-    branchname: "",
-    city: "",
+    airportname: "",
+    flightno: "",
     area: "",
+    adressdescription: "",
     pickupLocation: "",
     pickupAddress: "",
     pickupdate: "",
@@ -15,11 +16,11 @@ const initialState: ICitytoCityCreateReducer = {
     dropoffAddress: "",
     distance: "",
     adress: "",
-    adressdescription: "",
     name: "",
     phone: "",
     luggage: "",
-    children: ""
+    passenger: "",
+    triptype: ""
 
   },
   isSubmitting: false,

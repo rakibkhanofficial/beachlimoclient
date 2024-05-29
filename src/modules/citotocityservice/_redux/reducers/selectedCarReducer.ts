@@ -10,7 +10,8 @@ const initialState: selectedCarType = {
     perKiloPrice: 0,
     perhourPrice: 0,
     totalseat: 0,
-    isWifi: false
+    isWifi: false,
+    childSeat: false
   },
 };
 

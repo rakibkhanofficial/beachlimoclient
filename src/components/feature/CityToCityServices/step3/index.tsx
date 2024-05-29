@@ -4,12 +4,13 @@ import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/u
 
 const CitytocityOtherInformation = () => {
   const {
-    handleCitytoCityNext,
+    handleCreateBooking,
     handleInputChange,
     name,
     phone,
     luggage,
-    children,
+    passenger,
+    isBooking
   } = UseCityToCity();
 
   return (
@@ -40,26 +41,26 @@ const CitytocityOtherInformation = () => {
           onChange={(e) => handleInputChange("luggage", e.target.value)}
         />
         <Input
-          placeholder="Enter Children Number(If)"
-          label="children"
-          value={children}
+          placeholder="Enter Number of Passenger "
+          label="passenger"
+          value={passenger}
           className=" rounded-xl "
-          onChange={(e) => handleInputChange("children", e.target.value)}
+          onChange={(e) => handleInputChange("passenger", e.target.value)}
         />
       </div>
       <div className=" flex items-center justify-center ">
         <Button
           className=" mt-5 w-[80%] lg:w-[60%] "
           color="success"
-          onClick={handleCitytoCityNext}
+          onClick={handleCreateBooking}
           isDisabled={
             name === "" &&
             phone === "" && 
             luggage === "" &&
-            children === "" 
+            passenger === "" 
           }
         >
-          Next
+         {isBooking ? "Booking..." : "Confirm Booking"}
         </Button>
       </div>
     </div>

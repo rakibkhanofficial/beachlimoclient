@@ -9,6 +9,7 @@ export const Cardata = [
     totalseat: 6,
     isWifi: true,
     Luggage: 6,
+    childSeat: false
   },
   {
     id: 2,
@@ -20,10 +21,11 @@ export const Cardata = [
     totalseat: 5,
     isWifi: true,
     Luggage: 5,
+    childSeat: true
   },
   {
     id: 3,
-    Carname: " Land Cruiser Prado",
+    Carname: "Land Cruiser Prado",
     Model: "2017",
     image: "/carimages/ToyotaLandCruiserPrado.png",
     perhourPrice: 80,
@@ -31,6 +33,7 @@ export const Cardata = [
     totalseat: 5,
     isWifi: true,
     Luggage: 5,
+    childSeat: false
   },
   {
     id: 4,
@@ -42,5 +45,6 @@ export const Cardata = [
     totalseat: 6,
     isWifi: true,
     Luggage: 6,
+    childSeat: true
   },
 ];
