@@ -8,14 +8,15 @@ import Image from "next/image";
 import { useSidebarContext } from "../layout/layout-context";
 import { GiAutoRepair } from "react-icons/gi";
 import { useSession } from "next-auth/react";
-import { filterRoutes } from "../../privateRouting/PrivateRouting";
+import { getRoutesByRole } from "../../privateRouting/PrivateRouts.data";
 
 const SidebarWrapper = () => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
   const { data: session } = useSession();
 
-  const filteredRoutes = filterRoutes(session?.user?.isAdmin ?? "---");
+ // @ts-expect-error type error is not solved
+  const filteredRoutes = getRoutesByRole(session?.user?.role ?? "---");
 
   return (
     <aside className="sticky top-0 z-50 h-screen text-sm">

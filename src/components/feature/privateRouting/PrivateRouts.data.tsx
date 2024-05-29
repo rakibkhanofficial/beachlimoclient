@@ -8,8 +8,6 @@ import { FaSitemap } from "react-icons/fa6";
 import { LiaSitemapSolid } from "react-icons/lia";
 import { FcAcceptDatabase } from "react-icons/fc";
 
-export const userRoles = ["Admin", "Customer", "Service-man"];
-
 export const routes: any = {
   admin: [
     {
@@ -73,29 +71,6 @@ export const routes: any = {
         },
       ],
     },
-    // {
-    //   label: "Services",
-    //   routes: [
-    //     {
-    //       id: "1",
-    //       path: "#",
-    //       linkName: "Dashboard",
-    //       icon: <GiAutoRepair fontSize="1rem" />,
-    //       component: <></>,
-    //       subRoutes: [
-    //         {
-    //           href: "/servicemancreate",
-    //           title: "Service Man Create",
-    //         },
-    //         {
-    //           id: "1",
-    //           href: "/servicemanlist",
-    //           title: "Service Man List",
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
   ],
   customer: [
     {
@@ -103,7 +78,7 @@ export const routes: any = {
       routes: [
         {
           id: "1",
-          path: "/userdashboard", // it should be cusotmer dashboard
+          path: "/userdashboard",
           linkName: "Dashboard",
           icon: <MdDashboardCustomize fontSize="1rem" />,
           component: <></>,
@@ -111,16 +86,16 @@ export const routes: any = {
         },
         {
           id: "2",
-          path: "/cproductlist", // it should be cusotmer dashboard
-          linkName: "Registered Product List",
+          path: "/bookinglist",
+          linkName: "Booking List",
           icon: <CiBoxList fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
         {
           id: "3",
-          path: "/warrantyclaimlist", // it should be cusotmer dashboard
-          linkName: "Warranty Claim List",
+          path: "/drivercreate",
+          linkName: "Create Driver",
           icon: <FaSitemap fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
@@ -128,7 +103,7 @@ export const routes: any = {
       ],
     },
   ],
-  "service-man": [
+  driver: [
     {
       label: "Main Menu",
       routes: [
@@ -140,7 +115,6 @@ export const routes: any = {
           component: <></>,
           subRoutes: [],
         },
-
         {
           id: "2",
           path: "/warranty-claim/request-list",
@@ -149,20 +123,20 @@ export const routes: any = {
           component: <></>,
           subRoutes: [],
         },
-        // {
-        //   id: "2",
-        //   path: "#",
-        //   linkName: "Warranty Claim",
-        //   icon: <GiAutoRepair fontSize="1rem" />,
-        //   component: <></>,
-        //   subRoutes: [
-        //     {
-        //       href: "/warranty-claim/request-list",
-        //       title: "Requests",
-        //     },
-        //   ],
-        // },
       ],
     },
   ],
+};
+
+export const getRoutesByRole = (role: string) => {
+  switch (role.toLowerCase()) {
+    case "admin":
+      return routes.admin;
+    case "customer":
+      return routes.customer;
+    case "driver":
+      return routes.driver;
+    default:
+      return [];
+  }
 };

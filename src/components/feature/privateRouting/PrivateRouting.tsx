@@ -35,7 +35,7 @@ const PrivateRouting = ({ children }: Props) => {
 
       if (status === "authenticated") {
         // @ts-expect-error type error is not solved
-        const filteredRoutes = filterRoutes(session?.user?.isAdmin || "---");
+        const filteredRoutes = filterRoutes(session?.user?.role || "---");
         const isMatched = isPathMatched(pathname, filteredRoutes);
 
         if (!isMatched) {

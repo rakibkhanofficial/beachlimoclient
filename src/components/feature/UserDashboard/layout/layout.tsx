@@ -9,7 +9,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const DashboardLayout = ({ children }: Props) => {
+export const UserDashboardLayout = ({ children }: Props) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [, setLocked] = useLockedBody(false);
   const handleToggleSidebar = () => {
