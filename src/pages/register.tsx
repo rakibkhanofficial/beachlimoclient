@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import FooterComponent from "~@/components/feature/Footer";
+import HeaderLandingPage from "~@/components/feature/Header";
 import UserSignUp from "~@/components/feature/signup";
 
 const UserRegister = () => {
@@ -24,7 +26,9 @@ const UserRegister = () => {
 
   return (
     <div>
+      <HeaderLandingPage />
       <UserSignUp />
+      <FooterComponent />
     </div>
   );
 };

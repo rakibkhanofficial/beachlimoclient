@@ -61,7 +61,7 @@ const UserSignUp = () => {
 
   return (
     <div className=" bg-white dark:bg-gray-800 w-full">
-      <div className=" mt-5 px-20 underline ">
+      <div className=" px-20 underline ">
         <Link className="text-black dark:text-white" href="/">Go Back</Link>
       </div>
       <div className=" flex items-center justify-center pb-20">

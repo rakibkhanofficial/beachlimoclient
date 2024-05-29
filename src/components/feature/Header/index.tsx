@@ -22,7 +22,8 @@ import {
 } from "./icons";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { UserDropdown } from "../UserDashboard/navbar/user-dropdown";
+import { DarkModeSwitch } from "../AdminDashboard/navbar/darkmodeswitch";
+import { UserDropdown } from "../UserDropDown";
 
 const HeaderLandingPage = () => {
   const router = useRouter();
@@ -68,7 +69,9 @@ const HeaderLandingPage = () => {
 
       {
         // @ts-expect-error type error is not solved
-        session?.user?.accessToken && pathname !== "/" ? (
+        session?.user?.accessToken ||
+        pathname === "/login" ||
+        pathname === "/register" ? (
           <NavbarContent className="hidden gap-4 sm:flex" justify="center">
             <Link className="items-centers flex justify-center" href="/">
               Home
@@ -76,64 +79,6 @@ const HeaderLandingPage = () => {
           </NavbarContent>
         ) : (
           <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-            {/* <Dropdown>
-                  <NavbarItem>
-                    <DropdownTrigger>
-                      <Button
-                        disableRipple
-                        className="bg-transparent p-0 data-[hover=true]:bg-transparent"
-                        endContent={icons.chevron}
-                        radius="sm"
-                        variant="light"
-                      >
-                        Features
-                      </Button>
-                    </DropdownTrigger>
-                  </NavbarItem>
-                  <DropdownMenu
-                    aria-label="ACME features"
-                    className="w-[340px]"
-                    itemClasses={{
-                      base: "gap-4",
-                    }}
-                  >
-                    <DropdownItem
-                      key="autoscaling"
-                      description="ACME scales apps to meet user demand, automagically, based on load."
-                      startContent={icons.scale}
-                    >
-                      Autoscaling
-                    </DropdownItem>
-                    <DropdownItem
-                      key="usage_metrics"
-                      description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where."
-                      startContent={icons.activity}
-                    >
-                      Usage Metrics
-                    </DropdownItem>
-                    <DropdownItem
-                      key="production_ready"
-                      description="ACME runs on ACME, join us and others serving requests at web scale."
-                      startContent={icons.flash}
-                    >
-                      Production Ready
-                    </DropdownItem>
-                    <DropdownItem
-                      key="99_uptime"
-                      description="Applications stay on the grid with high availability and high uptime guarantees."
-                      startContent={icons.server}
-                    >
-                      +99% Uptime
-                    </DropdownItem>
-                    <DropdownItem
-                      key="supreme_support"
-                      description="Overcome any challenge with a supporting team ready to respond."
-                      startContent={icons.user}
-                    >
-                      +Supreme Support
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown> */}
             <NavbarItem>
               <Link
                 className="text-black dark:text-white"
@@ -187,7 +132,9 @@ const HeaderLandingPage = () => {
           </NavbarContent>
         )
       }
-
+      <NavbarContent justify="end">
+        <DarkModeSwitch />
+      </NavbarContent>
       {
         // @ts-expect-error type error is not solved
         session?.user?.accessToken ? (
@@ -196,15 +143,23 @@ const HeaderLandingPage = () => {
           </NavbarContent>
         ) : (
           <NavbarContent justify="end">
-            <NavbarItem className="hidden lg:flex">
-              <Link href="/login">Login</Link>
-            </NavbarItem>
-            <NavbarItem>
-              {/* signup button here  */}
-              <Button as={Link} color="primary" href="/register" variant="flat">
-                Register
-              </Button>
-            </NavbarItem>
+            {pathname !== "/login" && (
+              <NavbarItem className="hidden lg:flex">
+                <Link href="/login">Login</Link>
+              </NavbarItem>
+            )}
+            {pathname !== "/register" && (
+              <NavbarItem>
+                <Button
+                  as={Link}
+                  color="primary"
+                  href="/register"
+                  variant="flat"
+                >
+                  Register
+                </Button>
+              </NavbarItem>
+            )}
           </NavbarContent>
         )
       }
