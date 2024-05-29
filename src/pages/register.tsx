@@ -10,14 +10,14 @@ const UserRegister = () => {
   useEffect(() => {
     if (session?.user) {
       // @ts-expect-error type error is not solved
-      if (session?.user?.isAdmin === "false") {
+      if (session?.user?.role === "Customer") {
         router.push("/userdashboard");
         // @ts-expect-error type error is not solved
-      } else if (session?.user?.isAdmin === "true") {
+      } else if (session?.user?.role === "Admin") {
         router.push("/admindashboard");
         // @ts-expect-error type error is not solved
-      } else if (session?.user?.isAdmin === "driver") {
-        router.push("/servicemandashboard");
+      } else if (session?.user?.role === "Driver") {
+        router.push("/driverdashboard");
       }
     }
   }, [session, router]);
