@@ -54,23 +54,29 @@ const HeaderLandingPage = () => {
     }
   };
 
-  return (
-    <Navbar className="bg-gray-100 dark:bg-slate-800 text-black">
+  const handlehome = () => {
+    router.push("/");
+  };
 
-      <NavbarBrand>
-        <p className="font-bold text-black dark:text-white text-inherit">Beach Limo</p>
+  return (
+    <Navbar className="bg-gray-100 text-black dark:bg-slate-800">
+      <NavbarBrand className="cursor-pointer" onClick={handlehome}>
+        <p className="font-bold text-black text-inherit dark:text-white">
+          Beach Limo
+        </p>
       </NavbarBrand>
 
-      {// @ts-expect-error type error is not solved
-      session?.user?.accessToken && pathname !== "/" ? (
-        <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-          <Link className="items-centers flex justify-center" href="/">
-            Home
-          </Link>
-        </NavbarContent>
-      ) : (
-        <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-          {/* <Dropdown>
+      {
+        // @ts-expect-error type error is not solved
+        session?.user?.accessToken && pathname !== "/" ? (
+          <NavbarContent className="hidden gap-4 sm:flex" justify="center">
+            <Link className="items-centers flex justify-center" href="/">
+              Home
+            </Link>
+          </NavbarContent>
+        ) : (
+          <NavbarContent className="hidden gap-4 sm:flex" justify="center">
+            {/* <Dropdown>
                   <NavbarItem>
                     <DropdownTrigger>
                       <Button
@@ -128,78 +134,80 @@ const HeaderLandingPage = () => {
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown> */}
-          <NavbarItem>
-            <Link
-              className="text-black dark:text-white"
-              onClick={handleScroll}
-              href="#home"
-              color="foreground"
-            >
-              Home
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link
-              className="text-black dark:text-white"
-              color="foreground"
-              onClick={handleScroll}
-              href="#brand"
-            >
-              Brands
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link
-              className="text-black dark:text-white"
-              onClick={handleScroll}
-              color="foreground"
-              href="#services"
-            >
-              Services
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link
-              className="text-black dark:text-white"
-              onClick={handleScroll}
-              color="foreground"
-              href="#whychoose"
-            >
-              Why Choose
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link
-              className="text-black dark:text-white"
-              onClick={handleScroll}
-              color="foreground"
-              href="#download"
-            >
-              Why Choose
-            </Link>
-          </NavbarItem>
-        </NavbarContent>
-      )}
+            <NavbarItem>
+              <Link
+                className="text-black dark:text-white"
+                onClick={handleScroll}
+                href="#home"
+                color="foreground"
+              >
+                Home
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Link
+                className="text-black dark:text-white"
+                color="foreground"
+                onClick={handleScroll}
+                href="#brand"
+              >
+                Brands
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Link
+                className="text-black dark:text-white"
+                onClick={handleScroll}
+                color="foreground"
+                href="#services"
+              >
+                Services
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Link
+                className="text-black dark:text-white"
+                onClick={handleScroll}
+                color="foreground"
+                href="#whychoose"
+              >
+                Why Choose
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Link
+                className="text-black dark:text-white"
+                onClick={handleScroll}
+                color="foreground"
+                href="#download"
+              >
+                Why Choose
+              </Link>
+            </NavbarItem>
+          </NavbarContent>
+        )
+      }
 
-      {// @ts-expect-error type error is not solved
-      session?.user?.accessToken ? (
-        <NavbarContent justify="end">
-          <UserDropdown />
-        </NavbarContent>
-      ) : (
-        <NavbarContent justify="end">
-          <NavbarItem className="hidden lg:flex">
-            <Link href="/login">Login</Link>
-          </NavbarItem>
-          <NavbarItem>
-            {/* signup button here  */}
-            <Button as={Link} color="primary" href="/register" variant="flat">
-              Register
-            </Button>
-          </NavbarItem>
-        </NavbarContent>
-      )}
-      
+      {
+        // @ts-expect-error type error is not solved
+        session?.user?.accessToken ? (
+          <NavbarContent justify="end">
+            <UserDropdown />
+          </NavbarContent>
+        ) : (
+          <NavbarContent justify="end">
+            <NavbarItem className="hidden lg:flex">
+              <Link href="/login">Login</Link>
+            </NavbarItem>
+            <NavbarItem>
+              {/* signup button here  */}
+              <Button as={Link} color="primary" href="/register" variant="flat">
+                Register
+              </Button>
+            </NavbarItem>
+          </NavbarContent>
+        )
+      }
     </Navbar>
   );
 };

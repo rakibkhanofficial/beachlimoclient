@@ -41,18 +41,21 @@ const LocationSelection = () => {
           </div>
           <div className=" w-full flex flex-col gap-5 ">
             <Input
+              readOnly
               label="Pick Up Location"
               placeholder="Select Pick Up Adress From Map"
               className="text-black dark:text-white"
               value={pickupAddress}
             />
             <Input
+              readOnly
               label="Drop Off Location"
               placeholder="Select Drop Off Adress From Map"
               className="text-black dark:text-white"
               value={dropoffAddress}
             />
             <Input
+              readOnly
               label="Distance"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
@@ -85,7 +88,7 @@ const LocationSelection = () => {
           <Button
             className=" lg:w-[40%] w-[80%] "
             color="success"
-            isDisabled={distance === ""}
+            isDisabled={distance === "" || pickupdate === "" || pickuptime === ""}
             onClick={handleCitytoCityNext}
           >
             Next

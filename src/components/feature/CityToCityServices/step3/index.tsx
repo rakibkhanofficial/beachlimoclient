@@ -15,10 +15,11 @@ const CitytocityOtherInformation = () => {
 
   return (
     <div className=" my-5 w-full p-2 lg:p-5  ">
+      <div className=" flex flex-col justify-center items-center">
       <h1 className=" my-5 text-center text-xl font-semibold  ">
         Type This Iformation For booking
       </h1>
-      <div className=" flex w-full flex-col gap-3 rounded-xl border border-slate-700 px-4 py-6 ">
+      <div className=" flex w-full lg:w-[60%] flex-col gap-3 rounded-xl border border-slate-700 px-4 py-6 ">
         <Input
           placeholder="Enter Name"
           label="name"
@@ -48,20 +49,21 @@ const CitytocityOtherInformation = () => {
           onChange={(e) => handleInputChange("passenger", e.target.value)}
         />
       </div>
-      <div className=" flex items-center justify-center ">
+      <div className="w-full flex items-center justify-center ">
         <Button
-          className=" mt-5 w-[80%] lg:w-[60%] "
+          className=" mt-5 w-[80%] lg:w-[50%] "
           color="success"
           onClick={handleCreateBooking}
           isDisabled={
-            name === "" &&
-            phone === "" && 
-            luggage === "" &&
+            name === "" ||
+            phone === "" ||
+            luggage === "" ||
             passenger === "" 
           }
         >
          {isBooking ? "Booking..." : "Confirm Booking"}
         </Button>
+      </div>
       </div>
     </div>
   );

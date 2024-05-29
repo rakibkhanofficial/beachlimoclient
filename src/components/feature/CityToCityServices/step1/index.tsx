@@ -24,7 +24,7 @@ const CarSelection = () => {
       <h1 className=" my-10 text-center text-xl font-semibold ">
         Choose Your Desire Car
       </h1>
-      <div className=" lg:my-4 grid grid-cols-2 lg:grid-cols-4 items-center justify-center gap-3 lg:gap-10 px-2 lg:px-10 py-3 ">
+      <div className=" lg:my-4 grid grid-cols-2 lg:grid-cols-2 items-center justify-center gap-3 lg:gap-10 px-2 lg:px-10 py-3 ">
         {Cardata?.map((data, index) => (
           <div
             key={index}

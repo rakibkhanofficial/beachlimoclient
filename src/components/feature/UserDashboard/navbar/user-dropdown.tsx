@@ -18,7 +18,7 @@ export const UserDropdown = () => {
   const pathname = usePathname();
 
   return (
-    <div>
+    <div className="cursor-pointer">
       <div className="hidden md:inline">
         <Dropdown>
           <NavbarItem>
@@ -41,12 +41,12 @@ export const UserDropdown = () => {
                     />
                   </div>
                   <div className=" px-6 text-sm ">
-                    <p className="text-black dark:text-white">{session?.user?.username}</p>
-                    {session?.user?.isAdmin === "true" ? (
-                      <p className=" font-base text-lg text-black dark:text-white ">Admin</p>
-                    ) : (
-                      <p className=" text-base font-medium text-black dark:text-white ">User</p>
-                    )}
+                    <p className="text-black dark:text-white">
+                      {session?.user?.username}
+                    </p>
+                    <p className="text-black dark:text-white">
+                      {session?.user?.email}
+                    </p>
                   </div>
                 </div>
               </DropdownTrigger>
@@ -58,21 +58,30 @@ export const UserDropdown = () => {
           >
             <DropdownItem
               key="profile"
-              className="flex w-full text-black dark:text-white flex-col items-start justify-start"
+              className="flex w-full flex-col items-start justify-start text-black dark:text-white"
             >
               <p className=" text-black dark:text-white ">Signed in as</p>
-              <p className=" text-black dark:text-white ">{session?.user?.email}</p>
+              <p className=" text-black dark:text-white ">
+                {session?.user?.email}
+              </p>
             </DropdownItem>
             {pathname !== "/userdashboard" &&
-            pathname !== "/admindashboard" &&
-            session?.user?.isAdmin === "false" ? (
+            session?.user?.role === "Customer" ? (
               <DropdownItem href="/userdashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
-            ) : (
+            ) : pathname !== "/admindashboard" &&
+              session?.user?.role === "Admin" ? (
               <DropdownItem href="/admindashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
+            ) : pathname === "/driverdashboard" &&
+              session?.user?.role !== "Driver" ? (
+              <DropdownItem href="/driverdashboar">
+                <p className=" text-black dark:text-white "> Go to Dashbaord</p>
+              </DropdownItem>
+            ) : (
+              <DropdownItem></DropdownItem>
             )}
             <DropdownItem
               onClick={handleSignOut}
@@ -95,6 +104,8 @@ export const UserDropdown = () => {
               placement="top-right"
             >
               <DropdownTrigger>
+                <div className=" flex px-3">
+                  <div>
                     <Avatar
                       isBordered
                       color="default"
@@ -103,6 +114,8 @@ export const UserDropdown = () => {
                         "https://i.ibb.co/dtt67mC/avathar.png"
                       }
                     />
+                  </div>
+                </div>
               </DropdownTrigger>
             </Badge>
           </NavbarItem>
@@ -112,21 +125,30 @@ export const UserDropdown = () => {
           >
             <DropdownItem
               key="profile"
-              className="flex w-full text-black dark:text-white flex-col items-start justify-start"
+              className="flex w-full items-start justify-start text-black dark:text-white"
             >
               <p className=" text-black dark:text-white ">Signed in as</p>
-              <p className=" text-black dark:text-white ">{session?.user?.email}</p>
+              <p className=" text-black dark:text-white ">
+                {session?.user?.username}
+              </p>
             </DropdownItem>
             {pathname !== "/userdashboard" &&
-            pathname !== "/admindashboard" &&
-            session?.user?.isAdmin === "false" ? (
+            session?.user?.role === "Customer" ? (
               <DropdownItem href="/userdashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
-            ) : (
+            ) : pathname !== "/admindashboard" &&
+              session?.user?.role === "Admin" ? (
               <DropdownItem href="/admindashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
+            ) : pathname !== "/driverdashboard" &&
+              session?.user?.role === "Driver" ? (
+              <DropdownItem href="/driverdashboar">
+                <p className=" text-black dark:text-white "> Go to Dashbaord</p>
+              </DropdownItem>
+            ) : (
+              <DropdownItem></DropdownItem>
             )}
             <DropdownItem
               onClick={handleSignOut}
