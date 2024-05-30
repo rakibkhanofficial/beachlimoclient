@@ -2,13 +2,13 @@ import { Button } from "@nextui-org/react";
 import React from "react";
 import { Cardata } from "./data";
 import Image from "next/image";
-import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
 import { MdArrowBackIos } from "react-icons/md";
 import Link from "next/link";
+import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 
 const CarSelection = () => {
   const { handleCitytoCityNext, handleSelectedcar, SelectedCarData } =
-    UseCityToCity();
+  UseBytheHour();
 
   return (
     <div className="w-full">
@@ -44,7 +44,7 @@ const CarSelection = () => {
             <h1 className=" text-center text-medium font-medium lg:text-lg ">
               {data?.Carname} {data?.Model}
             </h1>
-            <p>Per Miles Price: {data?.perMilePrice} $</p>
+            <p>Per Hour Price: {data?.perhourPrice} $</p>
             <p>Passenger Quantity: {data?.passenger}</p>
             <p>Luggage Quantity: {data?.Luggage}</p>
             {data?.isWifi === true ? (

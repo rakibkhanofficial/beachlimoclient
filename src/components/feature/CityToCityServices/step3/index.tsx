@@ -1,6 +1,6 @@
 import { Button, Input, TimeInput, DatePicker } from "@nextui-org/react";
 import React from "react";
-import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/useCitytoCityService";
+import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
 
 const CitytocityOtherInformation = () => {
   const {

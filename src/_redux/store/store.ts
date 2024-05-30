@@ -8,8 +8,8 @@ import {
 import { themeRootReducer } from "../reducers/counters/themeReducer/_themeRootReducer";
 import { RegisterauthRootReducer } from "../../modules/auth/_redux/reducers/_authRootreducer";
 import { loginauthRootReducer } from "../../modules/auth/_redux/reducers/_loginauthRootreducer";
-import { citytocityRootReducer } from "~@/modules/citotocityservice/_redux/reducers/citytocityRootReducer";
-import { selectedCarDataRootReducer } from "~@/modules/citotocityservice/_redux/reducers/selectedcarrootreducer";
+import { citytocityRootReducer } from "~@/modules/servicemodule/_redux/reducers/citytocityRootReducer";
+import { selectedCarDataRootReducer } from "~@/modules/servicemodule/_redux/reducers/selectedcarrootreducer";
 
 // Define the RootState type correctly
 export type RootState = ReturnType<typeof rootReducer>;
