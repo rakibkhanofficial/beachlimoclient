@@ -69,9 +69,7 @@ const HeaderLandingPage = () => {
 
       {
         // @ts-expect-error type error is not solved
-        session?.user?.accessToken ||
-        pathname === "/login" ||
-        pathname === "/register" ? (
+        session?.user?.accessToken && pathname !== "/" ? (
           <NavbarContent className="hidden gap-4 sm:flex" justify="center">
             <Link className="items-centers flex justify-center" href="/">
               Home

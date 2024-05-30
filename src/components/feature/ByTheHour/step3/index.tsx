@@ -6,7 +6,6 @@ import {
   DatePicker,
   Modal,
   ModalContent,
-  ModalHeader,
   ModalBody,
   ModalFooter,
   useDisclosure,
@@ -14,6 +13,7 @@ import {
 import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 import Image from "next/image";
 import { useAppSelector } from "~@/_redux/hooks/hooks";
+import { MdArrowForwardIos } from "react-icons/md";
 
 type selectedCarType = {
   id: number;
@@ -39,7 +39,8 @@ const CitytocityOtherInformation = () => {
     pickuptime,
     isBooking,
     pickupAddress,
-    dropoffAddress
+    dropoffAddress,
+    TotalFarePriceCalculationBymilesandhours,
   } = UseBytheHour();
   const SelectedCarData: selectedCarType = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
@@ -88,17 +89,18 @@ const CitytocityOtherInformation = () => {
             onPress={onOpen}
             isDisabled={!name || !phone || !pickupdate || !pickuptime}
           >
-            Next
+            <span className="text-white">Next</span>
+            <span>
+              <MdArrowForwardIos />
+            </span>
           </Button>
           <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="auto">
             <ModalContent>
               {(onClose) => (
                 <>
-                  <ModalHeader className="flex flex-col gap-1">
-                    Booking Information
-                  </ModalHeader>
                   <ModalBody>
-                    <div className="flex justify-center items-center">
+                    <h1 className=" text-black dark:text-white my-3 text-center font-semibold text-xl ">Booking Information</h1>
+                    <div className="flex items-center justify-center">
                       <Image
                         src={SelectedCarData?.image}
                         alt={SelectedCarData?.Carname}
@@ -106,20 +108,40 @@ const CitytocityOtherInformation = () => {
                         width={200}
                       />
                     </div>
-                    <div className=" border grid grid-cols-2 gap-1 rounded-lg p-4 ">
-                        <p className=" text-black dark:text-white ">Name:</p>
-                        <p className=" text-black dark:text-white ">{name}</p>
-                        <p className=" text-black dark:text-white ">Phone</p>
-                        <p className=" text-black dark:text-white ">{phone}</p>
-                        <p className=" text-black dark:text-white ">Car Name</p>
-                        <p className=" text-black dark:text-white ">{SelectedCarData.Carname}</p>
-                        <p className=" text-black dark:text-white ">Pickup Address</p>
-                        <p className=" text-black dark:text-white ">{pickupAddress}</p>
-                        <p className=" text-black dark:text-white ">Drop Off Address</p>
-                        <p className=" text-black dark:text-white ">{dropoffAddress}</p>
-                        <p className=" text-black dark:text-white ">PickUp date & Time</p>
-                        <p className=" text-black dark:text-white ">{pickupdate} {pickuptime}</p>
-                      </div>
+                    <div className=" grid grid-cols-2 gap-1 rounded-lg border p-4 ">
+                      <p className=" text-black dark:text-white ">Name:</p>
+                      <p className=" text-black dark:text-white ">{name}</p>
+                      <p className=" text-black dark:text-white ">Phone:</p>
+                      <p className=" text-black dark:text-white ">{phone}</p>
+                      <p className=" text-black dark:text-white ">Car Name:</p>
+                      <p className=" text-black dark:text-white ">
+                        {SelectedCarData.Carname}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        Pickup Address:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {pickupAddress}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        Drop Off Address:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {dropoffAddress}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        PickUp Time & Date:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {pickuptime}, {pickupdate}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        Total Fare Price:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {TotalFarePriceCalculationBymilesandhours} $
+                      </p>
+                    </div>
                     <div className="flex w-full items-center justify-center">
                       <Button
                         className="mt-5 w-[80%] lg:w-[50%]"
@@ -129,7 +151,7 @@ const CitytocityOtherInformation = () => {
                           !name || !phone || !pickupdate || !pickuptime
                         }
                       >
-                        {isBooking ? "Booking..." : "Confirm Booking"}
+                       <span className="text-white">{isBooking ? "Booking..." : "Confirm Booking"}</span>
                       </Button>
                     </div>
                   </ModalBody>

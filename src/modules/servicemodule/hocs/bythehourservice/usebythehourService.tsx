@@ -85,7 +85,7 @@ const UseBytheHour = () => {
   // Remove 'km' and convert the distance to a number
   const numericDistance = parseFloat(distance.replace(" mi", ""));
 
-  const FarePriceCalculationBymiles = (
+  const TotalFarePriceCalculationBymilesandhours = (
     numericDistance * SelectedCarData.perhourPrice
   ).toFixed(2);
 
@@ -110,7 +110,7 @@ const UseBytheHour = () => {
       pickuptime: pickuptime,
       dropofflocationAdress: dropoffAddress,
       dropofflocationMapLink: dropoffLocation,
-      rentalprice: parseInt(FarePriceCalculationBymiles),
+      rentalprice: parseInt(TotalFarePriceCalculationBymilesandhours),
       createdDate: new Date(),
       status: "Pending",
       renterName: name,
@@ -149,7 +149,7 @@ const UseBytheHour = () => {
     handleCitytoCityBack,
     handleSelectedcar,
     SelectedCarData,
-    FarePriceCalculationBymiles,
+    TotalFarePriceCalculationBymilesandhours,
     name,
     phone,
     luggage,

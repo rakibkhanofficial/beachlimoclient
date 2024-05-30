@@ -14,7 +14,7 @@ const Login = () => {
     if (session?.user) {
       // @ts-expect-error type error is not solved
       if (session?.user?.role === "Customer") {
-        router.push("/userdashboard");
+        router.push("/");
         // @ts-expect-error type error is not solved
       } else if (session?.user?.role === "Admin") {
         router.push("/admindashboard");

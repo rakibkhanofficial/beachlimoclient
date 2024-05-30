@@ -12,7 +12,7 @@ const HeroSection = () => {
   return (
     <section className=" h-auto bg-[#b2b7c2]/10 xl:h-[70vh] " id="home">
       <div className="container mx-auto ">
-        <div className="flex flex-col items-center justify-center xl:flex-row xl:justify-center">
+        <div className="flex flex-col items-center justify-center xl:flex-row xl:justify-between">
           <div className="text-center xl:mt-0 xl:max-w-xl xl:text-left">
             <motion.h1
               variants={fadeIn("down", 0.2)}

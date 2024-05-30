@@ -1,7 +1,7 @@
 import React from "react";
 import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
 import { Button, Input } from "@nextui-org/react";
-import { MdArrowBackIos } from "react-icons/md";
+import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import Googlemap from "./googlemap";
 // import { CalendarDate, Time } from "@internationalized/date";
 
@@ -67,14 +67,17 @@ const LocationSelection = () => {
 
           </div>
         </div>
-        <div className=" flex items-center justify-center my-4 ">
+        <div className=" my-4 flex items-center justify-center ">
           <Button
-            className=" lg:w-[40%] w-[80%] "
+            className=" w-[80%] lg:w-[40%] "
             color="success"
             isDisabled={distance === ""}
             onClick={handleCitytoCityNext}
           >
-            Next
+            <span>Next</span>
+            <span>
+              <MdArrowForwardIos />
+            </span>
           </Button>
         </div>
       </div>
