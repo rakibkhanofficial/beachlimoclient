@@ -2,10 +2,17 @@ import type { Dispatch } from "@reduxjs/toolkit";
 import * as Types from "../types/citytocity";
 
 type selectedCarType = {
+  id: number
   Carname: string;
   image: string;
   Model: string;
-  perKiloPrice: number;
+  perMilePrice: number;
+  childSeat: boolean;
+  perhourPrice : number
+  passenger: number;
+  Luggage: number;
+  totalseat: number;
+  isWifi: boolean
 };
 
 export const handleCitytoCityInputChange =

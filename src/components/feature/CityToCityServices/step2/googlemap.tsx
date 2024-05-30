@@ -37,11 +37,11 @@ const Googlemap = () => {
     setMap(null);
   }, []);
 
-  const convertMilesToKilometers = (distanceText: string): string => {
-    const miles = parseFloat(distanceText.split(" ")[0]);
-    const kilometers = miles * 1.60934;
-    return `${kilometers.toFixed(2)} km`;
-  };
+  // const convertMilesToKilometers = (distanceText: string): string => {
+  //   const miles = parseFloat(distanceText.split(" ")[0]);
+  //   const kilometers = miles * 1.60934;
+  //   return `${kilometers.toFixed(2)} km`;
+  // };
 
   const handleMapClick = useCallback((event: google.maps.MapMouseEvent) => {
     const latLng = event.latLng;
@@ -83,8 +83,8 @@ const Googlemap = () => {
                 const route = result.routes[0];
                 const distance = route.legs[0].distance?.text;
                 if (distance) {
-                  const distanceInKm = convertMilesToKilometers(distance);
-                  handleInputChange("distance", distanceInKm);
+                  // const distanceInKm = convertMilesToKilometers(distance);
+                  handleInputChange("distance", distance);
                 }
               } else {
                 console.error("Directions request failed due to ", status);

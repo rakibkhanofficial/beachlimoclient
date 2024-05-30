@@ -25,13 +25,16 @@ export interface ICitytoCityCreateReducer {
 
 export type selectedCarType = {
   SelectedcarData: {
+    id: number
     Carname: string;
     image: string;
     Model: string;
-    perKiloPrice: number;
+    perMilePrice: number;
     perhourPrice: number;
     totalseat: number;
     isWifi: boolean;
-    childSeat: boolean
+    childSeat: boolean;
+    passenger: number;
+    Luggage: number
   };
 };

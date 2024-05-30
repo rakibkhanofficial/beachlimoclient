@@ -11,10 +11,17 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 
 type selectedCarType = {
+  id: number
   Carname: string;
   image: string;
   Model: string;
-  perKiloPrice: number;
+  perMilePrice: number;
+  childSeat: boolean;
+  perhourPrice : number
+  passenger: number;
+  Luggage: number;
+  totalseat: number;
+  isWifi: boolean
 };
 
 const UseCityToCity = () => {
@@ -22,7 +29,7 @@ const UseCityToCity = () => {
   const { data: session } = useSession();
   const [isBooking, setIsbooking] = useState(false)
 
-  const SelectedCarData = useAppSelector(
+  const SelectedCarData: selectedCarType  = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
 
@@ -76,10 +83,10 @@ const UseCityToCity = () => {
   // console.log("pickuptime", pickuptime);
 
   // Remove 'km' and convert the distance to a number
-  const numericDistance = parseFloat(distance.replace(" km", ""));
+  const numericDistance = parseFloat(distance.replace(" mi", ""));
 
-  const FarePriceCalculationBykilometer = (
-    numericDistance * SelectedCarData.perKiloPrice
+  const FarePriceCalculationBymiles = (
+    numericDistance * SelectedCarData.perMilePrice
   ).toFixed(2);
 
   const handleCreateBooking = async () => {
@@ -92,8 +99,8 @@ const UseCityToCity = () => {
       airportname: airportname,
       flightno: flightno,
       childseat: SelectedCarData.childSeat,
-      luggage: parseInt(luggage),
-      passenger: parseInt(passenger),
+      luggage: SelectedCarData.Luggage,
+      passenger: SelectedCarData.passenger,
       carModel: SelectedCarData.Model,
       carName: SelectedCarData.Carname,
       mobilenumber: phone,
@@ -103,7 +110,7 @@ const UseCityToCity = () => {
       pickuptime: pickuptime,
       dropofflocationAdress: dropoffAddress,
       dropofflocationMapLink: dropoffLocation,
-      rentalprice: parseInt(FarePriceCalculationBykilometer),
+      rentalprice: parseInt(FarePriceCalculationBymiles),
       createdDate: new Date(),
       status: "Pending",
       renterName: name,
@@ -142,7 +149,7 @@ const UseCityToCity = () => {
     handleCitytoCityBack,
     handleSelectedcar,
     SelectedCarData,
-    FarePriceCalculationBykilometer,
+    FarePriceCalculationBymiles,
     name,
     phone,
     luggage,

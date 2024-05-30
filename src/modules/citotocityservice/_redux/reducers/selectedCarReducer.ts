@@ -4,11 +4,14 @@ import type { AnyAction } from "@reduxjs/toolkit";
 
 const initialState: selectedCarType = {
   SelectedcarData: {
+    id: 0,
     Carname: "",
     image: "",
     Model: "",
-    perKiloPrice: 0,
+    perMilePrice: 0,
     perhourPrice: 0,
+    passenger: 0,
+    Luggage: 0,
     totalseat: 0,
     isWifi: false,
     childSeat: false

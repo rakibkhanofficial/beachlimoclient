@@ -9,6 +9,7 @@ import { useSidebarContext } from "../layout/layout-context";
 import { GiAutoRepair } from "react-icons/gi";
 import { useSession } from "next-auth/react";
 import { getRoutesByRole } from "../../privateRouting/PrivateRouts.data";
+import Link from "next/link";
 
 const SidebarWrapper = () => {
   const pathname = usePathname();
@@ -41,7 +42,7 @@ const SidebarWrapper = () => {
             alt="Qr Code Logo"
           />
         </div>
-        <h1 className=" text-center text-xl text-black dark:text-white font-bold ">Beach Limo</h1>
+        <Link href="/" className=" text-center cursor-pointer text-xl text-black dark:text-white font-bold ">Beach Limo</Link>
         <div className="flex h-full flex-col justify-between">
           <div className="mt-6 flex flex-col gap-4 px-2">
             {filteredRoutes &&

@@ -1,6 +1,6 @@
 import React from "react";
 import UseCityToCity from "~@/modules/citotocityservice/hocs/citytocityservice/useCitytoCityService";
-import { Button, Input, TimeInput, DatePicker } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { MdArrowBackIos } from "react-icons/md";
 import Googlemap from "./googlemap";
 // import { CalendarDate, Time } from "@internationalized/date";
@@ -9,13 +9,10 @@ const LocationSelection = () => {
   const {
     pickupAddress,
     dropoffAddress,
-    pickupdate,
-    pickuptime,
     distance,
     handleCitytoCityNext,
     handleCitytoCityBack,
-    handleInputChange,
-    FarePriceCalculationBykilometer,
+    FarePriceCalculationBymiles,
   } = UseCityToCity();
 
   return (
@@ -62,33 +59,19 @@ const LocationSelection = () => {
               value={distance}
             />
             <div className=" rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
-              {FarePriceCalculationBykilometer !== "NaN"
-                ? FarePriceCalculationBykilometer
+              {FarePriceCalculationBymiles !== "NaN"
+                ? FarePriceCalculationBymiles
                 : "Fair Price"}{" "}
               $
             </div>
-            <DatePicker
-              // value={new CalendarDate(pickupdate, pickupdate, pickupdate)}
-              onChange={(date) =>
-                handleInputChange("pickupdate", date?.toString())
-              }
-              label="Pick Up Date"
-              className="w-full"
-            />
-            <TimeInput
-              // value={new Time(pickuptime, pickuptime)}
-              onChange={(time) =>
-                handleInputChange("pickuptime", time?.toString())
-              }
-              label="Pick Up Time"
-            />
+
           </div>
         </div>
         <div className=" flex items-center justify-center my-4 ">
           <Button
             className=" lg:w-[40%] w-[80%] "
             color="success"
-            isDisabled={distance === "" || pickupdate === "" || pickuptime === ""}
+            isDisabled={distance === ""}
             onClick={handleCitytoCityNext}
           >
             Next

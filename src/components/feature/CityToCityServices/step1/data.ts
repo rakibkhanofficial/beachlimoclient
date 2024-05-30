@@ -5,10 +5,11 @@ export const Cardata = [
     Model: "2018",
     image: "/carimages/GMCYoukon2012.png",
     perhourPrice: 60,
-    perKiloPrice: 80,
-    totalseat: 6,
-    isWifi: true,
+    perMilePrice: 2.25,
     Luggage: 6,
+    totalseat: 6,
+    passenger: 6,
+    isWifi: true,
     childSeat: false
   },
   {
@@ -17,11 +18,12 @@ export const Cardata = [
     Model: "2017",
     image: "/carimages/JeepGrandCherokee.png",
     perhourPrice: 80,
-    perKiloPrice: 50,
+    perMilePrice: 2.25,
     totalseat: 5,
     isWifi: true,
     Luggage: 5,
-    childSeat: true
+    childSeat: true,
+    passenger: 5,
   },
   {
     id: 3,
@@ -29,11 +31,12 @@ export const Cardata = [
     Model: "2017",
     image: "/carimages/ToyotaLandCruiserPrado.png",
     perhourPrice: 80,
-    perKiloPrice: 50,
-    totalseat: 5,
+    perMilePrice: 2.25,
+    totalseat: 8,
     isWifi: true,
     Luggage: 5,
-    childSeat: false
+    childSeat: false,
+    passenger: 8,
   },
   {
     id: 4,
@@ -41,10 +44,11 @@ export const Cardata = [
     Model: "2012",
     image: "/carimages/GMCYoukon2012.png",
     perhourPrice: 60,
-    perKiloPrice: 80,
-    totalseat: 6,
+    perMilePrice: 2.25,
+    totalseat: 4,
     isWifi: true,
     Luggage: 6,
-    childSeat: true
+    childSeat: true,
+    passenger: 4,
   },
 ];
