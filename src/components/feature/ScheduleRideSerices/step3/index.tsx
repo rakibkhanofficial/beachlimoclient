@@ -11,10 +11,10 @@ import {
   useDisclosure,
   Spinner
 } from "@nextui-org/react";
+import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 import Image from "next/image";
 import { useAppSelector } from "~@/_redux/hooks/hooks";
 import { MdArrowForwardIos } from "react-icons/md";
-import UseScheduleRide from "~@/modules/servicemodule/hocs/schedulerideservice/useScheduleRideService";
 
 type selectedCarType = {
   id: number;
@@ -42,8 +42,7 @@ const OtherInformation = () => {
     pickupAddress,
     dropoffAddress,
     TotalFarePriceCalculationBymilesandhours,
-  } = UseScheduleRide();
-  
+  } = UseBytheHour();
   const SelectedCarData: selectedCarType = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );

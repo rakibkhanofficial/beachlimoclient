@@ -21,6 +21,6 @@ export const Servicedata = [
     id: 4,
     name: "Schedule Ride Service",
     image: "/ourservice/scheduledride.png",
-    url: "scheduled-ride",
+    url: "schedule-ride",
   },
 ];

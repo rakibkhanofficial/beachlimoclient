@@ -4,12 +4,12 @@ import { Cardata } from "./data";
 import Image from "next/image";
 import { MdArrowBackIos } from "react-icons/md";
 import Link from "next/link";
+import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 import { MdArrowForwardIos } from "react-icons/md";
-import UseScheduleRide from "~@/modules/servicemodule/hocs/schedulerideservice/useScheduleRideService";
 
 const CarSelection = () => {
   const { handleCitytoCityNext, handleSelectedcar, SelectedCarData } =
-  UseScheduleRide();
+    UseBytheHour();
 
   return (
     <div className="w-full">

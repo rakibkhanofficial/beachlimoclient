@@ -5,7 +5,7 @@ import LocationSelection from "./step2";
 import OtherInformation from "./step3";
 import CarBookingBycitytovitySucessFull from "./step4";
 
-const ScheduleRide = () => {
+const Bythehour = () => {
   const step: number = useAppSelector(
     (state) => state?.cityTocityServiceReducer?.citytocity?.step,
   );
@@ -25,4 +25,4 @@ const ScheduleRide = () => {
   return <>{stepper()}</>;
 };
 
-export default ScheduleRide;
+export default Bythehour;

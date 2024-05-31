@@ -2,7 +2,8 @@ import React from "react";
 import { Button, Input } from "@nextui-org/react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import Googlemap from "./googlemap";
-import UseScheduleRide from "~@/modules/servicemodule/hocs/schedulerideservice/useScheduleRideService";
+import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
+// import { CalendarDate, Time } from "@internationalized/date";
 
 const LocationSelection = () => {
   const {
@@ -12,7 +13,7 @@ const LocationSelection = () => {
     handleCitytoCityNext,
     handleCitytoCityBack,
     TotalFarePriceCalculationBymilesandhours,
-  } = UseScheduleRide();
+  } = UseBytheHour();
 
   return (
     <div className="w-full px-2 text-black dark:text-white ">
