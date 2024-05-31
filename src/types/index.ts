@@ -21,3 +21,29 @@ export type ResponseType = {
     firstName: string
     lastName: string
   }
+
+  export type IuserBookingListType = {
+    _id: string;
+    userId: string;
+    triptype: "CityToCity" | "AirportTransfer" | "ByTheHour" | "ScheduleRide"; // Enum or specific string values
+    airportname: string; // Empty string if not applicable
+    flightno: string; // Empty string if not applicable
+    childseat: boolean;
+    luggage: number;
+    passenger: number;
+    carModel: string;
+    carName: string;
+    mobilenumber: string;
+    pickuplocationAdress: string;
+    pickuplocationMapLink: string;
+    pickupDate: string; // ISO 8601 date string
+    pickuptime: string; // HH:mm:ss format
+    dropofflocationAdress: string;
+    dropofflocationMapLink: string;
+    rentalprice: number;
+    createdDate: string; // ISO 8601 date string
+    status: "pending" | "confirmed" | "completed" | "canceled"; // Enum for status
+    renterName: string;
+    renterPhone: string;
+    __v: number;
+  }

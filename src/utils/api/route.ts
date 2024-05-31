@@ -9,7 +9,7 @@ export const endPoints = {
   },
   Customer: {
     CreateBooking: "carrents/createCarRental",
-    getRentAllByuserId: "carrents/rentalbyuser",
+    getRentAllByuserId: (userId: string) => `carrents/rentalbyuser/${userId}`,
     getRentadetailsbyRentId: "carrents/rentalbyid"
   }
 }
