@@ -39,7 +39,7 @@ const AboutSection = () => {
           </motion.div>
           </div>
           <div className="flex-1 flex items-center xl:justify-center ">
-            <div className="xl:max-w-[517px]">
+            <div className=" w-[auto] xl:max-w-[517px]">
               <motion.h2
                 variants={fadeIn("up", 0.4)}
                 initial="hidden"
@@ -67,7 +67,7 @@ const AboutSection = () => {
                 viewport={{ once: false, amount: 0.2 }}
                 className="flex justify-center lg:justify-start items-center gap-8 mb-12"
               >
-                <div className="flex justify-center items-center md:justify-start md:items-start flex-col w-[100px]">
+                <div className="flex justify-center items-center md:justify-start md:items-start flex-col md:w-[100px]">
                   <MdOutlineDirectionsCar className="text-5xl text-[#f13024] mb-2" />
                   <div className="text-3xl font-black mb-2">
                     {inView ? (
@@ -81,7 +81,7 @@ const AboutSection = () => {
                   </div>
                 </div>
 
-                <div className="flex  justify-center items-center md:justify-start md:items-start flex-col w-[100px]">
+                <div className="flex  justify-center items-center md:justify-start md:items-start flex-col md:w-[100px]">
                   <MdOutlineMapsHomeWork className="text-5xl text-[#f13024] mb-2" />
                   <div className="text-3xl font-black mb-2">
                     {inView ? (
@@ -96,7 +96,7 @@ const AboutSection = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-center items-center md:justify-start md:items-start flex-col w-[100px]">
+                <div className="flex justify-center items-center md:justify-start md:items-start flex-col md:w-[100px]">
                   <MdOutlineBuildCircle className="text-5xl text-[#f13024] mb-2" />
                   <div className="text-3xl font-black mb-2">
                     {inView ? (

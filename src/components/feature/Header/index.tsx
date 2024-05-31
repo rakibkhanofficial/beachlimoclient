@@ -124,7 +124,7 @@ const HeaderLandingPage = () => {
                 color="foreground"
                 href="#download"
               >
-                Why Choose
+                Download
               </Link>
             </NavbarItem>
           </NavbarContent>

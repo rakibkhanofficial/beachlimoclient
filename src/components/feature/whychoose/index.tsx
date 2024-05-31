@@ -6,7 +6,7 @@ import { fadeIn } from "../../../../variant";
 
  const Whychoose = () => {
   return (
-    <section className=" h-[90vh] flex items-center " id="whychoose">
+    <section className=" h-[90vh] flex items-center my-36 md:my-5 " id="whychoose">
       <div className="container mx-auto grid gap-2 md:gap-6">
         <div>
         <motion.h2

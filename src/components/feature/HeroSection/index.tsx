@@ -22,7 +22,7 @@ const HeroSection = () => {
               className=" mb-2 text-[3rem] font-bold md:text-[3rem] xl:text-[4rem] "
             >
               Explore the Finest <span className="text-[#f11717]">Global</span>
-              Offers
+              Service
             </motion.h1>
             <motion.p
               variants={fadeIn("down", 0.4)}

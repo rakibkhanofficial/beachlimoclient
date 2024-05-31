@@ -1,13 +1,13 @@
 export const Servicedata = [
   {
     id: 1,
-    name: "City to City",
+    name: "City to City Service",
     image: "/ourservice/citytocity.png",
     url: "city-to-city",
   },
   {
     id: 2,
-    name: "By The Hour",
+    name: "By The Hour Service",
     image: "/ourservice/bythehour.png",
     url: "by-the-hour",
   },
@@ -19,7 +19,7 @@ export const Servicedata = [
   },
   {
     id: 4,
-    name: "Schedule Ride",
+    name: "Schedule Ride Service",
     image: "/ourservice/scheduledride.png",
     url: "scheduled-ride",
   },
