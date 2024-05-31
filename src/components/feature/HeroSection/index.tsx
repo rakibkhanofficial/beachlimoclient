@@ -69,7 +69,7 @@ const HeroSection = () => {
             // xl:max-h-[542px] xl:absolute xl:-right-[100px] min-[1680px]:right-[120px] xl:top-48"
           >
             <Image
-              src={"/images/limocars/carred.png"}
+              src={"/carimages/gmc2016.png"}
               width={800}
               height={500}
               alt="image"

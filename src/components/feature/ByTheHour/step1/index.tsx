@@ -73,8 +73,8 @@ const CarSelection = () => {
           onClick={handleCitytoCityNext}
           isDisabled={SelectedCarData.Carname === ""}
         >
-          <span>Next</span>
-          <span>
+          <span className=" text-white text-lg ">Next</span>
+          <span className=" text-white text-lg ">
             <MdArrowForwardIos />
           </span>
         </Button>

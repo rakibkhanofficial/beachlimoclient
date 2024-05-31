@@ -6,7 +6,8 @@ import {   Button,
   ModalContent,
   ModalBody,
   ModalFooter,
-  useDisclosure, } from "@nextui-org/react";
+  useDisclosure,
+  Spinner, } from "@nextui-org/react";
 import React from "react";
 import { MdArrowForwardIos } from "react-icons/md";
 import { useAppSelector } from "~@/_redux/hooks/hooks";
@@ -152,7 +153,7 @@ const CitytocityOtherInformation = () => {
                           !name || !phone || !pickupdate || !pickuptime
                         }
                       >
-                       <span className="text-white">{isBooking ? "Booking..." : "Confirm Booking"}</span>
+                       <span className="text-white">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
                       </Button >
                     </div>
                   </ModalBody>

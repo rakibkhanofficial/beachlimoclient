@@ -9,6 +9,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Spinner
 } from "@nextui-org/react";
 import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 import Image from "next/image";
@@ -89,8 +90,8 @@ const CitytocityOtherInformation = () => {
             onPress={onOpen}
             isDisabled={!name || !phone || !pickupdate || !pickuptime}
           >
-            <span className="text-white">Next</span>
-            <span>
+            <span className="text-white text-lg">Next</span>
+            <span className=" text-white text-lg ">
               <MdArrowForwardIos />
             </span>
           </Button>
@@ -151,7 +152,7 @@ const CitytocityOtherInformation = () => {
                           !name || !phone || !pickupdate || !pickuptime
                         }
                       >
-                       <span className="text-white">{isBooking ? "Booking..." : "Confirm Booking"}</span>
+                       <span className="text-white text-lg">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
                       </Button>
                     </div>
                   </ModalBody>
