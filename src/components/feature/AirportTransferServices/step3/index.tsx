@@ -1,4 +1,6 @@
-import {   Button,
+import React from "react";
+import {
+  Button,
   Input,
   TimeInput,
   DatePicker,
@@ -7,13 +9,12 @@ import {   Button,
   // ModalBody,
   // ModalFooter,
   useDisclosure,
-  Spinner, } from "@nextui-org/react";
-import React from "react";
-import { MdArrowForwardIos } from "react-icons/md";
-import { useAppSelector } from "~@/_redux/hooks/hooks";
-import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
+  Spinner
+} from "@nextui-org/react";
+import UseAirportTransfer from "~@/modules/servicemodule/hocs/airporttransferservice/useAirportTransferService";
 import Image from "next/image";
-
+import { useAppSelector } from "~@/_redux/hooks/hooks";
+import { MdArrowForwardIos } from "react-icons/md";
 
 type selectedCarType = {
   id: number;
@@ -29,48 +30,65 @@ type selectedCarType = {
   isWifi: boolean;
 };
 
-const CitytocityOtherInformation = () => {
+const OtherInformation = () => {
   const {
     handleCreateBooking,
     handleInputChange,
     name,
     phone,
+    airportname,
+    flightno,
     pickupdate,
     pickuptime,
     isBooking,
     pickupAddress,
     dropoffAddress,
-    FarePriceCalculationBymiles
-  } = UseCityToCity();
+    TotalFarePriceCalculationBymilesandhours,
+  } = UseAirportTransfer();
+
   const SelectedCarData: selectedCarType = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <div className=" my-5 w-full p-2 lg:p-5  ">
-      <div className=" flex flex-col items-center justify-center">
-        <h1 className=" my-5 text-center text-xl font-semibold  ">
-          Type This Iformation For booking
+    <div className="my-5 w-full p-2 lg:p-5">
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="my-5 text-center text-xl font-semibold">
+          Type This Information For Booking
         </h1>
-        <div className=" flex w-full flex-col gap-3 rounded-xl border border-slate-700 px-4 py-6 lg:w-[60%] ">
+        <div className="flex w-full flex-col gap-3 rounded-xl border border-slate-700 px-4 py-6 lg:w-[60%]">
           <Input
             placeholder="Enter Name"
             label="name"
-            className=" rounded-xl "
+            className="rounded-xl"
             value={name}
             onChange={(e) => handleInputChange("name", e.target.value)}
           />
           <Input
             placeholder="Enter Phone"
-            label="phone"
             inputMode="numeric"
-            className=" rounded-xl "
+            label="phone"
+            className="rounded-xl"
             value={phone}
             onChange={(e) => handleInputChange("phone", e.target.value)}
           />
+          <Input
+            placeholder="Enter Airport Name"
+            label="airport name"
+            className="rounded-xl"
+            value={airportname}
+            onChange={(e) => handleInputChange("airportname", e.target.value)}
+          />
+          <Input
+            placeholder="Enter Flight No"
+            label="flight no"
+            className="rounded-xl"
+            value={flightno}
+            onChange={(e) => handleInputChange("flightno", e.target.value)}
+          />
           <DatePicker
-            // value={new CalendarDate(pickupdate, pickupdate, pickupdate)}
             onChange={(date) =>
               handleInputChange("pickupdate", date?.toString())
             }
@@ -78,7 +96,6 @@ const CitytocityOtherInformation = () => {
             className="w-full"
           />
           <TimeInput
-            // value={new Time(pickuptime, pickuptime)}
             onChange={(time) =>
               handleInputChange("pickuptime", time?.toString())
             }
@@ -92,8 +109,8 @@ const CitytocityOtherInformation = () => {
             onPress={onOpen}
             isDisabled={!name || !phone || !pickupdate || !pickuptime}
           >
-            <span className="text-white">Next</span>
-            <span className="text-white">
+            <span className="text-white text-lg">Next</span>
+            <span className=" text-white text-lg ">
               <MdArrowForwardIos />
             </span>
           </Button>
@@ -141,7 +158,7 @@ const CitytocityOtherInformation = () => {
                         Total Fare Price:
                       </p>
                       <p className=" text-black dark:text-white ">
-                        {FarePriceCalculationBymiles} $
+                        {TotalFarePriceCalculationBymilesandhours} $
                       </p>
                     </div>
                     <div className="flex w-full items-center justify-center my-3">
@@ -153,8 +170,8 @@ const CitytocityOtherInformation = () => {
                           !name || !phone || !pickupdate || !pickuptime
                         }
                       >
-                       <span className="text-white">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
-                      </Button >
+                       <span className="text-white text-lg">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
+                      </Button>
                     </div>
                   {/* <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
@@ -171,4 +188,4 @@ const CitytocityOtherInformation = () => {
   );
 };
 
-export default CitytocityOtherInformation;
+export default OtherInformation;

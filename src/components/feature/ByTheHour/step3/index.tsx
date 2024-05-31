@@ -6,8 +6,8 @@ import {
   DatePicker,
   Modal,
   ModalContent,
-  ModalBody,
-  ModalFooter,
+  // ModalBody,
+  // ModalFooter,
   useDisclosure,
   Spinner
 } from "@nextui-org/react";
@@ -30,7 +30,7 @@ type selectedCarType = {
   isWifi: boolean;
 };
 
-const CitytocityOtherInformation = () => {
+const OtherInformation = () => {
   const {
     handleCreateBooking,
     handleInputChange,
@@ -64,6 +64,7 @@ const CitytocityOtherInformation = () => {
           />
           <Input
             placeholder="Enter Phone"
+            inputMode="numeric"
             label="phone"
             className="rounded-xl"
             value={phone}
@@ -99,7 +100,6 @@ const CitytocityOtherInformation = () => {
             <ModalContent>
               {(onClose) => (
                 <>
-                  <ModalBody>
                     <h1 className=" text-black dark:text-white my-3 text-center font-semibold text-xl ">Booking Information</h1>
                     <div className="flex items-center justify-center">
                       <Image
@@ -109,7 +109,7 @@ const CitytocityOtherInformation = () => {
                         width={200}
                       />
                     </div>
-                    <div className=" grid grid-cols-2 gap-1 rounded-lg border p-4 ">
+                    <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
                       <p className=" text-black dark:text-white ">Name:</p>
                       <p className=" text-black dark:text-white ">{name}</p>
                       <p className=" text-black dark:text-white ">Phone:</p>
@@ -143,7 +143,7 @@ const CitytocityOtherInformation = () => {
                         {TotalFarePriceCalculationBymilesandhours} $
                       </p>
                     </div>
-                    <div className="flex w-full items-center justify-center">
+                    <div className="flex w-full items-center justify-center my-3">
                       <Button
                         className="mt-5 w-[80%] lg:w-[50%]"
                         color="success"
@@ -155,12 +155,11 @@ const CitytocityOtherInformation = () => {
                        <span className="text-white text-lg">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
                       </Button>
                     </div>
-                  </ModalBody>
-                  <ModalFooter>
+                  {/* <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
                       Close
                     </Button>
-                  </ModalFooter>
+                  </ModalFooter> */}
                 </>
               )}
             </ModalContent>
@@ -171,4 +170,4 @@ const CitytocityOtherInformation = () => {
   );
 };
 
-export default CitytocityOtherInformation;
+export default OtherInformation;

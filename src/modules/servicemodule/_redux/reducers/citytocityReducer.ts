@@ -6,8 +6,6 @@ const initialState: ICitytoCityCreateReducer = {
   CitytoCityServiceInput: {
     airportname: "",
     flightno: "",
-    area: "",
-    adressdescription: "",
     pickupLocation: "",
     pickupAddress: "",
     pickupdate: "",
@@ -15,13 +13,14 @@ const initialState: ICitytoCityCreateReducer = {
     dropoffLocation: "",
     dropoffAddress: "",
     distance: "",
-    adress: "",
     name: "",
     phone: "",
     luggage: "",
     passenger: "",
-    triptype: ""
-
+    triptype: "",
+    area: "",
+    adressdescription: "",
+    adress: ""
   },
   isSubmitting: false,
   errors: "",

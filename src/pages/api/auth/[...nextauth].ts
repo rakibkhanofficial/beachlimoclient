@@ -14,7 +14,8 @@ interface User {
   _id: string;
   username: string
   email?: string | null;
-  isAdmin?: boolean
+  role?: string | null
+  accessToken?: string | null;
 }
 
 
@@ -135,7 +136,7 @@ const authOptions: NextAuthOptions = {
 
       return { ...token, ...user };
     },
-
+// @ts-expect-error type error is not solved
     async session({
       session,
       token,

@@ -3,9 +3,10 @@ import { useAppSelector } from "~@/_redux/hooks/hooks";
 import CarSelection from "./step1";
 import LocationSelection from "./step2";
 import OtherInformation from "./step3";
-import CarBookingBycitytovitySucessFull from "./step4";
+import CarBookingSucessFull from "./step4";
 
-const Bythehour = () => {
+const AirportTranserServiceComponenet = () => {
+  
   const step: number = useAppSelector(
     (state) => state?.cityTocityServiceReducer?.citytocity?.step,
   );
@@ -17,7 +18,7 @@ const Bythehour = () => {
       case 2:
         return <OtherInformation />;
       case 3:
-        return <CarBookingBycitytovitySucessFull />;
+        return <CarBookingSucessFull />;
       default:
         return <CarSelection />;
     }
@@ -25,4 +26,4 @@ const Bythehour = () => {
   return <>{stepper()}</>;
 };
 
-export default Bythehour;
+export default AirportTranserServiceComponenet;
