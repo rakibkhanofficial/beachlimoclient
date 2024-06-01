@@ -87,14 +87,6 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "3",
-          path: "/pendingbokkinglist",
-          linkName: "Pending Booking",
-          icon: <FaSitemap fontSize="1rem" />,
-          component: <></>,
-          subRoutes: [],
-        },
-        {
           id: "2",
           path: "/bookinglist",
           linkName: "All Booking List",
@@ -104,6 +96,14 @@ export const routes: any = {
         },
         {
           id: "3",
+          path: "/pendingbookinglist",
+          linkName: "Pending Booking",
+          icon: <FaSitemap fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "4",
           path: "/completebokkinglist",
           linkName: "Complete Booking",
           icon: <FaSitemap fontSize="1rem" />,
@@ -111,7 +111,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "4",
+          id: "5",
           path: "/cancelbokkinglist",
           linkName: "Cancel Booking",
           icon: <FaSitemap fontSize="1rem" />,

@@ -8,7 +8,7 @@ import { Spinner, Modal, ModalContent, useDisclosure } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
 
-const BookingListComponent = () => {
+const PendingBookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
     [],
   );
@@ -23,10 +23,10 @@ const BookingListComponent = () => {
       setIsLoading(true);
       try {
         const response = await getMethod(
-          endPoints.Customer.getRentAllByuserId(UserId),
+          endPoints.Customer.getPendingRentAllByuserId(UserId),
         );
         if (response?.data?.statusCode === 200) {
-          setBookingList(response?.data?.rentals as IuserBookingListType[]);
+          setBookingList(response?.data?.data as IuserBookingListType[]);
           setIsLoading(false);
         } else {
           setIsLoading(false);
@@ -52,7 +52,7 @@ const BookingListComponent = () => {
       ) : (
         <div>
           <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
-            All Booking List
+            Pending Booking List
           </h1>
           <div className=" hidden lg:inline ">
             <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
@@ -98,15 +98,9 @@ const BookingListComponent = () => {
                       {data?.pickupDate.slice(0, 10)}{" "}
                       {convertTo12HourFormat(data?.pickuptime)}
                     </p>
-                    {data?.status === "pending" ? (
-                      <p className=" col-span-1 text-center text-green-500">
-                        {data?.status}
-                      </p>
-                    ) : (
-                      <p className=" col-span-1 text-center text-blue-500">
-                        {data?.status}
-                      </p>
-                    )}
+                    <p className=" col-span-1 text-center text-blue-500">
+                      {data?.status}
+                    </p>
                     <Link
                       target="_blank"
                       href={data?.pickuplocationMapLink}
@@ -118,20 +112,27 @@ const BookingListComponent = () => {
                       <button onClick={onOpen} title="view" type="button">
                         <MdRemoveRedEye />
                       </button>
-                      <Modal backdrop="transparent" isOpen={isOpen} onOpenChange={onOpenChange} placement="auto">
-            <ModalContent>
-              {(onClose) => (
-                <>
-                    <h1 className=" text-black dark:text-white my-3 text-center font-semibold text-xl ">Booking Information</h1>
-                    <div className="flex items-center justify-center">
-                      {/* <Image
+                      <Modal
+                        backdrop="transparent"
+                        isOpen={isOpen}
+                        onOpenChange={onOpenChange}
+                        placement="auto"
+                      >
+                        <ModalContent>
+                          {(onClose) => (
+                            <>
+                              <h1 className=" my-3 text-center text-xl font-semibold text-black dark:text-white ">
+                                Booking Information
+                              </h1>
+                              <div className="flex items-center justify-center">
+                                {/* <Image
                         src={SelectedCarData?.image}
                         alt={SelectedCarData?.Carname}
                         height={200}
                         width={200}
                       /> */}
-                    </div>
-                    {/* <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
+                              </div>
+                              {/* <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
                       <p className=" text-black dark:text-white ">Name:</p>
                       <p className=" text-black dark:text-white ">{name}</p>
                       <p className=" text-black dark:text-white ">Phone:</p>
@@ -177,15 +178,15 @@ const BookingListComponent = () => {
                        <span className="text-white text-lg">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
                       </Button>
                     </div> */}
-                  {/* <ModalFooter>
+                              {/* <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
                       Close
                     </Button>
                   </ModalFooter> */}
-                </>
-              )}
-            </ModalContent>
-          </Modal>
+                            </>
+                          )}
+                        </ModalContent>
+                      </Modal>
                     </div>
                   </div>
                 ))
@@ -230,11 +231,7 @@ const BookingListComponent = () => {
                           {data?.pickupDate.slice(0, 10)},{" "}
                           {convertTo12HourFormat(data?.pickuptime)}
                         </p>
-                        {data?.status === "pending" ? (
-                          <p className=" text-green-500">{data?.status}</p>
-                        ) : (
-                          <p className=" text-blue-500">{data?.status}</p>
-                        )}
+                        <p className=" text-blue-500">{data?.status}</p>
                         <div className="text-center text-black dark:text-white">
                           <button title="view" type="button">
                             <MdRemoveRedEye />
@@ -246,7 +243,7 @@ const BookingListComponent = () => {
                 ))
               ) : (
                 <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  No Booking Data Aailable Please Book your car!
+                  No Pending Booking Aailable Please Book your car!
                 </div>
               )}
             </div>
@@ -257,4 +254,4 @@ const BookingListComponent = () => {
   );
 };
 
-export default BookingListComponent;
+export default PendingBookingListComponent;

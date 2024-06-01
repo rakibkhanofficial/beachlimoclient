@@ -10,6 +10,7 @@ export const endPoints = {
   Customer: {
     CreateBooking: "carrents/createCarRental",
     getRentAllByuserId: (userId: string) => `carrents/rentalbyuser/${userId}`,
+    getPendingRentAllByuserId: (userId: string) => `carrents/pendingrentalbyuser/${userId}`,
     getRentadetailsbyRentId: "carrents/rentalbyid"
   }
 }
