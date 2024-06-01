@@ -60,7 +60,7 @@ const DriverCreate = () => {
   return (
     <div className=" w-full bg-white dark:bg-gray-800">
       <div className=" flex items-center justify-center pb-20">
-        <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center">
+      <div className="flex w-full md:w-[70%] lg:w-[45%] xl:w-[35%] 2xl:w-[30%] flex-col items-center  justify-center gap-4 p-4 text-center">
           <div>
             <Image
               src="/BeachLimo.png"
@@ -70,10 +70,10 @@ const DriverCreate = () => {
               sizes="100vw"
               style={{ width: "200px", height: "100px", objectFit: "contain" }}
             />
-            <h1 className=" text-2xl font-medium text-black dark:text-white ">
+          </div>
+          <h1 className=" text-2xl font-medium text-black dark:text-white ">
               Create Driver Account Here
             </h1>
-          </div>
           <form className="h-full w-full ">
             {/* <TextInput
               type="text"

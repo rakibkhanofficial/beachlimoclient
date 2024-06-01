@@ -12,5 +12,9 @@ export const endPoints = {
     getRentAllByuserId: (userId: string) => `carrents/rentalbyuser/${userId}`,
     getPendingRentAllByuserId: (userId: string) => `carrents/pendingrentalbyuser/${userId}`,
     getRentadetailsbyRentId: "carrents/rentalbyid"
+  },
+  Admin: {
+    getAllCustomerList: "admin/allusersdata",
+    getAllDriverList: "admin/alldriverdata"
   }
 }
