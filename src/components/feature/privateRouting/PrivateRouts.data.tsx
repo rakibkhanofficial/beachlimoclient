@@ -136,8 +136,8 @@ export const routes: any = {
         },
         {
           id: "2",
-          path: "/warranty-claim/request-list",
-          linkName: "Warranty Claim",
+          path: "bokkinglistfordriver",
+          linkName: "Booking List",
           icon: <GiAutoRepair fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
