@@ -9,6 +9,7 @@ import { LiaSitemapSolid } from "react-icons/lia";
 import { FcAcceptDatabase } from "react-icons/fc";
 
 export const routes: any = {
+
   admin: [
     {
       label: "Main menu",
@@ -72,6 +73,7 @@ export const routes: any = {
       ],
     },
   ],
+
   customer: [
     {
       label: "Main menu",
@@ -85,17 +87,33 @@ export const routes: any = {
           subRoutes: [],
         },
         {
+          id: "3",
+          path: "/pendingbokkinglist",
+          linkName: "Pending Booking",
+          icon: <FaSitemap fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
           id: "2",
           path: "/bookinglist",
-          linkName: "Booking List",
+          linkName: "All Booking List",
           icon: <CiBoxList fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
         {
           id: "3",
-          path: "/drivercreate",
-          linkName: "Create Driver",
+          path: "/completebokkinglist",
+          linkName: "Complete Booking",
+          icon: <FaSitemap fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "4",
+          path: "/cancelbokkinglist",
+          linkName: "Cancel Booking",
           icon: <FaSitemap fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
@@ -103,6 +121,7 @@ export const routes: any = {
       ],
     },
   ],
+
   driver: [
     {
       label: "Main Menu",
@@ -126,6 +145,7 @@ export const routes: any = {
       ],
     },
   ],
+
 };
 
 export const getRoutesByRole = (role: string) => {
