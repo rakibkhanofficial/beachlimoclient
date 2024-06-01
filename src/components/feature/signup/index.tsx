@@ -61,13 +61,13 @@ const UserSignUp = () => {
 
   return (
     <div className=" w-full bg-white dark:bg-gray-800">
-      <div className=" px-20 underline ">
+      <div className=" px-5 md:px-10 lg:px-20 underline pt-2 ">
         <Link className="text-black dark:text-white" href="/">
           Go Back
         </Link>
       </div>
       <div className=" flex items-center justify-center pb-20">
-        <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center">
+      <div className="flex w-full md:w-[70%] lg:w-[45%] xl:w-[35%] 2xl:w-[30%] flex-col items-center  justify-center gap-4 p-4 text-center">
           <div>
             <Image
               src="/BeachLimo.png"
@@ -77,10 +77,10 @@ const UserSignUp = () => {
               sizes="100vw"
               style={{ width: "200px", height: "100px", objectFit: "contain" }}
             />
-            <h1 className=" text-2xl font-medium text-black dark:text-white ">
+          </div>
+          <h1 className=" text-2xl font-medium text-black dark:text-white ">
               Register Here For Booking
             </h1>
-          </div>
           <h1 className="text-black dark:text-white">
             {`have an account?`}
             <span className="pl-1">
@@ -92,7 +92,7 @@ const UserSignUp = () => {
               </Link>
             </span>
           </h1>
-          <form className="h-full w-full ">
+          <form className="h-full w-full my-2 ">
             {/* <TextInput
               type="text"
               isInvalid={isInvalidusername}
@@ -192,9 +192,9 @@ const UserSignUp = () => {
               }
             />
           </form>
-          <div className="flex w-full">
+          {/* <div className="flex w-full">
             <Checkbox>Remember Me</Checkbox>
-          </div>
+          </div> */}
           {signUpError && <p className="text-red-500">{signUpError}</p>}
           <Button
             size="lg"
@@ -234,22 +234,23 @@ const UserSignUp = () => {
           {/* <Link className="flex w-full hover:underline" href="/forget-password">
               Forgot My Password
             </Link> */}
-          <div className="flex w-full flex-col gap-4 sm:flex-row">
-            <button
+          <div className="flex w-full flex-col justify-center items-center gap-4 sm:flex-row">
+          <button
               title="Sign Up"
               type="button"
               onClick={handleSignUpwithgoogle}
-              className="grid w-full cursor-pointer grid-cols-7 whitespace-nowrap rounded-md bg-[#4285F4] px-3 py-2 font-medium text-white"
+              className=" flex w-full flex-col justify-center items-center cursor-pointer rounded-md bg-[#4285F4] px-3 py-1 font-medium text-white"
             >
               <Image
                 src="/assets/auth/google.png"
                 alt="Google"
-                height={24}
-                width={24}
+                height={20}
+                width={20}
+                className="rounded-full"
               />
-              <span className="col-span-6"> Google</span>
+              <span className="col-span-6"> Try with Google</span>
             </button>
-            <button
+            {/* <button
               title="Sign Up"
               type="button"
               onClick={handleSignUpwithMicrosoft}
@@ -262,7 +263,7 @@ const UserSignUp = () => {
                 width={24}
               />
               <span className="col-span-6">Github</span>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
