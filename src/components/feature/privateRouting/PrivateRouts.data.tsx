@@ -5,7 +5,6 @@ import { FcSupport } from "react-icons/fc";
 import { GiAutoRepair } from "react-icons/gi";
 import { GrServices } from "react-icons/gr";
 import { FaSitemap } from "react-icons/fa6";
-import { LiaSitemapSolid } from "react-icons/lia";
 import { FcAcceptDatabase } from "react-icons/fc";
 
 export const routes: any = {
@@ -24,48 +23,40 @@ export const routes: any = {
         },
         {
           id: "2",
-          path: "/generateqr",
-          linkName: "Generate Products",
-          icon: <LiaSitemapSolid fontSize="1rem" />,
-          component: <></>,
-          subRoutes: [],
-        },
-        {
-          id: "3",
-          path: "/productlist",
-          linkName: "Generated Product List",
+          path: "/pendingbookinglist",
+          linkName: "Pending Booking List",
           icon: <CiBoxList fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
         {
-          id: "4",
-          path: "/registeredproductlist",
-          linkName: "Registered Product List",
+          id: "3",
+          path: "/allbookinglist",
+          linkName: "All Booking List",
           icon: <FcAcceptDatabase fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
         {
-          id: "5",
-          path: "/adminwarrantyclaimlist",
-          linkName: "Warranty Claim History",
+          id: "4",
+          path: "/completebookinglist",
+          linkName: "Complete Booking List",
           icon: <FcSupport fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
         {
-          id: "6",
-          path: "/createmiddler",
-          linkName: "MiddleMan Create",
+          id: "5",
+          path: "/createdriver",
+          linkName: "Driver Create",
           icon: <GiAutoRepair fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
         {
-          id: "7",
-          path: "/middlemanlist",
-          linkName: "MiddleMan List",
+          id: "6s",
+          path: "/driverlist",
+          linkName: "Driver List",
           icon: <GrServices fontSize="1rem" />,
           component: <></>,
           subRoutes: [],

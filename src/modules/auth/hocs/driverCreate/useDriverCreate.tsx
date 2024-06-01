@@ -14,7 +14,7 @@ import { endPoints } from "../../../../utils/api/route";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-export const useSignup = () => {
+export const useDriverCreate = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isVisibleretype, setIsVisibleRetype] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
@@ -133,7 +133,7 @@ export const useSignup = () => {
           username: firstname,
           phone: phone,
           image: "",
-          role: "Customer"
+          role: "Driver"
           // strFirstName: firstname,
           // strLastName: lastname,
           // strPhone: phone,
@@ -141,34 +141,20 @@ export const useSignup = () => {
         },
       });
       if (response?.data?.statusCode === 200) {
+        toast.success(response?.data?.message as string)
         setIsSignup(false);
-        const loginresponse = await postMethod({
-          route: endPoints.auth.login,
-          postData: {
-            email: email,
-            password: password,
-          },
-        });
-        if (loginresponse?.data?.statusCode === 200) {
-          const loginresponseData = loginresponse?.data?.user;
-          await signIn("credentials", {
-            ...loginresponseData,
-            redirect: false,
-          });
-        } else {
-          dispatch(handleErros("SignUpError", loginresponse.data.messgae));
-        }
       } else {
-        setIsSignup(false);
         dispatch(handleErros("SignUpError", response.data.messgae));
         toast.error("Erorr Create Account Try Again", {
           duration: 3000,
           position: "top-center",
         });
+        setIsSignup(false);
       }
     } catch (error) {
       console.error(error);
       dispatch(handleSubmitting(false));
+      setIsSignup(false);
     }
   };
 

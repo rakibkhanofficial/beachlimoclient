@@ -1,18 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
-import { Button, Input, Spinner } from "@nextui-org/react";
-import Link from "next/link";
-import { Checkbox } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import TextInput from "../../elements/input/index";
 import { handleChangeRegisterInput } from "../../../modules/auth/_redux/actions/auth-action";
-import { useSignup } from "../../../modules/auth/hocs/signup/useSignup";
+import { useDriverCreate } from "~@/modules/auth/hocs/driverCreate/useDriverCreate";
 // import { useSession } from "next-auth/react";
 // import { useRouter } from "next/navigation";
 
-const UserSignUp = () => {
+const DriverCreate = () => {
   const {
     isInvalid,
     email,
@@ -37,7 +35,7 @@ const UserSignUp = () => {
     isSubmitting,
     isSignup,
     isVisibleretype,
-  } = useSignup();
+  } = useDriverCreate();
 
   // const router = useRouter();
   // const { data: session, status } = useSession();
@@ -61,11 +59,6 @@ const UserSignUp = () => {
 
   return (
     <div className=" w-full bg-white dark:bg-gray-800">
-      <div className=" px-20 underline ">
-        <Link className="text-black dark:text-white" href="/">
-          Go Back
-        </Link>
-      </div>
       <div className=" flex items-center justify-center pb-20">
         <div className="flex flex-col items-center  justify-center gap-4 p-4 text-center">
           <div>
@@ -78,20 +71,9 @@ const UserSignUp = () => {
               style={{ width: "200px", height: "100px", objectFit: "contain" }}
             />
             <h1 className=" text-2xl font-medium text-black dark:text-white ">
-              Register Here For Booking
+              Create Driver Account Here
             </h1>
           </div>
-          <h1 className="text-black dark:text-white">
-            {`have an account?`}
-            <span className="pl-1">
-              <Link
-                className="font-semibold text-black hover:underline dark:text-white"
-                href="/login"
-              >
-                Log In
-              </Link>
-            </span>
-          </h1>
           <form className="h-full w-full ">
             {/* <TextInput
               type="text"
@@ -192,9 +174,6 @@ const UserSignUp = () => {
               }
             />
           </form>
-          <div className="flex w-full">
-            <Checkbox>Remember Me</Checkbox>
-          </div>
           {signUpError && <p className="text-red-500">{signUpError}</p>}
           <Button
             size="lg"
@@ -216,8 +195,8 @@ const UserSignUp = () => {
               (isInvalidPassword &&
                 firstname === "" &&
                 email === "" &&
-                password === "" &&
                 phone === "" &&
+                password === "" &&
                 isPasswordNotMatched === false) ||
               isSubmitting
             }
@@ -231,43 +210,10 @@ const UserSignUp = () => {
           >
             {isSignup ? <Spinner color="warning" size="md" /> : "Create Account"}
           </Button>
-          {/* <Link className="flex w-full hover:underline" href="/forget-password">
-              Forgot My Password
-            </Link> */}
-          <div className="flex w-full flex-col gap-4 sm:flex-row">
-            <button
-              title="Sign Up"
-              type="button"
-              onClick={handleSignUpwithgoogle}
-              className="grid w-full cursor-pointer grid-cols-7 whitespace-nowrap rounded-md bg-[#4285F4] px-3 py-2 font-medium text-white"
-            >
-              <Image
-                src="/assets/auth/google.png"
-                alt="Google"
-                height={24}
-                width={24}
-              />
-              <span className="col-span-6"> Google</span>
-            </button>
-            <button
-              title="Sign Up"
-              type="button"
-              onClick={handleSignUpwithMicrosoft}
-              className="grid w-full cursor-pointer grid-cols-7 whitespace-nowrap rounded-md bg-[#2F2F2F] px-3 py-2 font-medium text-white"
-            >
-              <Image
-                src="/assets/auth/github.png"
-                alt="Github"
-                height={24}
-                width={24}
-              />
-              <span className="col-span-6">Github</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default UserSignUp;
+export default DriverCreate;

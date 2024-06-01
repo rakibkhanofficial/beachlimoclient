@@ -8,7 +8,7 @@ const initialState: IAuthReducer = {
     password: "",
     // firstName: "",
     // lastName: "",
-    // phone: "",
+    phone: "",
     retypepassword: "",
     username: "",
   },

@@ -9,7 +9,7 @@ export interface IAuthReducer {
     // lastName: string;
     username: string;
     retypepassword: string
-    // phone: string;
+    phone: string;
   };
 }
 
