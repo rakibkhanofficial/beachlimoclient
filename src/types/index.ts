@@ -47,3 +47,12 @@ export type ResponseType = {
     renterPhone: string;
     __v: number;
   }
+
+  export type DriverType = {
+    username: string;
+    email: string;
+    phone: string;
+    role: string
+    status: string
+    image: string
+  }

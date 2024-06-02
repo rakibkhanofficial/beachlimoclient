@@ -8,7 +8,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["cdn.sanity.io"],
+    domains: ["cdn.sanity.io", "i.ibb.co"],
   },
   typescript: {
     ignoreBuildErrors: true,
