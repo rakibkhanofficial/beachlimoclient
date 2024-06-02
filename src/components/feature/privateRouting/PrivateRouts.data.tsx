@@ -54,9 +54,17 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "6s",
+          id: "6",
           path: "/driverlist",
           linkName: "Driver List",
+          icon: <GrServices fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "7",
+          path: "/customerlist",
+          linkName: "Customer List",
           icon: <GrServices fontSize="1rem" />,
           component: <></>,
           subRoutes: [],

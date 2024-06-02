@@ -56,3 +56,12 @@ export type ResponseType = {
     status: string
     image: string
   }
+
+  export type CustomerType = {
+    username: string;
+    email: string;
+    phone: string;
+    role: string
+    status: string
+    image: string
+  }
