@@ -54,10 +54,10 @@ const DriverListComponenet = () => {
               <p className=" col-span-2 text-center text-black dark:text-white">
                 email
               </p>
-              <p className=" col-span-1 text-center text-black dark:text-white">
+              <p className=" col-span-2 text-center text-black dark:text-white">
                 role
               </p>
-              <p className=" col-span-3 text-center text-black dark:text-white">
+              <p className=" col-span-2 text-center text-black dark:text-white">
                 Status
               </p>
               <p className=" col-span-1 text-center text-black dark:text-white">
