@@ -15,6 +15,7 @@ export const endPoints = {
   },
   Admin: {
     getAllCustomerList: "admin/allusersdata",
-    getAllDriverList: "admin/alldriverdata"
+    getAllDriverList: "admin/alldriverdata",
+    getAllPendinBooking: "admin/pendingrentadata"
   }
 }

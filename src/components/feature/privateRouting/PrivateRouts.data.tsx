@@ -23,7 +23,7 @@ export const routes: any = {
         },
         {
           id: "2",
-          path: "/pendingbookinglist",
+          path: "/adminpendingbookinglist",
           linkName: "Pending Booking List",
           icon: <CiBoxList fontSize="1rem" />,
           component: <></>,
