@@ -16,6 +16,7 @@ export const endPoints = {
   Admin: {
     getAllCustomerList: "admin/allusersdata",
     getAllDriverList: "admin/alldriverdata",
-    getAllPendinBooking: "admin/pendingrentadata"
+    getAllPendinBooking: "admin/pendingrentadata",
+    updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`
   }
 }
