@@ -253,9 +253,65 @@ const AdminPendingBookingListComponent = () => {
                         </p>
                         <p className=" text-blue-500">{data?.status}</p>
                         <div className="text-center text-black dark:text-white">
-                          <button title="view" type="button">
+                          <button onClick={() => handleOpenModal(index)} title="view" type="button">
                             <MdRemoveRedEye />
                           </button>
+                          <Modal
+                        backdrop="transparent"
+                        isOpen={isOpen}
+                        onOpenChange={onOpenChange}
+                        placement="auto"
+                      >
+                        <ModalContent>
+                          {(onClose) => (
+                            <div className=" w-full px-5 overflow-y-scroll bg-white text-black ">
+                              <h1 className=" my-3 text-center text-xl font-semibold ">
+                                Select Status
+                              </h1>
+                              <div>
+                                <CustomSelect
+                                  showSearch
+                                  allowClear
+                                  placeholder="Select Status"
+                                  value={updatestatus ?? ""}
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLSelectElement>,
+                                  ) => {
+                                    setUpdateStatus(e.target.value);
+                                  }}
+                                >
+                                  {statusdata?.map((data, index) => (
+                                    <CustomSelect.Option
+                                      key={index}
+                                      value={data?.value}
+                                    >
+                                      {data?.level}
+                                    </CustomSelect.Option>
+                                  ))}
+                                </CustomSelect>
+                              </div>
+
+                              <Button
+                                onClick={handleStatusChange}
+                                className="my-2 w-full cursor-pointer rounded-lg bg-green-600 p-2"
+                              >
+                                {isupdateStatus
+                                  ? "Updating..."
+                                  : "Update Status"}
+                              </Button>
+                              <ModalFooter>
+                                <Button
+                                  color="danger"
+                                  variant="light"
+                                  onPress={onClose}
+                                >
+                                  Close
+                                </Button>
+                              </ModalFooter>
+                            </div>
+                          )}
+                        </ModalContent>
+                      </Modal>
                         </div>
                       </div>
                     </div>
