@@ -135,7 +135,7 @@ export const routes: any = {
       routes: [
         {
           id: "1",
-          path: "/servicemandashboard",
+          path: "/driverdashboard",
           linkName: "Dashboard",
           icon: <MdDashboardCustomize fontSize="1rem" />,
           component: <></>,
@@ -143,12 +143,20 @@ export const routes: any = {
         },
         {
           id: "2",
-          path: "bokkinglistfordriver",
-          linkName: "Booking List",
+          path: "/driverassignbookinglist",
+          linkName: " Assign Booking List",
           icon: <GiAutoRepair fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
+        {
+          id: "3",
+          path: "/drivercompletebookinglist",
+          linkName: " Complete Booking List",
+          icon: <GiAutoRepair fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        }
       ],
     },
   ],

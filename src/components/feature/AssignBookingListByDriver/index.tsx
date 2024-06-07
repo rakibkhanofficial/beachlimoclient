@@ -17,8 +17,9 @@ import { putMethod } from "~@/utils/api/putMethod";
 import toast from "react-hot-toast";
 import CustomSelect from "~@/components/elements/CustomSelect";
 import { statusdata } from "./statusdata";
+import { useSession } from "next-auth/react";
 
-const AdminPendingBookingListComponent = () => {
+const AssignBookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
     [],
   );
@@ -27,12 +28,16 @@ const AdminPendingBookingListComponent = () => {
   const [updatestatus, setUpdateStatus] = useState<string>("");
   const [rentid, setRentId] = useState<string>("");
   const [isupdateStatus, setIsUpdateStatus] = useState<boolean>(false);
+  const { data: session } = useSession();
+
 
   useEffect(() => {
+        // @ts-expect-error type error is not solved
+        const UserId = session?.user?._id;
     const fetchUserBookingList = async () => {
       setIsLoading(true);
       try {
-        const response = await getMethod(endPoints.Admin.getAllPendinBooking);
+        const response = await getMethod(endPoints.Driver.getAssignBookingList(UserId));
         if (response?.data?.statusCode === 200) {
           setBookingList(response?.data?.data as IuserBookingListType[]);
           setIsLoading(false);
@@ -59,7 +64,7 @@ const AdminPendingBookingListComponent = () => {
     setIsUpdateStatus(true);
     try {
       const response = await putMethod({
-        route: endPoints?.Admin?.updatestatusbyrentalid(rentid),
+        route: endPoints?.Driver.updateStatusByDriver(rentid),
         updateData: {
           status: updatestatus,
         },
@@ -88,7 +93,7 @@ const AdminPendingBookingListComponent = () => {
       ) : (
         <div>
           <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
-            Pending Booking List
+            Assign Booking List
           </h1>
           <div className=" hidden lg:inline ">
             <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
@@ -320,7 +325,7 @@ const AdminPendingBookingListComponent = () => {
                 ))
               ) : (
                 <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  No Pending Booking Aailable Please Book your car!
+                  No Assign Booking Aailable
                 </div>
               )}
             </div>
@@ -331,4 +336,4 @@ const AdminPendingBookingListComponent = () => {
   );
 };
 
-export default AdminPendingBookingListComponent;
+export default AssignBookingListComponent;
