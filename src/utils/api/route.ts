@@ -17,6 +17,8 @@ export const endPoints = {
     getAllCustomerList: "admin/allusersdata",
     getAllDriverList: "admin/alldriverdata",
     getAllPendinBooking: "admin/pendingrentadata",
-    updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`
+    updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`,
+    getAcceptedBookingList: "admin/acceptedrentadata",
+    updateDriver: (id: string) => `admin/assigndriverbyid/${id}`
   }
 }

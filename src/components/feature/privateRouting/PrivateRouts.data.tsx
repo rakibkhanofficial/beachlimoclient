@@ -31,6 +31,14 @@ export const routes: any = {
         },
         {
           id: "3",
+          path: "/acceptedbookinglistbyadmin",
+          linkName: "Accepted Booking List",
+          icon: <CiBoxList fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "3",
           path: "/allbookinglist",
           linkName: "All Booking List",
           icon: <FcAcceptDatabase fontSize="1rem" />,
