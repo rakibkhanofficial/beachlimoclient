@@ -9,14 +9,12 @@ import {
   ModalContent,
   useDisclosure,
   Button,
-  ModalFooter,
+  ModalBody,
 } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
 import { putMethod } from "~@/utils/api/putMethod";
 import toast from "react-hot-toast";
-import CustomSelect from "~@/components/elements/CustomSelect";
-import { statusdata } from "./statusdata";
 import { useSession } from "next-auth/react";
 
 const AssignBookingListComponent = () => {
@@ -25,19 +23,19 @@ const AssignBookingListComponent = () => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [updatestatus, setUpdateStatus] = useState<string>("");
   const [rentid, setRentId] = useState<string>("");
   const [isupdateStatus, setIsUpdateStatus] = useState<boolean>(false);
   const { data: session } = useSession();
 
-
   useEffect(() => {
-        // @ts-expect-error type error is not solved
-        const UserId = session?.user?._id;
+    // @ts-expect-error type error is not solved
+    const UserId = session?.user?._id;
     const fetchUserBookingList = async () => {
       setIsLoading(true);
       try {
-        const response = await getMethod(endPoints.Driver.getAssignBookingList(UserId));
+        const response = await getMethod(
+          endPoints.Driver.getAssignBookingList(UserId),
+        );
         if (response?.data?.statusCode === 200) {
           setBookingList(response?.data?.data as IuserBookingListType[]);
           setIsLoading(false);
@@ -56,7 +54,6 @@ const AssignBookingListComponent = () => {
   const handleOpenModal = (index: number) => {
     onOpen();
     const seleteddata = userBookingList[index];
-    setUpdateStatus(seleteddata?.status);
     setRentId(seleteddata?._id);
   };
 
@@ -66,12 +63,12 @@ const AssignBookingListComponent = () => {
       const response = await putMethod({
         route: endPoints?.Driver.updateStatusByDriver(rentid),
         updateData: {
-          status: updatestatus,
+          status: "complete",
         },
       });
       if (response?.data?.statusCode === 200) {
         toast.success(response?.data?.message);
-        onOpenChange()
+        onOpenChange();
         setIsUpdateStatus(false);
       } else {
         toast.error(response?.data?.message);
@@ -165,51 +162,31 @@ const AssignBookingListComponent = () => {
                       >
                         <ModalContent>
                           {(onClose) => (
-                            <div className=" w-full px-5 overflow-y-scroll bg-white text-black ">
-                              <h1 className=" my-3 text-center text-xl font-semibold ">
-                                Select Status
-                              </h1>
-                              <div>
-                                <CustomSelect
-                                  showSearch
-                                  allowClear
-                                  placeholder="Select Status"
-                                  value={updatestatus ?? ""}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLSelectElement>,
-                                  ) => {
-                                    setUpdateStatus(e.target.value);
-                                  }}
-                                >
-                                  {statusdata?.map((data, index) => (
-                                    <CustomSelect.Option
-                                      key={index}
-                                      value={data?.value}
-                                    >
-                                      {data?.level}
-                                    </CustomSelect.Option>
-                                  ))}
-                                </CustomSelect>
+                            <ModalBody>
+                              <div className=" my-5 flex h-[200px] w-full flex-col bg-white px-5 text-black ">
+                                <h1 className=" my-3 text-center text-xl font-semibold ">
+                                  Complete Booking
+                                </h1>
+                                <div className=" my-4 flex items-center justify-center gap-5 ">
+                                  <Button
+                                    className=" rounded-lg bg-red-700 text-white "
+                                    onPress={onClose}
+                                  >
+                                    Go Back
+                                  </Button>
+                                  <Button
+                                    onClick={handleStatusChange}
+                                    className=" rounded-lg bg-green-600 text-white hover:bg-green-700 "
+                                  >
+                                    {isupdateStatus ? (
+                                      <Spinner color="primary" />
+                                    ) : (
+                                      "Complete Ride"
+                                    )}
+                                  </Button>
+                                </div>
                               </div>
-
-                              <Button
-                                onClick={handleStatusChange}
-                                className="my-2 w-full cursor-pointer rounded-lg bg-green-600 p-2"
-                              >
-                                {isupdateStatus
-                                  ? "Updating..."
-                                  : "Update Status"}
-                              </Button>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  variant="light"
-                                  onPress={onClose}
-                                >
-                                  Close
-                                </Button>
-                              </ModalFooter>
-                            </div>
+                            </ModalBody>
                           )}
                         </ModalContent>
                       </Modal>
@@ -217,8 +194,10 @@ const AssignBookingListComponent = () => {
                   </div>
                 ))
               ) : (
-                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  No Booking Data Aailable Please Book your car!
+                <div className=" flex min-h-screen items-center justify-center ">
+                  <h1 className=" text-center text-xl font-semibold text-red-600 ">
+                    No Booking Data!
+                  </h1>
                 </div>
               )}
             </div>
@@ -259,73 +238,23 @@ const AssignBookingListComponent = () => {
                         </p>
                         <p className=" text-blue-500">{data?.status}</p>
                         <div className="text-center text-black dark:text-white">
-                          <button onClick={() => handleOpenModal(index)} title="view" type="button">
+                          <button
+                            onClick={() => handleOpenModal(index)}
+                            title="view"
+                            type="button"
+                          >
                             <MdRemoveRedEye />
                           </button>
-                          <Modal
-                        backdrop="transparent"
-                        isOpen={isOpen}
-                        onOpenChange={onOpenChange}
-                        placement="auto"
-                      >
-                        <ModalContent>
-                          {(onClose) => (
-                            <div className=" w-full px-5 overflow-y-scroll bg-white text-black ">
-                              <h1 className=" my-3 text-center text-xl font-semibold ">
-                                Select Status
-                              </h1>
-                              <div>
-                                <CustomSelect
-                                  showSearch
-                                  allowClear
-                                  placeholder="Select Status"
-                                  value={updatestatus ?? ""}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLSelectElement>,
-                                  ) => {
-                                    setUpdateStatus(e.target.value);
-                                  }}
-                                >
-                                  {statusdata?.map((data, index) => (
-                                    <CustomSelect.Option
-                                      key={index}
-                                      value={data?.value}
-                                    >
-                                      {data?.level}
-                                    </CustomSelect.Option>
-                                  ))}
-                                </CustomSelect>
-                              </div>
-
-                              <Button
-                                onClick={handleStatusChange}
-                                className="my-2 w-full cursor-pointer rounded-lg bg-green-600 p-2"
-                              >
-                                {isupdateStatus
-                                  ? "Updating..."
-                                  : "Update Status"}
-                              </Button>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  variant="light"
-                                  onPress={onClose}
-                                >
-                                  Close
-                                </Button>
-                              </ModalFooter>
-                            </div>
-                          )}
-                        </ModalContent>
-                      </Modal>
                         </div>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  No Assign Booking Aailable
+                <div className=" flex min-h-screen items-center justify-center ">
+                  <h1 className=" text-center text-xl font-semibold text-red-600 ">
+                    No Assign Booking Aailable
+                  </h1>
                 </div>
               )}
             </div>

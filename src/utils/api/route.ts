@@ -23,7 +23,7 @@ export const endPoints = {
   },
  Driver: {
     getAssignBookingList: (id: string) => `driver/driverassignedrentaldata/${id}`,
-    updateStatusByDriver: (id: string) => `/driverrental/status/${id}`,
+    updateStatusByDriver: (id: string) => `driver/driverrental/status/${id}`,
     getCompleteBookingList: (id: string) => `driver/drivercompleterentaldata/${id}`
   }
 }
