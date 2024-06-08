@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import CustomSelect from "~@/components/elements/CustomSelect";
 import { statusdata } from "./statusdata";
 
-const AdminPendingBookingListComponent = () => {
+const AssignBookingListByAdmin = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
     [],
   );
@@ -32,7 +32,7 @@ const AdminPendingBookingListComponent = () => {
     const fetchUserBookingList = async () => {
       setIsLoading(true);
       try {
-        const response = await getMethod(endPoints.Admin.getAllPendinBooking);
+        const response = await getMethod(endPoints.Admin.getAssignBookingList);
         if (response?.data?.statusCode === 200) {
           setBookingList(response?.data?.data as IuserBookingListType[]);
           setIsLoading(false);
@@ -88,7 +88,7 @@ const AdminPendingBookingListComponent = () => {
       ) : (
         <div>
           <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
-            Pending Booking List
+            Assign Booking List
           </h1>
           <div className=" hidden lg:inline ">
             <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
@@ -213,7 +213,9 @@ const AdminPendingBookingListComponent = () => {
                 ))
               ) : (
                 <div className=" min-h-screen flex justify-center items-center ">
-                  <h1 className=" text-xl font-semibold text-red-600 text-center ">No Pending Booking Data Aailable</h1>
+                    <h1 className=" text-xl font-semibold text-red-600 text-center ">
+                    No Booking Data !
+                    </h1>
                 </div>
               )}
             </div>
@@ -319,8 +321,8 @@ const AdminPendingBookingListComponent = () => {
                   </div>
                 ))
               ) : (
-                <div className=" min-h-screen flex justify-center items-center ">
-                  <h1 className=" text-xl font-semibold text-red-600 text-center ">No Pending Booking Data Aailable</h1>
+                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
+                  No Pending Booking Aailable Please Book your car!
                 </div>
               )}
             </div>
@@ -331,4 +333,5 @@ const AdminPendingBookingListComponent = () => {
   );
 };
 
-export default AdminPendingBookingListComponent;
+export default AssignBookingListByAdmin;
+

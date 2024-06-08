@@ -4,11 +4,11 @@ export const statusdata = [
     //     level: "Pending",
     //     value: "pending"
     // },
-    {
-        id: 2,
-        level: "Accept",
-        value: "accepted"
-    },
+    // {
+    //     id: 2,
+    //     level: "Accepted",
+    //     value: "accepted"
+    // },
     {
         id: 3,
         level: "Complete",

@@ -19,7 +19,8 @@ export const endPoints = {
     getAllPendinBooking: "admin/pendingrentadata",
     updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`,
     getAcceptedBookingList: "admin/acceptedrentadata",
-    updateDriver: (id: string) => `admin/assigndriverbyid/${id}`
+    updateDriver: (id: string) => `admin/assigndriverbyid/${id}`,
+    getAssignBookingList: "admin/assignedrentadata"
   },
  Driver: {
     getAssignBookingList: (id: string) => `driver/driverassignedrentaldata/${id}`,
