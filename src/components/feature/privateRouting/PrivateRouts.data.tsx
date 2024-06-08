@@ -47,7 +47,7 @@ export const routes: any = {
         },
         {
           id: "4",
-          path: "/completebookinglist",
+          path: "/admincompletebookinglist",
           linkName: "Complete Booking List",
           icon: <FcSupport fontSize="1rem" />,
           component: <></>,
@@ -55,7 +55,7 @@ export const routes: any = {
         },
         {
           id: "4",
-          path: "/cancelbookinglist",
+          path: "/admincancelbookinglist",
           linkName: "Cancel Booking List",
           icon: <FcSupport fontSize="1rem" />,
           component: <></>,

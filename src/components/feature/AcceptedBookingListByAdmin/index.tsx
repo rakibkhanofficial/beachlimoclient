@@ -94,6 +94,7 @@ const AdminAcceptedBookingListComponent = () => {
         setIsUpdateStatus(false);
       }
     } catch (error) {
+      // @ts-expect-error type error is not solved
       toast.error(error?.response?.data?.message);
       setIsUpdateStatus(false);
     }
@@ -233,7 +234,7 @@ const AdminAcceptedBookingListComponent = () => {
                 ))
               ) : (
                 <div className=" min-h-screen flex justify-center items-center ">
-                    <h1 className=" text-center text-xl font-semibold text-red-600 "> No Accepted Data Aailable!</h1>
+                    <h1 className=" text-center text-xl font-semibold text-red-600 "> No Accepted Booking Aailable!</h1>
                 </div>
               )}
             </div>
@@ -339,9 +340,11 @@ const AdminAcceptedBookingListComponent = () => {
                   </div>
                 ))
               ) : (
-                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  No Accepted Booking Aailable Please Book your car!
-                </div>
+                <div className=" flex min-h-screen items-center justify-center ">
+                <h1 className=" text-center text-xl font-semibold text-red-600 ">
+                  No Accepted Booking Aailable
+                </h1>
+              </div>
               )}
             </div>
           </div>

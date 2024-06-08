@@ -3,36 +3,24 @@ import { IuserBookingListType } from "~@/types";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
 import Link from "next/link";
-import {
-  Spinner,
-  Modal,
-  ModalContent,
-  useDisclosure,
-  Button,
-  ModalFooter,
-} from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
-import { putMethod } from "~@/utils/api/putMethod";
-import toast from "react-hot-toast";
-import CustomSelect from "~@/components/elements/CustomSelect";
-import { statusdata } from "./statusdata";
 
-const AssignBookingListByAdmin = () => {
+const AdminCompleteBookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
     [],
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [updatestatus, setUpdateStatus] = useState<string>("");
-  const [rentid, setRentId] = useState<string>("");
-  const [isupdateStatus, setIsUpdateStatus] = useState<boolean>(false);
+//   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
     const fetchUserBookingList = async () => {
       setIsLoading(true);
       try {
-        const response = await getMethod(endPoints.Admin.getAssignBookingList);
+        const response = await getMethod(
+          endPoints.Admin.getCompleteBookingList,
+        );
         if (response?.data?.statusCode === 200) {
           setBookingList(response?.data?.data as IuserBookingListType[]);
           setIsLoading(false);
@@ -45,39 +33,8 @@ const AssignBookingListByAdmin = () => {
         console.error(error);
       }
     };
-    void fetchUserBookingList();
-  }, [isupdateStatus]);
-
-  const handleOpenModal = (index: number) => {
-    onOpen();
-    const seleteddata = userBookingList[index];
-    setUpdateStatus(seleteddata?.status);
-    setRentId(seleteddata?._id);
-  };
-
-  const handleStatusChange = async () => {
-    setIsUpdateStatus(true);
-    try {
-      const response = await putMethod({
-        route: endPoints?.Admin?.updatestatusbyrentalid(rentid),
-        updateData: {
-          status: updatestatus,
-        },
-      });
-      if (response?.data?.statusCode === 200) {
-        toast.success(response?.data?.message);
-        onOpenChange()
-        setIsUpdateStatus(false);
-      } else {
-        toast.error(response?.data?.message);
-        setIsUpdateStatus(false);
-      }
-    } catch (error) {
-      // @ts-expect-error type error is not solved
-      toast.error(error?.response?.data?.message);
-      setIsUpdateStatus(false);
-    }
-  };
+      void fetchUserBookingList();
+  }, []);
 
   return (
     <div className=" min-h-screen bg-white px-2 dark:bg-slate-900 lg:px-10">
@@ -88,7 +45,7 @@ const AssignBookingListByAdmin = () => {
       ) : (
         <div>
           <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
-            Assign Booking List
+            Complete Booking List
           </h1>
           <div className=" hidden lg:inline ">
             <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
@@ -145,14 +102,10 @@ const AssignBookingListByAdmin = () => {
                       {data?.pickuplocationAdress}
                     </Link>
                     <div className=" col-span-1 text-center text-black dark:text-white">
-                      <button
-                        onClick={() => handleOpenModal(index)}
-                        title="view"
-                        type="button"
-                      >
+                      <button title="view" type="button">
                         <MdRemoveRedEye />
                       </button>
-                      <Modal
+                      {/* <Modal
                         backdrop="transparent"
                         isOpen={isOpen}
                         onOpenChange={onOpenChange}
@@ -160,63 +113,23 @@ const AssignBookingListByAdmin = () => {
                       >
                         <ModalContent>
                           {(onClose) => (
-                            <div className=" w-full px-5 overflow-y-scroll bg-white text-black ">
-                              <h1 className=" my-3 text-center text-xl font-semibold ">
-                                Select Status
+                            <>
+                              <h1 className=" my-3 text-center text-xl font-semibold text-black dark:text-white ">
+                                Booking Information
                               </h1>
-                              <div>
-                                <CustomSelect
-                                  showSearch
-                                  allowClear
-                                  placeholder="Select Status"
-                                  value={updatestatus ?? ""}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLSelectElement>,
-                                  ) => {
-                                    setUpdateStatus(e.target.value);
-                                  }}
-                                >
-                                  {statusdata?.map((data, index) => (
-                                    <CustomSelect.Option
-                                      key={index}
-                                      value={data?.value}
-                                    >
-                                      {data?.level}
-                                    </CustomSelect.Option>
-                                  ))}
-                                </CustomSelect>
-                              </div>
-
-                              <Button
-                                onClick={handleStatusChange}
-                                className="my-2 w-full cursor-pointer rounded-lg bg-green-600 p-2"
-                              >
-                                {isupdateStatus
-                                  ? "Updating..."
-                                  : "Update Status"}
-                              </Button>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  variant="light"
-                                  onPress={onClose}
-                                >
-                                  Close
-                                </Button>
-                              </ModalFooter>
-                            </div>
+                            </>
                           )}
                         </ModalContent>
-                      </Modal>
+                      </Modal> */}
                     </div>
                   </div>
                 ))
               ) : (
-                <div className=" min-h-screen flex justify-center items-center ">
-                    <h1 className=" text-xl font-semibold text-red-600 text-center ">
-                    No Assigned Booking Data !
-                    </h1>
-                </div>
+                <div className=" flex min-h-screen items-center justify-center ">
+                <h1 className=" text-center text-xl font-semibold text-red-600 ">
+                  No Complete Booking Aailable
+                </h1>
+              </div>
               )}
             </div>
           </div>
@@ -256,65 +169,9 @@ const AssignBookingListByAdmin = () => {
                         </p>
                         <p className=" text-blue-500">{data?.status}</p>
                         <div className="text-center text-black dark:text-white">
-                          <button onClick={() => handleOpenModal(index)} title="view" type="button">
+                          <button title="view" type="button">
                             <MdRemoveRedEye />
                           </button>
-                          <Modal
-                        backdrop="transparent"
-                        isOpen={isOpen}
-                        onOpenChange={onOpenChange}
-                        placement="auto"
-                      >
-                        <ModalContent>
-                          {(onClose) => (
-                            <div className=" w-full px-5 overflow-y-scroll bg-white text-black ">
-                              <h1 className=" my-3 text-center text-xl font-semibold ">
-                                Select Status
-                              </h1>
-                              <div>
-                                <CustomSelect
-                                  showSearch
-                                  allowClear
-                                  placeholder="Select Status"
-                                  value={updatestatus ?? ""}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLSelectElement>,
-                                  ) => {
-                                    setUpdateStatus(e.target.value);
-                                  }}
-                                >
-                                  {statusdata?.map((data, index) => (
-                                    <CustomSelect.Option
-                                      key={index}
-                                      value={data?.value}
-                                    >
-                                      {data?.level}
-                                    </CustomSelect.Option>
-                                  ))}
-                                </CustomSelect>
-                              </div>
-
-                              <Button
-                                onClick={handleStatusChange}
-                                className="my-2 w-full cursor-pointer rounded-lg bg-green-600 p-2"
-                              >
-                                {isupdateStatus
-                                  ? "Updating..."
-                                  : "Update Status"}
-                              </Button>
-                              <ModalFooter>
-                                <Button
-                                  color="danger"
-                                  variant="light"
-                                  onPress={onClose}
-                                >
-                                  Close
-                                </Button>
-                              </ModalFooter>
-                            </div>
-                          )}
-                        </ModalContent>
-                      </Modal>
                         </div>
                       </div>
                     </div>
@@ -323,7 +180,7 @@ const AssignBookingListByAdmin = () => {
               ) : (
                 <div className=" flex min-h-screen items-center justify-center ">
                 <h1 className=" text-center text-xl font-semibold text-red-600 ">
-                  No Assign Booking Aailable
+                  No Complete Booking Aailable
                 </h1>
               </div>
               )}
@@ -335,5 +192,4 @@ const AssignBookingListByAdmin = () => {
   );
 };
 
-export default AssignBookingListByAdmin;
-
+export default AdminCompleteBookingListComponent;
