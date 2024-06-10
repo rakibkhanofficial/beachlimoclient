@@ -18,15 +18,16 @@ export const endPoints = {
     getRentadetailsbyRentId: "customer/rentalbyid"
   },
   Admin: {
-    getAllCustomerList: "admin/allusersdata",
-    getAllDriverList: "admin/alldriverdata",
+    allbookinglistforadmin: "admin/allrentaldata",
     getAllPendinBooking: "admin/pendingrentadata",
     updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`,
     getAcceptedBookingList: "admin/acceptedrentadata",
     updateDriver: (id: string) => `admin/assigndriverbyid/${id}`,
     getAssignBookingList: "admin/assignedrentadata",
     getCompleteBookingList: "admin/completerentadata",
-    getCancelBookingList: "admin/cancelrentadata"
+    getCancelBookingList: "admin/cancelrentadata",
+    getAllCustomerList: "admin/allusersdata",
+    getAllDriverList: "admin/alldriverdata",
   },
  Driver: {
     getAssignBookingList: (id: string) => `driver/driverassignedrentaldata/${id}`,

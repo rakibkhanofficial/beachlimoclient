@@ -23,6 +23,14 @@ export const routes: any = {
         },
         {
           id: "2",
+          path: "/adminallrentdata",
+          linkName: "All Booking List",
+          icon: <MdDashboardCustomize fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "3",
           path: "/adminpendingbookinglist",
           linkName: "Pending Booking List",
           icon: <CiBoxList fontSize="1rem" />,
@@ -30,7 +38,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "3",
+          id: "4",
           path: "/acceptedbookinglistbyadmin",
           linkName: "Accepted Booking List",
           icon: <CiBoxList fontSize="1rem" />,
@@ -38,7 +46,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "3",
+          id: "5",
           path: "/assignbookinglistbyadmin",
           linkName: "Assigned Booking List",
           icon: <FcAcceptDatabase fontSize="1rem" />,
@@ -46,7 +54,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "4",
+          id: "6",
           path: "/admincompletebookinglist",
           linkName: "Complete Booking List",
           icon: <FcSupport fontSize="1rem" />,
@@ -54,7 +62,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "4",
+          id: "7",
           path: "/admincancelbookinglist",
           linkName: "Cancel Booking List",
           icon: <FcSupport fontSize="1rem" />,
@@ -62,7 +70,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "5",
+          id: "8",
           path: "/createdriver",
           linkName: "Driver Create",
           icon: <GiAutoRepair fontSize="1rem" />,
@@ -70,7 +78,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "6",
+          id: "9",
           path: "/driverlist",
           linkName: "Driver List",
           icon: <GrServices fontSize="1rem" />,
@@ -78,7 +86,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "7",
+          id: "10",
           path: "/customerlist",
           linkName: "Customer List",
           icon: <GrServices fontSize="1rem" />,
@@ -118,7 +126,15 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "3",
+          id: "4",
+          path: "/useracceptedbookinglist",
+          linkName: "Accepted Booking",
+          icon: <FaSitemap fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "5",
           path: "/userassignbookinglist",
           linkName: "Assign Booking",
           icon: <FaSitemap fontSize="1rem" />,
@@ -126,7 +142,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "4",
+          id: "6",
           path: "/usercompletebooking",
           linkName: "Complete Booking",
           icon: <FaSitemap fontSize="1rem" />,
@@ -134,7 +150,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "5",
+          id: "7",
           path: "/usercancelbookinglist",
           linkName: "Cancel Booking",
           icon: <FaSitemap fontSize="1rem" />,
