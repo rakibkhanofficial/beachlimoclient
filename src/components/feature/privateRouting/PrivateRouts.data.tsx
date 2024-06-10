@@ -103,7 +103,7 @@ export const routes: any = {
         },
         {
           id: "2",
-          path: "/bookinglist",
+          path: "/userallbookinglist",
           linkName: "All Booking List",
           icon: <CiBoxList fontSize="1rem" />,
           component: <></>,
@@ -111,7 +111,7 @@ export const routes: any = {
         },
         {
           id: "3",
-          path: "/pendingbookinglist",
+          path: "/userpendingbookinglist",
           linkName: "Pending Booking",
           icon: <FaSitemap fontSize="1rem" />,
           component: <></>,
@@ -119,7 +119,7 @@ export const routes: any = {
         },
         {
           id: "4",
-          path: "/completebokkinglist",
+          path: "/usercompletebooking",
           linkName: "Complete Booking",
           icon: <FaSitemap fontSize="1rem" />,
           component: <></>,
@@ -127,7 +127,7 @@ export const routes: any = {
         },
         {
           id: "5",
-          path: "/cancelbokkinglist",
+          path: "/usercancelbookinglist",
           linkName: "Cancel Booking",
           icon: <FaSitemap fontSize="1rem" />,
           component: <></>,

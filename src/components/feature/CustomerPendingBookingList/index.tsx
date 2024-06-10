@@ -8,7 +8,7 @@ import { Spinner, Modal, ModalContent, useDisclosure } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
 
-const PendingBookingListComponent = () => {
+const CustomerPendingBookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
     [],
   );
@@ -254,4 +254,4 @@ const PendingBookingListComponent = () => {
   );
 };
 
-export default PendingBookingListComponent;
+export default CustomerPendingBookingListComponent;

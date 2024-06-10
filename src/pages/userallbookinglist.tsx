@@ -1,8 +1,8 @@
 import React from "react";
-import BookingListComponent from "~@/components/feature/AllBookingList";
+import BookingListComponent from "~@/components/feature/CustomerAllBookingList";
 import { UserDashboardLayout } from "~@/components/feature/UserDashboard/layout/layout";
 
-const BookingListPage = () => {
+const CustomerAllBookingListPage = () => {
   return (
     <div>
       <UserDashboardLayout children={<BookingListComponent />} />
@@ -10,4 +10,4 @@ const BookingListPage = () => {
   );
 };
 
-export default BookingListPage;
+export default CustomerAllBookingListPage;
