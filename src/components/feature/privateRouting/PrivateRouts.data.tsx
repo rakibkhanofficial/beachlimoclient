@@ -118,6 +118,14 @@ export const routes: any = {
           subRoutes: [],
         },
         {
+          id: "3",
+          path: "/userassignbookinglist",
+          linkName: "Assign Booking",
+          icon: <FaSitemap fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
           id: "4",
           path: "/usercompletebooking",
           linkName: "Complete Booking",
