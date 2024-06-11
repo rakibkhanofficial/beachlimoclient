@@ -4,9 +4,17 @@ import { IuserBookingListType } from "~@/types";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
 import Link from "next/link";
-import { Spinner, Modal, ModalContent, useDisclosure } from "@nextui-org/react";
+import {
+  Spinner,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  Button,
+  ModalBody,
+} from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
+import BookingStatus from "./bookingStatus";
 
 const BookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
@@ -14,7 +22,8 @@ const BookingListComponent = () => {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: session } = useSession();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [statusmodalShow, setModalShow] = useState(false);
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     // @ts-expect-error type error is not solved
@@ -42,6 +51,11 @@ const BookingListComponent = () => {
     }
     // @ts-expect-error type error is not solved
   }, [session?.user?._id]);
+
+  const handleOpenStatusModal = (status: string) => {
+    setStatus(status);
+    setModalShow(true);
+  };
 
   return (
     <div className=" min-h-screen bg-white px-2 dark:bg-slate-900 lg:px-10">
@@ -95,7 +109,7 @@ const BookingListComponent = () => {
                       {data?.renterPhone}
                     </p>
                     <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.pickupDate.slice(0, 10)}{" "}
+                      {data?.pickupDate.slice(0, 10)}
                       {convertTo12HourFormat(data?.pickuptime)}
                     </p>
                     {data?.status === "pending" ? (
@@ -115,84 +129,13 @@ const BookingListComponent = () => {
                       {data?.pickuplocationAdress}
                     </Link>
                     <div className=" col-span-1 text-center text-black dark:text-white">
-                      <button onClick={onOpen} title="view" type="button">
+                      <button
+                        onClick={() => handleOpenStatusModal(data?.status)}
+                        title="view"
+                        type="button"
+                      >
                         <MdRemoveRedEye />
                       </button>
-                      <Modal
-                        backdrop="transparent"
-                        isOpen={isOpen}
-                        onOpenChange={onOpenChange}
-                        placement="auto"
-                      >
-                        <ModalContent>
-                          {(onClose) => (
-                            <>
-                              <h1 className=" my-3 text-center text-xl font-semibold text-black dark:text-white ">
-                                Booking Information
-                              </h1>
-                              <div className="flex items-center justify-center">
-                                {/* <Image
-                        src={SelectedCarData?.image}
-                        alt={SelectedCarData?.Carname}
-                        height={200}
-                        width={200}
-                      /> */}
-                              </div>
-                              {/* <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
-                      <p className=" text-black dark:text-white ">Name:</p>
-                      <p className=" text-black dark:text-white ">{name}</p>
-                      <p className=" text-black dark:text-white ">Phone:</p>
-                      <p className=" text-black dark:text-white ">{phone}</p>
-                      <p className=" text-black dark:text-white ">Car Name:</p>
-                      <p className=" text-black dark:text-white ">
-                        {SelectedCarData.Carname}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        Pickup Address:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {pickupAddress}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        Drop Off Address:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {dropoffAddress}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        PickUp Time & Date:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {pickuptime}, {pickupdate}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        Total Fare Price:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {TotalFarePriceCalculationBymilesandhours} $
-                      </p>
-                    </div>
-                    <div className="flex w-full items-center justify-center my-3">
-                      <Button
-                        className="mt-5 w-[80%] lg:w-[50%]"
-                        color="success"
-                        onPress={handleCreateBooking}
-                        isDisabled={
-                          !name || !phone || !pickupdate || !pickuptime
-                        }
-                      >
-                       <span className="text-white text-lg">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
-                      </Button>
-                    </div> */}
-                              {/* <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
-                      Close
-                    </Button>
-                  </ModalFooter> */}
-                            </>
-                          )}
-                        </ModalContent>
-                      </Modal>
                     </div>
                   </div>
                 ))
@@ -202,6 +145,33 @@ const BookingListComponent = () => {
                 </div>
               )}
             </div>
+            <Modal
+              backdrop="blur"
+              isOpen={statusmodalShow}
+              onOpenChange={() => setModalShow(!statusmodalShow)}
+              placement="auto"
+              size="4xl"
+            >
+              <ModalContent>
+                <>
+                  <ModalBody>
+                    <h1 className="mb-6 text-center text-black text-2xl font-semibold">
+                      Your Booking Status
+                    </h1>
+                    <BookingStatus bookingStatus={status} />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={() => setModalShow(!statusmodalShow)}
+                    >
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </>
+              </ModalContent>
+            </Modal>
           </div>
           <div className=" inline lg:hidden ">
             <div className=" grid grid-cols-1 text-black dark:text-white md:grid-cols-2 md:gap-2 ">
