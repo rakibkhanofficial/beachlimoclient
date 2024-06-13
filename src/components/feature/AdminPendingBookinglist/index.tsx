@@ -10,6 +10,7 @@ import {
   useDisclosure,
   Button,
   ModalFooter,
+  Input,
 } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
@@ -17,6 +18,7 @@ import { putMethod } from "~@/utils/api/putMethod";
 import toast from "react-hot-toast";
 import CustomSelect from "~@/components/elements/CustomSelect";
 import { statusdata } from "./statusdata";
+import { SearchIcon } from "../../elements/searchIcon/Searchincon";
 
 const AdminPendingBookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
@@ -27,6 +29,7 @@ const AdminPendingBookingListComponent = () => {
   const [updatestatus, setUpdateStatus] = useState<string>("");
   const [rentid, setRentId] = useState<string>("");
   const [isupdateStatus, setIsUpdateStatus] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchUserBookingList = async () => {
@@ -79,6 +82,17 @@ const AdminPendingBookingListComponent = () => {
     }
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredBookingList = userBookingList.filter((booking) => {
+    return (
+      booking.renterName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booking.renterPhone.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
   return (
     <div className=" min-h-screen bg-white px-2 dark:bg-slate-900 lg:px-10">
       {isLoading === true ? (
@@ -90,6 +104,40 @@ const AdminPendingBookingListComponent = () => {
           <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
             Pending Booking List
           </h1>
+          <div className="mx-auto my-3 flex w-[50%] items-center justify-center">
+            <Input
+              label="Search"
+              isClearable
+              radius="lg"
+              classNames={{
+                label: "text-black/50 dark:text-white/90",
+                input: [
+                  "bg-transparent",
+                  "text-black/90 dark:text-white/90",
+                  "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                ],
+                innerWrapper: "bg-transparent",
+                inputWrapper: [
+                  "shadow-xl",
+                  "bg-default-200/50",
+                  "dark:bg-default/60",
+                  "backdrop-blur-xl",
+                  "backdrop-saturate-200",
+                  "hover:bg-default-200/70",
+                  "dark:hover:bg-default/70",
+                  "group-data-[focus=true]:bg-default-200/50",
+                  "dark:group-data-[focus=true]:bg-default/60",
+                  "!cursor-text",
+                ],
+              }}
+              placeholder="Type to search..."
+              startContent={
+                <SearchIcon className="pointer-events-none mb-0.5 flex-shrink-0 text-black/50 text-slate-400 dark:text-white/90" />
+              }
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
           <div className=" hidden lg:inline ">
             <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
               <p className=" col-span-1 text-center text-black dark:text-white">
@@ -115,8 +163,8 @@ const AdminPendingBookingListComponent = () => {
               </p>
             </div>
             <div className=" my-4">
-              {userBookingList.length > 0 ? (
-                userBookingList?.map((data, index) => (
+              {filteredBookingList.length > 0 ? (
+                filteredBookingList?.map((data, index) => (
                   <div
                     key={index}
                     className=" mb-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white"

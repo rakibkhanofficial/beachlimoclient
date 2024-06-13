@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { DriverType } from "~@/types";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
-import { Spinner } from "@nextui-org/react";
+import { Input, Spinner } from "@nextui-org/react";
 import Image from "next/image";
+import { SearchIcon } from "~@/components/elements/searchIcon/Searchincon";
 
 const DriverListComponenet = () => {
   const [driverlist, setDriverList] = useState<DriverType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchDriverList = async () => {
@@ -29,6 +31,17 @@ const DriverListComponenet = () => {
     void fetchDriverList();
   }, []);
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredDriverList = driverlist.filter((driver) => {
+    return (
+      driver.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      driver.phone.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
   return (
     <div className=" min-h-screen bg-white px-2 dark:bg-slate-900 lg:px-10">
       {isLoading === true ? (
@@ -40,6 +53,40 @@ const DriverListComponenet = () => {
           <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
             Driver List
           </h1>
+          <div className="mx-auto my-3 flex w-[50%] items-center justify-center">
+            <Input
+              label="Search"
+              isClearable
+              radius="lg"
+              classNames={{
+                label: "text-black/50 dark:text-white/90",
+                input: [
+                  "bg-transparent",
+                  "text-black/90 dark:text-white/90",
+                  "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                ],
+                innerWrapper: "bg-transparent",
+                inputWrapper: [
+                  "shadow-xl",
+                  "bg-default-200/50",
+                  "dark:bg-default/60",
+                  "backdrop-blur-xl",
+                  "backdrop-saturate-200",
+                  "hover:bg-default-200/70",
+                  "dark:hover:bg-default/70",
+                  "group-data-[focus=true]:bg-default-200/50",
+                  "dark:group-data-[focus=true]:bg-default/60",
+                  "!cursor-text",
+                ],
+              }}
+              placeholder="Type to search..."
+              startContent={
+                <SearchIcon className="pointer-events-none mb-0.5 flex-shrink-0 text-black/50 text-slate-400 dark:text-white/90" />
+              }
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
           <div className=" hidden lg:inline ">
             <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
               <p className=" col-span-1 text-center text-black dark:text-white">
@@ -65,8 +112,8 @@ const DriverListComponenet = () => {
               </p>
             </div>
             <div className=" my-4">
-              {driverlist.length > 0 ? (
-                driverlist?.map((data, index) => (
+              {filteredDriverList.length > 0 ? (
+                filteredDriverList?.map((data, index) => (
                   <div
                     key={index}
                     className=" mb-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white"

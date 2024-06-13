@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { IuserBookingListType } from "~@/types";
 import { getMethod } from "~@/utils/api/getMethod";
@@ -13,13 +12,12 @@ import {
 } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
-import { SearchIcon } from "./Searchincon";
+import { SearchIcon } from "../../elements/searchIcon/Searchincon";
 
 const AdminAllBookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const { data: session } = useSession();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
