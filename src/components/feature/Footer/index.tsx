@@ -29,8 +29,8 @@ const FooterComponent = () => {
               </h1>
             </Link>
             <p>Services</p>
-            <p>Flat Booking</p>
-            <p>Construction</p>
+            <p>Car Booking</p>
+            <p>Rent Services</p>
           </div>
 
           {/* Contact */}
@@ -40,9 +40,9 @@ const FooterComponent = () => {
                 Contact
               </h1>
             </Link>
-            <p>Rampura,Dhaka</p>
-            <p>+88012345-67891</p>
-            <p>statebuilder@builderstate.com</p>
+            <p>Caloforniya,USA</p>
+            <p>{`+1(646) 517-4942`}</p>
+            <p>support@beachLimo.com</p>
           </div>
 
           {/* Newsletter */}

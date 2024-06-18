@@ -43,7 +43,7 @@ const SidebarWrapper = () => {
           />
         </div>
         <Link href="/" className=" text-center cursor-pointer text-xl text-black dark:text-white font-bold ">Beach Limo</Link>
-        <div className="flex h-full flex-col justify-between">
+        <div className="flex h-full overflow-y-scroll flex-col justify-between">
           <div className="mt-6 flex flex-col gap-4 px-2">
             {filteredRoutes &&
               filteredRoutes?.length > 0 &&
