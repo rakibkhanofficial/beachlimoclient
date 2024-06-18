@@ -12,7 +12,7 @@ const AdminDashbaordOverView = () => {
 
   return (
     <div className=" flex flex-col gap-5 bg-white text-black dark:bg-black dark:text-white p-4 ">
-      <div className=" grid grid-cols-4 gap-4 my-4 ">
+      <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 my-4 ">
         <Card className="w-full bg-[#519921] px-2 py-8 text-white shadow-md shadow-[#afafaf] dark:shadow-slate-700 ">
           <CardBody>
             {loading ? (
