@@ -29,7 +29,8 @@ export const endPoints = {
     getCancelBookingList: "admin/cancelrentadata",
     getAllCustomerList: "admin/allusersdata",
     getAllDriverList: "admin/alldriverdata",
-    getTotalBookingbyAdmin: "admin/analytics/totalbooking"
+    getTotalBookingbyAdmin: "admin/analytics/totalbooking",
+    getTotalCompletebookingDaily: "admin/analytics/dailycompletebooking"
   },
  Driver: {
     getAssignBookingList: (id: string) => `driver/driverassignedrentaldata/${id}`,

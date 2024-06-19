@@ -6,58 +6,40 @@ import { endPoints } from "~@/utils/api/route";
 
 export type completeBookingchartType = {
   id: number;
-  date: string;
+  day: string;
   count: number;
 };
 
-const completeBookingcount = [
-  {
-    id: 1,
-    date: "17",
-    count: 40,
-  },
-  {
-    id: 2,
-    date: "18",
-    count: 20,
-  },
-  {
-    id: 3,
-    date: "19",
-    count: 60
-  }
-];
-
 const CompleteBookingChart = () => {
-  //   const [completeBookingcount, setCompleteBookingcount] = useState<completeBookingchartType[]>(
-  //     [],
-  //   );
+    const [completeBookingcount, setCompleteBookingcount] = useState<completeBookingchartType[]>(
+      [],
+    );
     const [loading, setLoading] = useState<boolean>(false);
 
-  //   useEffect(() => {
-  //     const fetchwarrantycount = async () => {
-  //       try {
-  //         setLoading(true);
-  //         const response = await getMethod(
-  //           endPoints.analytics.warrantyclaimcount,
-  //         );
-  //         const responseData = response?.data?.data as completeBookingchartType[];
-  //         setCompleteBookingcount(responseData);
-  //       } catch (error) {
-  //         setLoading(false);
-  //         console.error(error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
+    useEffect(() => {
+      const fetchwarrantycount = async () => {
+        try {
+          setLoading(true);
+          const response = await getMethod(
+            endPoints.Admin.getTotalCompletebookingDaily,
+          );
+          const responseData = response?.data?.data as completeBookingchartType[];
+          setCompleteBookingcount(responseData);
+        } catch (error) {
+          setLoading(false);
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-  //     fetchwarrantycount();
-  //   }, []);
+      fetchwarrantycount();
+    }, []);
 
   const seriesData = completeBookingcount?.map((item) => item.count);
   const categoriesxaxis = completeBookingcount?.length;
   const indexArray = [...Array(categoriesxaxis)]?.map((_, index) => index + 1);
-  const DateArray = completeBookingcount?.map((item, index) => item?.date)
+  // const DateArray = completeBookingcount?.map((item, index) => item?.day)
 
   const state: Props["series"] = [
     {
@@ -88,7 +70,7 @@ const CompleteBookingChart = () => {
     },
 
     xaxis: {
-      categories: DateArray,
+      categories: indexArray,
       labels: {
         style: {
           colors: "green",
