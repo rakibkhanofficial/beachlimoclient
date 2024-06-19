@@ -1,31 +1,20 @@
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { IuserBookingListType } from "~@/types";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
 import Link from "next/link";
-import {
-  Spinner,
-  Modal,
-  ModalContent,
-  useDisclosure,
-  Button,
-  ModalBody,
-} from "@nextui-org/react";
+import { Spinner, Modal, ModalContent, useDisclosure } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import { MdRemoveRedEye } from "react-icons/md";
-import { putMethod } from "~@/utils/api/putMethod";
-import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
 
-const AssignBookingListComponent = () => {
+const DriverCancelBookingListComponent = () => {
   const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
     [],
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [rentid, setRentId] = useState<string>("");
-  const [isupdateStatus, setIsUpdateStatus] = useState<boolean>(false);
   const { data: session } = useSession();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
     // @ts-expect-error type error is not solved
@@ -34,7 +23,7 @@ const AssignBookingListComponent = () => {
       setIsLoading(true);
       try {
         const response = await getMethod(
-          endPoints.Driver.getAssignBookingList(UserId),
+          endPoints.Driver.getCanceledBookingList(UserId),
         );
         if (response?.data?.statusCode === 200) {
           setBookingList(response?.data?.data as IuserBookingListType[]);
@@ -48,38 +37,11 @@ const AssignBookingListComponent = () => {
         console.error(error);
       }
     };
-    void fetchUserBookingList();
-  }, [isupdateStatus]);
-
-  const handleOpenModal = (index: number) => {
-    onOpen();
-    const seleteddata = userBookingList[index];
-    setRentId(seleteddata?._id);
-  };
-
-  const handleStatusChange = async () => {
-    setIsUpdateStatus(true);
-    try {
-      const response = await putMethod({
-        route: endPoints?.Driver.updateStatusByDriver(rentid),
-        updateData: {
-          status: "complete",
-        },
-      });
-      if (response?.data?.statusCode === 200) {
-        toast.success(response?.data?.message);
-        onOpenChange();
-        setIsUpdateStatus(false);
-      } else {
-        toast.error(response?.data?.message);
-        setIsUpdateStatus(false);
-      }
-    } catch (error) {
-      // @ts-expect-error type error is not solved
-      toast.error(error?.response?.data?.message);
-      setIsUpdateStatus(false);
+    if (UserId) {
+      void fetchUserBookingList();
     }
-  };
+    // @ts-expect-error type error is not solved
+  }, [session?.user?._id]);
 
   return (
     <div className=" min-h-screen bg-white px-2 dark:bg-slate-900 lg:px-10">
@@ -90,7 +52,7 @@ const AssignBookingListComponent = () => {
       ) : (
         <div>
           <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
-            Assign Booking List
+            Canceled Booking List
           </h1>
           <div className=" hidden lg:inline ">
             <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
@@ -147,11 +109,7 @@ const AssignBookingListComponent = () => {
                       {data?.pickuplocationAdress}
                     </Link>
                     <div className=" col-span-1 text-center text-black dark:text-white">
-                      <button
-                        onClick={() => handleOpenModal(index)}
-                        title="view"
-                        type="button"
-                      >
+                      <button onClick={onOpen} title="view" type="button">
                         <MdRemoveRedEye />
                       </button>
                       <Modal
@@ -162,31 +120,70 @@ const AssignBookingListComponent = () => {
                       >
                         <ModalContent>
                           {(onClose) => (
-                            <ModalBody>
-                              <div className=" my-5 flex h-[200px] w-full flex-col bg-white px-5 text-black ">
-                                <h1 className=" my-3 text-center text-xl font-semibold ">
-                                  Complete Booking
-                                </h1>
-                                <div className=" my-4 flex items-center justify-center gap-5 ">
-                                  <Button
-                                    className=" rounded-lg bg-red-700 text-white "
-                                    onPress={onClose}
-                                  >
-                                    Go Back
-                                  </Button>
-                                  <Button
-                                    onClick={handleStatusChange}
-                                    className=" rounded-lg bg-green-600 text-white hover:bg-green-700 "
-                                  >
-                                    {isupdateStatus ? (
-                                      <Spinner color="primary" />
-                                    ) : (
-                                      "Complete Ride"
-                                    )}
-                                  </Button>
-                                </div>
+                            <>
+                              <h1 className=" my-3 text-center text-xl font-semibold text-black dark:text-white ">
+                                Booking Information
+                              </h1>
+                              <div className="flex items-center justify-center">
+                                {/* <Image
+                        src={SelectedCarData?.image}
+                        alt={SelectedCarData?.Carname}
+                        height={200}
+                        width={200}
+                      /> */}
                               </div>
-                            </ModalBody>
+                              {/* <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
+                      <p className=" text-black dark:text-white ">Name:</p>
+                      <p className=" text-black dark:text-white ">{name}</p>
+                      <p className=" text-black dark:text-white ">Phone:</p>
+                      <p className=" text-black dark:text-white ">{phone}</p>
+                      <p className=" text-black dark:text-white ">Car Name:</p>
+                      <p className=" text-black dark:text-white ">
+                        {SelectedCarData.Carname}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        Pickup Address:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {pickupAddress}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        Drop Off Address:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {dropoffAddress}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        PickUp Time & Date:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {pickuptime}, {pickupdate}
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        Total Fare Price:
+                      </p>
+                      <p className=" text-black dark:text-white ">
+                        {TotalFarePriceCalculationBymilesandhours} $
+                      </p>
+                    </div>
+                    <div className="flex w-full items-center justify-center my-3">
+                      <Button
+                        className="mt-5 w-[80%] lg:w-[50%]"
+                        color="success"
+                        onPress={handleCreateBooking}
+                        isDisabled={
+                          !name || !phone || !pickupdate || !pickuptime
+                        }
+                      >
+                       <span className="text-white text-lg">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
+                      </Button>
+                    </div> */}
+                              {/* <ModalFooter>
+                    <Button color="danger" variant="light" onPress={onClose}>
+                      Close
+                    </Button>
+                  </ModalFooter> */}
+                            </>
                           )}
                         </ModalContent>
                       </Modal>
@@ -194,9 +191,9 @@ const AssignBookingListComponent = () => {
                   </div>
                 ))
               ) : (
-                <div className=" flex min-h-screen items-center justify-center ">
-                  <h1 className=" text-center text-xl font-semibold text-red-600 ">
-                    No Booking Data!
+                <div className=" flex min-h-screen items-center justify-center">
+                  <h1 className=" text-xl font-semibold text-red-600 ">
+                    No Cancel Booking Aailable
                   </h1>
                 </div>
               )}
@@ -238,11 +235,7 @@ const AssignBookingListComponent = () => {
                         </p>
                         <p className=" text-blue-500">{data?.status}</p>
                         <div className="text-center text-black dark:text-white">
-                          <button
-                            onClick={() => handleOpenModal(index)}
-                            title="view"
-                            type="button"
-                          >
+                          <button title="view" type="button">
                             <MdRemoveRedEye />
                           </button>
                         </div>
@@ -251,9 +244,9 @@ const AssignBookingListComponent = () => {
                   </div>
                 ))
               ) : (
-                <div className=" flex min-h-screen items-center justify-center ">
-                  <h1 className=" text-center text-xl font-semibold text-red-600 ">
-                    No Assign Booking Aailable
+                <div className=" flex min-h-screen items-center justify-center">
+                  <h1 className=" text-xl font-semibold text-red-600 ">
+                    No Cancel Booking Aailable
                   </h1>
                 </div>
               )}
@@ -265,4 +258,4 @@ const AssignBookingListComponent = () => {
   );
 };
 
-export default AssignBookingListComponent;
+export default DriverCancelBookingListComponent;

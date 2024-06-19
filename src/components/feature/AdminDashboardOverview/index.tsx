@@ -1,18 +1,50 @@
 import { Card, CardBody, Skeleton } from "@nextui-org/react";
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
+import { getMethod } from "~@/utils/api/getMethod";
+import { endPoints } from "~@/utils/api/route";
 
 const CompleteBookingCharts = dynamic(() => import("./CompleteBookingChart"), {
   ssr: false,
 });
 
+type IuserBookingListType = {
+  totalPendingBookingdata: number | undefined;
+  totalAcceptedBookingdata: number | undefined;
+  totalAssignedBookingdata: number | undefined;
+  totalCompleteBookingdata: number | undefined;
+  totalCanceledBookingdata: number | undefined;
+};
+
 const AdminDashbaordOverView = () => {
+  const [totalBooking, setTotalBooking] = useState<
+    IuserBookingListType | undefined
+  >({} as IuserBookingListType);
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    setLoading(true);
+    const fetchTotalBookings = async () => {
+      try {
+        const response = await getMethod(
+          endPoints.Admin.getTotalBookingbyAdmin,
+        );
+        if (response?.data?.statusCode === 200) {
+          setTotalBooking(response?.data?.data as IuserBookingListType);
+        }
+      } catch (error) {
+        console.error("Error fetching total bookings: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    void fetchTotalBookings();
+  }, []);
+
   return (
-    <div className=" flex flex-col gap-5 bg-white text-black dark:bg-black dark:text-white p-4 ">
-      <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 my-4 ">
+    <div className=" flex flex-col gap-5 bg-white p-4 text-black dark:bg-black dark:text-white ">
+      <div className=" my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 ">
         <Card className="w-full bg-[#519921] px-2 py-8 text-white shadow-md shadow-[#afafaf] dark:shadow-slate-700 ">
           <CardBody>
             {loading ? (
@@ -31,7 +63,13 @@ const AdminDashbaordOverView = () => {
                   Total Complete Booking
                 </div>
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
-                  <CountUp start={0} end={10} duration={4} delay={1} />
+                  <CountUp
+                    start={0}
+                    // @ts-expect-error type error is not solved
+                    end={totalBooking?.totalCompleteBookingdata}
+                    duration={4}
+                    delay={1}
+                  />
                 </div>
               </div>
             )}
@@ -55,7 +93,13 @@ const AdminDashbaordOverView = () => {
                   Total Assigned Booking
                 </div>
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
-                  <CountUp start={0} end={20} duration={4} delay={1} />
+                  <CountUp
+                    start={0}
+                    // @ts-expect-error type error is not solved
+                    end={totalBooking?.totalAssignedBookingdata}
+                    duration={4}
+                    delay={1}
+                  />
                 </div>
               </div>
             )}
@@ -79,7 +123,13 @@ const AdminDashbaordOverView = () => {
                   Total Canceled Booking
                 </div>
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
-                  <CountUp start={0} end={30} duration={4} delay={1} />
+                  <CountUp
+                    start={0}
+                    // @ts-expect-error type error is not solved
+                    end={totalBooking?.totalCanceledBookingdata}
+                    duration={4}
+                    delay={1}
+                  />
                 </div>
               </div>
             )}
@@ -103,14 +153,20 @@ const AdminDashbaordOverView = () => {
                   Total Pending Booking
                 </div>
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
-                  <CountUp start={0} end={40} duration={4} delay={1} />
+                  <CountUp
+                    start={0}
+                    // @ts-expect-error type error is not solved
+                    end={totalBooking?.totalPendingBookingdata}
+                    duration={4}
+                    delay={1}
+                  />
                 </div>
               </div>
             )}
           </CardBody>
         </Card>
       </div>
-      <div className=" my-4 border border-gray-300 rounded-lg">
+      <div className=" my-4 rounded-lg border border-gray-300">
         <CompleteBookingCharts />
       </div>
     </div>

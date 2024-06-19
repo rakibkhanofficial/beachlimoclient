@@ -1,11 +1,11 @@
 import React from "react";
-import AssignBookingListComponent from "~@/components/feature/AssignBookingListByDriver";
+import DriverAssignBookingListComponent from "~@/components/feature/DriverAssignBookingListByDriver";
 import { DriverDashboardLayout } from "~@/components/feature/DriverDashboard/layout/layout";
 
 const DriverAssignBookingListPage = () => {
   return (
     <div>
-      <DriverDashboardLayout children={<AssignBookingListComponent />} />
+      <DriverDashboardLayout children={<DriverAssignBookingListComponent />} />
     </div>
   );
 };

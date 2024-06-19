@@ -188,6 +188,14 @@ export const routes: any = {
           icon: <GiAutoRepair fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
+        },
+        {
+          id: "3",
+          path: "/drivercancelbookinglist",
+          linkName: " Cancel Booking List",
+          icon: <GiAutoRepair fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
         }
       ],
     },
