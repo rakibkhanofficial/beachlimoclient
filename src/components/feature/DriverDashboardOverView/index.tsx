@@ -139,7 +139,7 @@ const DriverDashboardOverview = () => {
           </CardBody>
         </Card>
       </div>
-      <div className=" my-4 rounded-lg border border-gray-300">
+      <div className=" my-4 rounded-lg border border-gray-300 dark:border-gray-700">
         <CompleteBookingCharts />
       </div>
     </div>
