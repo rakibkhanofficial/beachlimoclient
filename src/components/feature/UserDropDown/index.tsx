@@ -35,7 +35,7 @@ export const UserDropdown = () => {
                       isBordered
                       color="default"
                       src={
-                        session?.user?.image ||
+                        session?.user?.image ? session?.user?.image :
                         "https://i.ibb.co/dtt67mC/avathar.png"
                       }
                     />

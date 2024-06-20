@@ -48,8 +48,8 @@ const Main = ({ children }: { children: React.ReactNode }) => {
           const response = await postMethod({
             route: endPoints.auth.login,
             postData: {
-              strEmailOrPhone: session?.user.email,
-              strPassword: session?.user.id,
+              email: session?.user.email,
+              password: session?.user.id,
             },
           });
           const responseData = response?.data;

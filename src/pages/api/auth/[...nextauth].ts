@@ -6,7 +6,8 @@ import FacebookProvider from 'next-auth/providers/facebook'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import DiscordProvider from "next-auth/providers/discord";
-import axios from "axios";
+import { endPoints } from '~@/utils/api/route'
+import { postMethod } from '../../../utils/api/postMethod/index';
 
 interface User {
   name?: string | null;
@@ -14,7 +15,7 @@ interface User {
   _id: string;
   username: string
   email?: string | null;
-  role?: string | null
+  role?: string | null;
   accessToken?: string | null;
 }
 
@@ -93,23 +94,15 @@ const authOptions: NextAuthOptions = {
         const { id, name, email, image } = user;
         // console.log(name, email, image, id);
         const postData = {
-          name: name,
           email: email,
-          image: image,
           password: id,
+          username: name,
+          phone: "0123456",
+          image: image,
+          role: "Customer"
         };
-
         try {
-          const response = await axios.post(
-            "https://hoteldb-delta.vercel.app/api/register",
-            postData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            },
-          );
-
+          const response = await postMethod({route: endPoints.auth.register, postData: postData})
           if (response?.data?.statusCode === 200) {
             console.log("Provider login response:", response?.data?.data);
           } else {
