@@ -17,6 +17,7 @@ export const endPoints = {
     getCancelRentAllByuserId: (userId: string) => `customer/cancelbookingbyuserid/${userId}`,
     getRentadetailsbyRentId: "customer/rentalbyid",
     getAllBooking: ( userId: string) => `customer/analytics/totalbooking/${userId}`,
+    getCompleteBookingDaily: (userId: string) => `customer/analytics/dailycompletebooking/${userId}`
   },
   Admin: {
     allbookinglistforadmin: "admin/allrentaldata",
@@ -38,5 +39,6 @@ export const endPoints = {
     getCompleteBookingList: (id: string) => `driver/drivercompleterentaldata/${id}`,
     getCanceledBookingList: (id: string) => `driver/drivercancelrentaldata/${id}`,
     getTotalBooking: (id: string) => `driver/analytics/drivertotalbookingdata/${id}`,
+    getCompleteBookingDaily: (id: string) => `driver/analytics/dailycompletebooking/${id}`
   }
 }

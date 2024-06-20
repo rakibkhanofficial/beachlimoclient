@@ -18,7 +18,7 @@ const CompleteBookingChart = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-      const fetchwarrantycount = async () => {
+      const fetchDailyCompleteBookingycount = async () => {
         try {
           setLoading(true);
           const response = await getMethod(
@@ -34,12 +34,12 @@ const CompleteBookingChart = () => {
         }
       };
 
-      fetchwarrantycount();
+     void fetchDailyCompleteBookingycount();
     }, []);
 
   const seriesData = completeBookingcount?.map((item) => item.count);
   const categoriesxaxis = completeBookingcount?.length;
-  const indexArray = [...Array(categoriesxaxis)]?.map((_, index) => index + 1);
+  // const indexArray = [...Array(categoriesxaxis)]?.map((_, index) => index + 1);
   const DateArray = completeBookingcount?.map((item, index) => formatDate(item?.day))
 
   const state: Props["series"] = [

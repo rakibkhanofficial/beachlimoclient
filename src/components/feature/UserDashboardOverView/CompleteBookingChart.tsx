@@ -3,61 +3,50 @@ import Chart, { type Props } from "react-apexcharts";
 import { Skeleton } from "@nextui-org/react";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
+import { useSession } from "next-auth/react";
+import { formatDate } from "~@/utils/formatdate";
 
 export type completeBookingchartType = {
   id: number;
-  date: string;
+  day: string;
   count: number;
 };
 
-const completeBookingcount = [
-  {
-    id: 1,
-    date: "17",
-    count: 40,
-  },
-  {
-    id: 2,
-    date: "18",
-    count: 20,
-  },
-  {
-    id: 3,
-    date: "19",
-    count: 60
-  }
-];
 
 const CompleteBookingChart = () => {
-  //   const [completeBookingcount, setCompleteBookingcount] = useState<completeBookingchartType[]>(
-  //     [],
-  //   );
-    const [loading, setLoading] = useState<boolean>(false);
+  const { data: session } = useSession();
+  const [completeBookingcount, setCompleteBookingcount] = useState<completeBookingchartType[]>(
+    [],
+  );
+  const [loading, setLoading] = useState<boolean>(false);
 
-  //   useEffect(() => {
-  //     const fetchwarrantycount = async () => {
-  //       try {
-  //         setLoading(true);
-  //         const response = await getMethod(
-  //           endPoints.analytics.warrantyclaimcount,
-  //         );
-  //         const responseData = response?.data?.data as completeBookingchartType[];
-  //         setCompleteBookingcount(responseData);
-  //       } catch (error) {
-  //         setLoading(false);
-  //         console.error(error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
+  useEffect(() => {
+    // @ts-expect-error type error is not solved
+    const userId = session?.user?._id;
+    const fetchDailyCompleteBookingycount = async () => {
+      try {
+        setLoading(true);
+        const response = await getMethod(
+          endPoints.Customer.getCompleteBookingDaily(userId),
+        );
+        const responseData = response?.data?.data as completeBookingchartType[];
+        setCompleteBookingcount(responseData);
+      } catch (error) {
+        setLoading(false);
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //     fetchwarrantycount();
-  //   }, []);
+   void fetchDailyCompleteBookingycount();
+   // @ts-expect-error type error is not solved
+  }, [session?.user?._id]);
 
   const seriesData = completeBookingcount?.map((item) => item.count);
   const categoriesxaxis = completeBookingcount?.length;
-  const indexArray = [...Array(categoriesxaxis)]?.map((_, index) => index + 1);
-  const DateArray = completeBookingcount?.map((item, index) => item?.date)
+  // const indexArray = [...Array(categoriesxaxis)]?.map((_, index) => index + 1);
+  const DateArray = completeBookingcount?.map((item, index) => formatDate(item?.day))
 
   const state: Props["series"] = [
     {
