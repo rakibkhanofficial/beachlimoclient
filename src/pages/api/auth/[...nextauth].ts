@@ -93,7 +93,7 @@ const authOptions: NextAuthOptions = {
       ) {
         const { id, name, email, image } = user;
         // console.log(name, email, image, id);
-        const postData = {
+        const RegisterData = {
           email: email,
           password: id,
           username: name,
@@ -102,16 +102,18 @@ const authOptions: NextAuthOptions = {
           role: "Customer"
         };
         try {
-          const response = await postMethod({route: endPoints.auth.register, postData: postData})
+          const response = await postMethod({route: endPoints.auth.register, postData: RegisterData})
           if (response?.data?.statusCode === 200) {
-            console.log("Provider login response:", response?.data?.data);
+            const response = await postMethod({route: endPoints.auth.login, postData: { email: email, password: id}});
           } else {
+            const response = await postMethod({route: endPoints.auth.login, postData: { email: email, password: id}});
             console.error(
               "Error sending data to endpoint:",
-              response.statusText,
+              response.data,
             );
           }
         } catch (error) {
+          const response = await postMethod({route: endPoints.auth.login, postData: { email: email, password: id}});
           console.error("Error:", error);
         }
       }

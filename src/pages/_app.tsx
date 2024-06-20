@@ -1,5 +1,5 @@
 import { type Session } from "next-auth";
-import { SessionProvider, signIn, useSession } from "next-auth/react";
+import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import { type AppType } from "next/app";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { NextUIProvider } from "@nextui-org/react";
@@ -52,20 +52,18 @@ const Main = ({ children }: { children: React.ReactNode }) => {
               password: session?.user.id,
             },
           });
-          const responseData = response?.data;
-          if (responseData) {
-            dispatch(
-              handleErros(
-                "loginError",
-                responseData?.error || responseData?.message,
-              ),
-            );
-          } else {
-            dispatch(handleErros("loginError", ""));
+          if (response?.data?.statusCode === 200) {
             await signIn("credentials", {
-              ...responseData,
+             ...response?.data?.user,
               redirect: false,
             });
+          }
+          else{
+            dispatch(handleErros("loginError", ""));
+            await signOut({
+              callbackUrl: "/login",
+            });
+            return;
           }
         }
       } catch (error) {
