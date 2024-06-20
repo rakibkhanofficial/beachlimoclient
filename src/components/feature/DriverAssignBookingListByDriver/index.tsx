@@ -213,7 +213,7 @@ const DriverAssignBookingListComponent = () => {
                           {(onClose) => (
                             <>
                               <ModalBody>
-                                <div className=" my-5 flex w-full flex-col bg-white px-5 text-black ">
+                                <div className=" my-5 flex w-full flex-col px-5 ">
                                   <h1 className=" my-3 text-center text-xl font-semibold ">
                                     Complete Booking
                                   </h1>

@@ -4,9 +4,9 @@ export function formatDate(dateTimeString: string): string {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
+      // hour: 'numeric',
+      // minute: 'numeric',
+      // second: 'numeric',
       hour12: true // this ensures AM/PM format
     });
   }

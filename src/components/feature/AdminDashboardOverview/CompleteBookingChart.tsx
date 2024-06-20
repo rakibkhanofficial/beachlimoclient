@@ -3,6 +3,7 @@ import Chart, { type Props } from "react-apexcharts";
 import { Skeleton } from "@nextui-org/react";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
+import { formatDate } from "~@/utils/formatdate";
 
 export type completeBookingchartType = {
   id: number;
@@ -39,7 +40,7 @@ const CompleteBookingChart = () => {
   const seriesData = completeBookingcount?.map((item) => item.count);
   const categoriesxaxis = completeBookingcount?.length;
   const indexArray = [...Array(categoriesxaxis)]?.map((_, index) => index + 1);
-  // const DateArray = completeBookingcount?.map((item, index) => item?.day)
+  const DateArray = completeBookingcount?.map((item, index) => formatDate(item?.day))
 
   const state: Props["series"] = [
     {
@@ -70,7 +71,7 @@ const CompleteBookingChart = () => {
     },
 
     xaxis: {
-      categories: indexArray,
+      categories: DateArray,
       labels: {
         style: {
           colors: "green",
