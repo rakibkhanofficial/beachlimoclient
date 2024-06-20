@@ -9,7 +9,6 @@ import WhatsAppChatbot from "~@/components/feature/WhatsAppChatbot/WhatsAppChatb
 const Home = () => {
   return (
     <>
-      <Head>
         <Head>
           <title>Beach Limo : Car Rental Services</title>
           <meta name="description" content={metaData.description} />
@@ -35,11 +34,6 @@ const Home = () => {
         `,
             }}
           />
-          <link
-            href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
-            rel="stylesheet"
-          />
-        </Head>
       </Head>
       <HeaderLandingPage />
       <main>
