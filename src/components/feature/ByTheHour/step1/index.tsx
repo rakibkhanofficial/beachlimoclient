@@ -53,14 +53,14 @@ const CarSelection = () => {
                 <p>Passenger Quantity: {data?.passenger}</p>
                 <p>Luggage Quantity: {data?.Luggage}</p>
                 {data?.isWifi === true ? (
-                  <p>Wifi Avaiable</p>
+                  <p className=" text-green-600 ">Wifi Avaiable</p>
                 ) : (
-                  <p>Wifi Not Available</p>
+                  <p className=" text-red-600 ">Wifi Not Available</p>
                 )}
                 {data?.childSeat === true ? (
-                  <p>Child Seat Available</p>
+                  <p className=" text-green-600 ">Child Seat Available</p>
                 ) : (
-                  <p>Child Seat Not Available</p>
+                  <p className=" text-red-600 ">Child Seat Not Available</p>
                 )}
               </div>
             </div>
