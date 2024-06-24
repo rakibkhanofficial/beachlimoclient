@@ -51,7 +51,7 @@ const Googlemap = () => {
     geocoder.geocode({ location: latLng }, (results, status) => {
       if (status === "OK" && results && results.length > 0) {
         const formattedAddress = results[0].formatted_address;
-        const locationLink = `https://maps.app.goo.gl/?q=${encodeURIComponent(formattedAddress)}`;
+        const locationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formattedAddress)}`;
 
         if (!pickupMarker) {
           const marker = new google.maps.Marker({
