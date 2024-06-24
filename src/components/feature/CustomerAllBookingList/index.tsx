@@ -155,7 +155,7 @@ const BookingListComponent = () => {
               <ModalContent>
                 <>
                   <ModalBody>
-                    <h1 className="mb-6 text-center text-black text-2xl font-semibold">
+                    <h1 className="mb-6 text-center text-2xl font-semibold text-black dark:text-white">
                       Your Booking Status
                     </h1>
                     <BookingStatus bookingStatus={status} />
@@ -200,9 +200,13 @@ const BookingListComponent = () => {
                         <p className=" text-black dark:text-white">
                           {data?.renterPhone}
                         </p>
-                        <p className=" text-black dark:text-white">
+                        <Link
+                          target="_blank"
+                          href={data?.pickuplocationMapLink}
+                          className=" col-span-3 cursor-pointer text-center text-black dark:text-white"
+                        >
                           {data?.pickuplocationAdress}
-                        </p>
+                        </Link>
                         <p className=" text-black dark:text-white">
                           {data?.pickupDate.slice(0, 10)},{" "}
                           {convertTo12HourFormat(data?.pickuptime)}
@@ -213,7 +217,11 @@ const BookingListComponent = () => {
                           <p className=" text-blue-500">{data?.status}</p>
                         )}
                         <div className="text-center text-black dark:text-white">
-                          <button title="view" type="button">
+                          <button
+                            onClick={() => handleOpenStatusModal(data?.status)}
+                            title="view"
+                            type="button"
+                          >
                             <MdRemoveRedEye />
                           </button>
                         </div>
