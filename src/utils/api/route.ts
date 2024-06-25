@@ -40,5 +40,8 @@ export const endPoints = {
     getCanceledBookingList: (id: string) => `driver/drivercancelrentaldata/${id}`,
     getTotalBooking: (id: string) => `driver/analytics/drivertotalbookingdata/${id}`,
     getCompleteBookingDaily: (id: string) => `driver/analytics/dailycompletebooking/${id}`
+  },
+  Subscribe: {
+    CreateSubsribe: "subscriber/subscribe",
   }
 }
