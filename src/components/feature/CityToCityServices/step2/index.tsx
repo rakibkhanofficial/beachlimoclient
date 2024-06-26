@@ -3,7 +3,6 @@ import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCi
 import { Button, Input } from "@nextui-org/react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import Googlemap from "./googlemap";
-// import { CalendarDate, Time } from "@internationalized/date";
 
 const LocationSelection = () => {
   const {

@@ -3,7 +3,6 @@ import { Button, Input } from "@nextui-org/react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import Googlemap from "./googlemap";
 import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
-// import { CalendarDate, Time } from "@internationalized/date";
 
 const LocationSelection = () => {
   const {
@@ -12,6 +11,7 @@ const LocationSelection = () => {
     distance,
     handleCitytoCityNext,
     handleCitytoCityBack,
+    handleInputChange,
     TotalFarePriceCalculationBymilesandhours,
   } = UseBytheHour();
 
@@ -38,21 +38,21 @@ const LocationSelection = () => {
           </div>
           <div className=" flex w-full flex-col gap-5 ">
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("pickupAddress", e.target.value)}
               label="Pick Up Location"
               placeholder="Select Pick Up Adress From Map"
               className="text-black dark:text-white"
               value={pickupAddress}
             />
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("dropoffAddress", e.target.value)}
               label="Drop Off Location"
               placeholder="Select Drop Off Adress From Map"
               className="text-black dark:text-white"
               value={dropoffAddress}
             />
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("distance", e.target.value)}
               label="Distance"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"

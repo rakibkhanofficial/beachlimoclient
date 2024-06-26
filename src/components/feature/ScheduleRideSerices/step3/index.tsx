@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Input,
@@ -6,15 +6,14 @@ import {
   DatePicker,
   Modal,
   ModalContent,
-  // ModalBody,
-  // ModalFooter,
   useDisclosure,
   Spinner
 } from "@nextui-org/react";
 import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 import Image from "next/image";
-import { useAppSelector } from "~@/_redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
 import { MdArrowForwardIos } from "react-icons/md";
+import { useSession } from "next-auth/react";
 
 type selectedCarType = {
   id: number;
@@ -31,6 +30,8 @@ type selectedCarType = {
 };
 
 const OtherInformation = () => {
+  const { data: session } = useSession();
+  const dispatch = useAppDispatch();
   const {
     handleCreateBooking,
     handleInputChange,
@@ -47,6 +48,15 @@ const OtherInformation = () => {
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    if (session?.user) {
+      // @ts-expect-error type error is not solved
+      dispatch(handleCitytoCityInputChange("name", session?.user?.username));
+      // @ts-expect-error type error is not solved
+      dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
+    }
+  }, [session, dispatch]);
 
   return (
     <div className="my-5 w-full p-2 lg:p-5">

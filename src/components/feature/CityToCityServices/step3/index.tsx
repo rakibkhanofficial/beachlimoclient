@@ -65,7 +65,7 @@ const CitytocityOtherInformation = () => {
     <div className=" my-5 w-full p-2 lg:p-5  ">
       <div className=" flex flex-col items-center justify-center">
         <h1 className=" my-5 text-center text-xl font-semibold  ">
-          Type This Iformation For booking
+          Type This Information For booking
         </h1>
         <div className=" flex w-full flex-col gap-3 rounded-xl border border-slate-700 px-4 py-6 lg:w-[60%] ">
           <Input
@@ -86,7 +86,7 @@ const CitytocityOtherInformation = () => {
           <Input
             value={pickupdate}
             placeholder="Select Date"
-            label="Date"
+            label="Pick Up Date"
             type="date"
             className=" rounded-xl "
             onChange={(e) => handleInputChange("pickupdate", e.target.value)}
@@ -94,7 +94,7 @@ const CitytocityOtherInformation = () => {
           <Input
             value={pickuptime}
             placeholder="Select Date"
-            label="Time"
+            label="Pick Up Time"
             type="time"
             className=" rounded-xl "
             onChange={(e) => handleInputChange("pickuptime", e.target.value)}

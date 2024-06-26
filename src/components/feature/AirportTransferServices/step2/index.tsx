@@ -1,9 +1,8 @@
 import React from "react";
+import UseAirportTransfer from "~@/modules/servicemodule/hocs/airporttransferservice/useAirportTransferService";
 import { Button, Input } from "@nextui-org/react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import Googlemap from "./googlemap";
-import UseAirportTransfer from "~@/modules/servicemodule/hocs/airporttransferservice/useAirportTransferService";
-// import { CalendarDate, Time } from "@internationalized/date";
 
 const LocationSelection = () => {
   const {
@@ -12,11 +11,12 @@ const LocationSelection = () => {
     distance,
     handleCitytoCityNext,
     handleCitytoCityBack,
+    handleInputChange,
     TotalFarePriceCalculationBymilesandhours,
   } = UseAirportTransfer();
 
   return (
-    <div className="w-full px-2 text-black dark:text-white ">
+    <div className="w-full text-black dark:text-white px-2 ">
       <button
         title="go back"
         type="button"
@@ -28,42 +28,43 @@ const LocationSelection = () => {
         </span>
         <span>Go Back</span>
       </button>
-      <h1 className=" my-3 text-center text-xl font-semibold lg:my-10 ">
+      <h1 className=" my-3 lg:my-10 text-center text-xl font-semibold ">
         Select Your Pickup and Drop Off Location
       </h1>
       <div className="w-full">
-        <div className=" grid w-full items-center gap-4 lg:my-5 lg:grid-cols-2 lg:justify-center lg:px-10 lg:py-5 ">
+        <div className=" w-full lg:my-5 grid lg:grid-cols-2 items-center lg:justify-center gap-4 lg:px-10 lg:py-5 ">
           <div className="w-full">
             <Googlemap />
           </div>
-          <div className=" flex w-full flex-col gap-5 ">
+          <div className=" w-full flex flex-col gap-5 ">
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("pickupAddress", e.target.value)}
               label="Pick Up Location"
               placeholder="Select Pick Up Adress From Map"
               className="text-black dark:text-white"
               value={pickupAddress}
             />
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("dropoffAddress", e.target.value)}
               label="Drop Off Location"
               placeholder="Select Drop Off Adress From Map"
               className="text-black dark:text-white"
               value={dropoffAddress}
             />
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("distance", e.target.value)}
               label="Distance"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
               value={distance}
             />
-            <div className=" rounded-2xl border border-gray-700 bg-gray-200 px-3 py-4 text-black dark:bg-zinc-700 dark:text-white">
+            <div className=" rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
               {TotalFarePriceCalculationBymilesandhours !== "NaN"
                 ? TotalFarePriceCalculationBymilesandhours
                 : "Fair Price"}{" "}
               $
             </div>
+
           </div>
         </div>
         <div className=" my-4 flex items-center justify-center ">
