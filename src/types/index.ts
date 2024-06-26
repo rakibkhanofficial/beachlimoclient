@@ -1,5 +1,4 @@
 
-
 export type ResponseType = {
     statusCode: number
     error: string
@@ -65,4 +64,30 @@ export type ResponseType = {
     role: string
     status: string
     image: string
+  }
+
+  export type ProductslugType = {
+    productSlug: servicesProptype[]
+  }
+
+  export type ProductDetailsType = {
+    product: servicesProptype
+  };
+  
+  export type servicesProptype = {
+    imagegallery: string
+    title: string;
+    companyImage: string;
+    passenger: string
+    luggage: string
+    dailyprice: string
+    hourlyprice: string
+    speed: string
+    wifi: string
+    slug: slugType
+  };
+
+  export type slugType = {
+    current: string
+    _type: string
   }
