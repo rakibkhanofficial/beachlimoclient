@@ -58,8 +58,6 @@ const LocationSelection = () => {
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
               value={distance}
-              type="number"
-              inputMode="numeric"
             />
             <div className=" rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
               {FarePriceCalculationBymiles !== "NaN"
