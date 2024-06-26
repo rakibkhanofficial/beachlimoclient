@@ -12,6 +12,7 @@ const LocationSelection = () => {
     distance,
     handleCitytoCityNext,
     handleCitytoCityBack,
+    handleInputChange,
     FarePriceCalculationBymiles,
   } = UseCityToCity();
 
@@ -38,25 +39,27 @@ const LocationSelection = () => {
           </div>
           <div className=" w-full flex flex-col gap-5 ">
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("pickupAddress", e.target.value)}
               label="Pick Up Location"
               placeholder="Select Pick Up Adress From Map"
               className="text-black dark:text-white"
               value={pickupAddress}
             />
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("dropoffAddress", e.target.value)}
               label="Drop Off Location"
               placeholder="Select Drop Off Adress From Map"
               className="text-black dark:text-white"
               value={dropoffAddress}
             />
             <Input
-              readOnly
+              onChange={(e) => handleInputChange("distance", e.target.value)}
               label="Distance"
               placeholder="Select Pick Up Adress and Drop Off Adress From Map"
               className="text-black dark:text-white"
               value={distance}
+              type="number"
+              inputMode="numeric"
             />
             <div className=" rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
               {FarePriceCalculationBymiles !== "NaN"
