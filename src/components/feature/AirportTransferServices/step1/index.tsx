@@ -47,7 +47,7 @@ const CarSelection = () => {
               </div>
               <div className="col-span-7 rounded-r-md border p-3">
                 <h1 className=" text-medium font-medium lg:text-lg ">
-                  {data?.Carname} {data?.Model}
+                  {data?.Carname}
                 </h1>
                 <p>Per Hour Price: {data?.perhourPrice} $</p>
                 <p>Passenger Quantity: {data?.passenger}</p>
