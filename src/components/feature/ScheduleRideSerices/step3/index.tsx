@@ -61,6 +61,7 @@ const OtherInformation = () => {
       // @ts-expect-error type error is not solved
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
+    handleInputChange("paymentmethod", "pay-cash");
   }, [session, dispatch]);
 
   return (
