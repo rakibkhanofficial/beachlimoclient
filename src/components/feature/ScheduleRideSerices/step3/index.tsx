@@ -7,7 +7,9 @@ import {
   Modal,
   ModalContent,
   useDisclosure,
-  Spinner
+  Spinner,
+  RadioGroup,
+  Radio,
 } from "@nextui-org/react";
 import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 import Image from "next/image";
@@ -44,6 +46,7 @@ const OtherInformation = () => {
     isBooking,
     pickupAddress,
     dropoffAddress,
+    paymentmethod,
     TotalFarePriceCalculationBymilesandhours,
   } = UseScheduleRide();
   const SelectedCarData: selectedCarType = useAppSelector(
@@ -98,6 +101,24 @@ const OtherInformation = () => {
             className=" rounded-xl "
             onChange={(e) => handleInputChange("pickuptime", e.target.value)}
           />
+          <RadioGroup
+            label="Select Your Payment"
+            color="secondary"
+            defaultValue="pay-cash"
+          >
+            <Radio value="pay-online" isDisabled>
+              Online Payment
+              <span className="ml-2 text-sm text-red-500">Coming Soon</span>
+            </Radio>
+            <Radio
+              onChange={(e) =>
+                handleInputChange("paymentmethod", e.target.value)
+              }
+              value="pay-cash"
+            >
+              Cash Payment
+            </Radio>
+          </RadioGroup>
         </div>
         <div className="flex w-full items-center justify-center">
           <Button
@@ -106,8 +127,8 @@ const OtherInformation = () => {
             onPress={onOpen}
             isDisabled={!name || !phone || !pickupdate || !pickuptime}
           >
-            <span className="text-white text-lg">Next</span>
-            <span className=" text-white text-lg ">
+            <span className="text-lg text-white">Next</span>
+            <span className=" text-lg text-white ">
               <MdArrowForwardIos />
             </span>
           </Button>
@@ -115,61 +136,73 @@ const OtherInformation = () => {
             <ModalContent>
               {(onClose) => (
                 <>
-                    <h1 className=" text-black dark:text-white my-3 text-center font-semibold text-xl ">Booking Information</h1>
-                    <div className="flex items-center justify-center">
-                      <Image
-                        src={SelectedCarData?.image}
-                        alt={SelectedCarData?.Carname}
-                        height={200}
-                        width={200}
-                      />
-                    </div>
-                    <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
-                      <p className=" text-black dark:text-white ">Name:</p>
-                      <p className=" text-black dark:text-white ">{name}</p>
-                      <p className=" text-black dark:text-white ">Phone:</p>
-                      <p className=" text-black dark:text-white ">{phone}</p>
-                      <p className=" text-black dark:text-white ">Car Name:</p>
-                      <p className=" text-black dark:text-white ">
-                        {SelectedCarData.Carname}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        Pickup Address:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {pickupAddress}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        Drop Off Address:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {dropoffAddress}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        PickUp Time & Date:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {pickuptime}, {pickupdate}
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        Total Fare Price:
-                      </p>
-                      <p className=" text-black dark:text-white ">
-                        {TotalFarePriceCalculationBymilesandhours} $
-                      </p>
-                    </div>
-                    <div className="flex w-full items-center justify-center my-3">
-                      <Button
-                        className="mt-5 w-[80%] lg:w-[50%]"
-                        color="success"
-                        onPress={handleCreateBooking}
-                        isDisabled={
-                          !name || !phone || !pickupdate || !pickuptime
-                        }
-                      >
-                       <span className="text-white text-lg">{isBooking ? <Spinner color="primary"/> : "Confirm Booking"}</span>
-                      </Button>
-                    </div>
+                  <h1 className=" my-3 text-center text-xl font-semibold text-black dark:text-white ">
+                    Booking Information
+                  </h1>
+                  <div className="flex items-center justify-center">
+                    <Image
+                      src={SelectedCarData?.image}
+                      alt={SelectedCarData?.Carname}
+                      height={200}
+                      width={200}
+                    />
+                  </div>
+                  <div className=" grid grid-cols-2 gap-1 rounded-lg border dark:border-gray-600 mx-2 p-2 ">
+                    <p className=" text-black dark:text-white ">Name:</p>
+                    <p className=" text-black dark:text-white ">{name}</p>
+                    <p className=" text-black dark:text-white ">Phone:</p>
+                    <p className=" text-black dark:text-white ">{phone}</p>
+                    <p className=" text-black dark:text-white ">Car Name:</p>
+                    <p className=" text-black dark:text-white ">
+                      {SelectedCarData.Carname}
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      Pickup Address:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {pickupAddress}
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      Drop Off Address:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {dropoffAddress}
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      PickUp Time & Date:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {pickuptime}, {pickupdate}
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      Total Fare Price:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {TotalFarePriceCalculationBymilesandhours} $
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      Payment Method:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {paymentmethod}
+                    </p>
+                  </div>
+                  <div className="my-3 flex w-full items-center justify-center">
+                    <Button
+                      className="mt-5 w-[80%] lg:w-[50%]"
+                      color="success"
+                      onPress={handleCreateBooking}
+                      isDisabled={!name || !phone || !pickupdate || !pickuptime}
+                    >
+                      <span className="text-lg text-white">
+                        {isBooking ? (
+                          <Spinner color="primary" />
+                        ) : (
+                          "Confirm Booking"
+                        )}
+                      </span>
+                    </Button>
+                  </div>
                   {/* <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
                       Close

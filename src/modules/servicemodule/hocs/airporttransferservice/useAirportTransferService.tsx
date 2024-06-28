@@ -57,6 +57,7 @@ const UseAirportTransfer = () => {
     luggage = "",
     passenger = "",
     hour = 0,
+    paymentmethod = ""
   } = cityToCityInput || {};
 
   const handleInputChange = (name: string, value: string) => {
@@ -110,7 +111,10 @@ const UseAirportTransfer = () => {
       status: "Pending",
       renterName: name,
       renterPhone: phone,
-      hour: hour
+      hour: hour,
+      paymentstatus: "pending",
+      paymentmethod: paymentmethod,
+      paymentid: "",
     };
     try {
       const response = await postMethod({
@@ -153,6 +157,7 @@ const UseAirportTransfer = () => {
     luggage,
     passenger,
     hour,
+    paymentmethod,
     handleCreateBooking,
     isBooking
   };

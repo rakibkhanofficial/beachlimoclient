@@ -8,6 +8,8 @@ import {
   // ModalFooter,
   useDisclosure,
   Spinner,
+  RadioGroup,
+  Radio,
 } from "@nextui-org/react";
 import UseAirportTransfer from "~@/modules/servicemodule/hocs/airporttransferservice/useAirportTransferService";
 import Image from "next/image";
@@ -50,6 +52,7 @@ const OtherInformation = () => {
     isBooking,
     pickupAddress,
     dropoffAddress,
+    paymentmethod,
     TotalFarePriceCalculationByhours,
   } = UseAirportTransfer();
 
@@ -100,7 +103,7 @@ const OtherInformation = () => {
             className=" rounded-xl "
             onChange={(e) => handleInputChange("pickuptime", e.target.value)}
           />
-            <Input
+          <Input
             placeholder="Enter Airport Name"
             label="Airport Name"
             className="rounded-xl"
@@ -114,13 +117,38 @@ const OtherInformation = () => {
             value={flightno}
             onChange={(e) => handleInputChange("flightno", e.target.value)}
           />
+          <RadioGroup
+            label="Select Your Payment"
+            color="secondary"
+            defaultValue="pay-cash"
+          >
+            <Radio value="pay-online" isDisabled>
+              Online Payment{" "}
+              <span className="ml-2 text-sm text-red-500">Coming Soon</span>
+            </Radio>
+            <Radio
+              onChange={(e) =>
+                handleInputChange("paymentmethod", e.target.value)
+              }
+              value="pay-cash"
+            >
+              Cash Payment
+            </Radio>
+          </RadioGroup>
         </div>
         <div className="flex w-full items-center justify-center">
           <Button
             className="mt-5 w-[80%] lg:w-[50%]"
             color="success"
             onPress={onOpen}
-            isDisabled={!name || !phone || !pickupdate || !pickuptime || !airportname || !flightno}
+            isDisabled={
+              !name ||
+              !phone ||
+              !pickupdate ||
+              !pickuptime ||
+              !airportname ||
+              !flightno
+            }
           >
             <span className="text-lg text-white">Next</span>
             <span className=" text-lg text-white ">
@@ -142,7 +170,7 @@ const OtherInformation = () => {
                       width={200}
                     />
                   </div>
-                  <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
+                  <div className=" grid grid-cols-2 gap-1 rounded-lg border dark:border-gray-600 mx-2 p-2 ">
                     <p className=" text-black dark:text-white ">Name:</p>
                     <p className=" text-black dark:text-white ">{name}</p>
                     <p className=" text-black dark:text-white ">Phone:</p>
@@ -174,6 +202,12 @@ const OtherInformation = () => {
                     </p>
                     <p className=" text-black dark:text-white ">
                       {TotalFarePriceCalculationByhours} $
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      Payment Method:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {paymentmethod}
                     </p>
                   </div>
                   <div className="my-3 flex w-full items-center justify-center">

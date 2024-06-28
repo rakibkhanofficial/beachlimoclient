@@ -56,7 +56,8 @@ const UseCityToCity = () => {
     phone = "",
     luggage = "",
     passenger = "",
-    hour = 0
+    hour = 0,
+    paymentmethod = ""
   } = cityToCityInput || {};
 
   const handleInputChange = (name: string, value: string | number | undefined) => {
@@ -110,7 +111,10 @@ const UseCityToCity = () => {
       status: "Pending",
       renterName: name,
       renterPhone: phone,
-      hour: hour
+      hour: hour,
+      paymentstatus: "pending",
+      paymentmethod: paymentmethod,
+      paymentid: "",
     };
     try {
       const response = await postMethod({
@@ -131,6 +135,8 @@ const UseCityToCity = () => {
     }
   };
 
+  console.log("paymentmethod", paymentmethod)
+
   return {
     handleInputChange,
     pickupLocation,
@@ -150,6 +156,7 @@ const UseCityToCity = () => {
     phone,
     luggage,
     passenger,
+    paymentmethod,
     handleCreateBooking,
     isBooking
   };

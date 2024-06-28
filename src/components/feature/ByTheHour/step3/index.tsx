@@ -6,6 +6,8 @@ import {
   ModalContent,
   useDisclosure,
   Spinner,
+  RadioGroup,
+  Radio,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
@@ -41,6 +43,7 @@ const OtherInformation = () => {
     isBooking,
     pickupAddress,
     dropoffAddress,
+    paymentmethod,
     TotalFarePriceCalculationBymilesandhours,
   } = UseBytheHour();
 
@@ -96,6 +99,24 @@ const OtherInformation = () => {
             className=" rounded-xl "
             onChange={(e) => handleInputChange("pickuptime", e.target.value)}
           />
+          <RadioGroup
+            label="Select Your Payment"
+            color="secondary"
+            defaultValue="pay-cash"
+          >
+            <Radio value="pay-online" isDisabled>
+              Online Payment
+              <span className="ml-2 text-sm text-red-500">Coming Soon</span>
+            </Radio>
+            <Radio
+              onChange={(e) =>
+                handleInputChange("paymentmethod", e.target.value)
+              }
+              value="pay-cash"
+            >
+              Cash Payment
+            </Radio>
+          </RadioGroup>
         </div>
         <div className="flex w-full items-center justify-center">
           <Button
@@ -124,7 +145,7 @@ const OtherInformation = () => {
                       width={200}
                     />
                   </div>
-                  <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
+                  <div className=" grid grid-cols-2 gap-1 rounded-lg border dark:border-gray-600 mx-2 p-2 ">
                     <p className=" text-black dark:text-white ">Name:</p>
                     <p className=" text-black dark:text-white ">{name}</p>
                     <p className=" text-black dark:text-white ">Phone:</p>
@@ -156,6 +177,12 @@ const OtherInformation = () => {
                     </p>
                     <p className=" text-black dark:text-white ">
                       {TotalFarePriceCalculationBymilesandhours} $
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      Payment Method:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {paymentmethod}
                     </p>
                   </div>
                   <div className="my-3 flex w-full items-center justify-center">

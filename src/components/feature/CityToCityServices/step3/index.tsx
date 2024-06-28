@@ -1,14 +1,12 @@
 import {
   Button,
   Input,
-  TimeInput,
-  DatePicker,
   Modal,
   ModalContent,
-  // ModalBody,
-  // ModalFooter,
   useDisclosure,
   Spinner,
+  RadioGroup,
+  Radio,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { MdArrowForwardIos } from "react-icons/md";
@@ -33,7 +31,7 @@ type selectedCarType = {
 };
 
 const CitytocityOtherInformation = () => {
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
   const {
     handleCreateBooking,
@@ -45,6 +43,7 @@ const CitytocityOtherInformation = () => {
     isBooking,
     pickupAddress,
     dropoffAddress,
+    paymentmethod,
     FarePriceCalculationBymiles,
   } = UseCityToCity();
   const SelectedCarData: selectedCarType = useAppSelector(
@@ -53,13 +52,13 @@ const CitytocityOtherInformation = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
-    if (session?.user){
+    if (session?.user) {
       // @ts-expect-error type error is not solved
       dispatch(handleCitytoCityInputChange("name", session?.user?.username));
       // @ts-expect-error type error is not solved
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
-  },[session,dispatch])
+  }, [session, dispatch]);
 
   return (
     <div className=" my-5 w-full p-2 lg:p-5  ">
@@ -99,6 +98,24 @@ const CitytocityOtherInformation = () => {
             className=" rounded-xl "
             onChange={(e) => handleInputChange("pickuptime", e.target.value)}
           />
+          <RadioGroup
+            label="Select Your Payment"
+            color="secondary"
+            defaultValue="pay-cash"
+          >
+            <Radio value="pay-online" isDisabled>
+              Online Payment{" "}
+              <span className="ml-2 text-sm text-red-500">Coming Soon</span>
+            </Radio>
+            <Radio
+              onChange={(e) =>
+                handleInputChange("paymentmethod", e.target.value)
+              }
+              value="pay-cash"
+            >
+              Cash Payment
+            </Radio>
+          </RadioGroup>
         </div>
         <div className="flex w-full items-center justify-center">
           <Button
@@ -127,7 +144,7 @@ const CitytocityOtherInformation = () => {
                       width={200}
                     />
                   </div>
-                  <div className=" grid grid-cols-2 gap-1 rounded-lg border p-2 ">
+                  <div className=" grid grid-cols-2 gap-1 rounded-lg border dark:border-gray-600 p-2 mx-2 ">
                     <p className=" text-black dark:text-white ">Name:</p>
                     <p className=" text-black dark:text-white ">{name}</p>
                     <p className=" text-black dark:text-white ">Phone:</p>
@@ -159,6 +176,12 @@ const CitytocityOtherInformation = () => {
                     </p>
                     <p className=" text-black dark:text-white ">
                       {FarePriceCalculationBymiles} $
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      Payment Method:
+                    </p>
+                    <p className=" text-black dark:text-white ">
+                      {paymentmethod}
                     </p>
                   </div>
                   <div className="my-3 flex w-full items-center justify-center">

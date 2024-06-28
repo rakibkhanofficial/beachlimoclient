@@ -42,6 +42,7 @@ const initialState: ICitytoCityCreateReducer = {
     adressdescription: "",
     adress: "",
     hour: 0,
+    paymentmethod: ""
   },
   isSubmitting: false,
   errors: "",

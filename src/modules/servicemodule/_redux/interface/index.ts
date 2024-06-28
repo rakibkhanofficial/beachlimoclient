@@ -19,6 +19,7 @@ export interface ICitytoCityCreateReducer {
     passenger: string;
     triptype: string;
     hour: number;
+    paymentmethod: string;
   };
   errors: string;
   step: number;
