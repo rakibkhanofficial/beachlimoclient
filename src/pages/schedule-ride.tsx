@@ -1,11 +1,11 @@
 import { useSession } from "next-auth/react";
 import React from "react";
-import ScheduleRide from "~@/components/feature/ByTheHour";
 import FooterComponent from "~@/components/feature/Footer";
 import HeaderLandingPage from "~@/components/feature/Header";
 import UserLogin from "~@/components/feature/login";
+import SecheduleRideServiceBythehour from "~@/components/feature/ScheduleRideSerices";
 
-const AirportTransferService = () => {
+const ScheduleRideService = () => {
   const { data: session } = useSession();
 
   return (
@@ -15,7 +15,7 @@ const AirportTransferService = () => {
         {
           // @ts-expect-error type error is not solved
           session?.user?.accessToken ? (
-            <ScheduleRide />
+            <SecheduleRideServiceBythehour />
           ) : (
             <UserLogin />
           )
@@ -26,4 +26,4 @@ const AirportTransferService = () => {
   );
 };
 
-export default AirportTransferService;
+export default ScheduleRideService;

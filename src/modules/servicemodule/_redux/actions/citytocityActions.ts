@@ -16,7 +16,7 @@ type selectedCarType = {
 };
 
 export const handleCitytoCityInputChange =
-  (name: string, value: string | number) => (dispatch: Dispatch) => {
+  (name: string, value: string | number | undefined) => (dispatch: Dispatch) => {
     const data = {
       [name]: value,
     };

@@ -6,6 +6,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
+import { metersToMiles } from "~@/utils/convertmeterIntoMiles";
 
 const containerStyle = {
   width: "100%",
@@ -81,10 +82,16 @@ const Googlemap = () => {
               if (status === google.maps.DirectionsStatus.OK && result) {
                 setDirectionsResponse(result);
                 const route = result.routes[0];
-                const distance = route.legs[0].distance?.text;
-                if (distance) {
-                  // const distanceInKm = convertMilesToKilometers(distance);
-                  handleInputChange("distance", distance);
+                const distanceInMeters: number | undefined = route.legs[0].distance?.value;
+                const convertDistanceInMiles = metersToMiles(distanceInMeters);
+                if (convertDistanceInMiles) {
+                  handleInputChange("distance", convertDistanceInMiles);
+                }
+                
+                const durationInSeconds: number | undefined = route.legs[0].duration?.value;
+                const durationInHours = (durationInSeconds / 3600).toFixed(2);
+                if (durationInHours) {
+                  handleInputChange("hour", durationInHours);
                 }
               } else {
                 console.error("Directions request failed due to ", status);

@@ -14,6 +14,8 @@ import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
 import { MdArrowForwardIos } from "react-icons/md";
 import { useSession } from "next-auth/react";
+import UseScheduleRide from "~@/modules/servicemodule/hocs/schedulerideservice/useScheduleRideService";
+import { handleCitytoCityInputChange } from "~@/modules/servicemodule/_redux/actions/citytocityActions";
 
 type selectedCarType = {
   id: number;
@@ -43,7 +45,7 @@ const OtherInformation = () => {
     pickupAddress,
     dropoffAddress,
     TotalFarePriceCalculationBymilesandhours,
-  } = UseBytheHour();
+  } = UseScheduleRide();
   const SelectedCarData: selectedCarType = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
@@ -80,18 +82,21 @@ const OtherInformation = () => {
             value={phone}
             onChange={(e) => handleInputChange("phone", e.target.value)}
           />
-          <DatePicker
-            onChange={(date) =>
-              handleInputChange("pickupdate", date?.toString())
-            }
+          <Input
+            value={pickupdate}
+            placeholder="Select Date"
             label="Pick Up Date"
-            className="w-full"
+            type="date"
+            className=" rounded-xl "
+            onChange={(e) => handleInputChange("pickupdate", e.target.value)}
           />
-          <TimeInput
-            onChange={(time) =>
-              handleInputChange("pickuptime", time?.toString())
-            }
+          <Input
+            value={pickuptime}
+            placeholder="Select Date"
             label="Pick Up Time"
+            type="time"
+            className=" rounded-xl "
+            onChange={(e) => handleInputChange("pickuptime", e.target.value)}
           />
         </div>
         <div className="flex w-full items-center justify-center">

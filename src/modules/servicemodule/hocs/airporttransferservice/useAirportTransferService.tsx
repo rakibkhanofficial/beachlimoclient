@@ -56,6 +56,7 @@ const UseAirportTransfer = () => {
     phone = "",
     luggage = "",
     passenger = "",
+    hour = 0,
   } = cityToCityInput || {};
 
   const handleInputChange = (name: string, value: string) => {
@@ -79,14 +80,8 @@ const UseAirportTransfer = () => {
     dispatch(handleCitytocityStepNext(step - 1));
   };
 
-  // console.log("pickupdate", pickupdate);
-  // console.log("pickuptime", pickuptime);
-
-  // Remove 'km' and convert the distance to a number
-  const numericDistance = parseFloat(distance.replace(" mi", ""));
-
-  const TotalFarePriceCalculationBymilesandhours = (
-    numericDistance * SelectedCarData.perhourPrice
+  const TotalFarePriceCalculationByhours = (
+    hour * SelectedCarData.perhourPrice
   ).toFixed(2);
 
   const handleCreateBooking = async () => {
@@ -110,11 +105,12 @@ const UseAirportTransfer = () => {
       pickuptime: pickuptime,
       dropofflocationAdress: dropoffAddress,
       dropofflocationMapLink: dropoffLocation,
-      rentalprice: parseInt(TotalFarePriceCalculationBymilesandhours),
+      rentalprice: parseInt(TotalFarePriceCalculationByhours),
       createdDate: new Date(),
       status: "Pending",
       renterName: name,
       renterPhone: phone,
+      hour: hour
     };
     try {
       const response = await postMethod({
@@ -149,13 +145,14 @@ const UseAirportTransfer = () => {
     handleCitytoCityBack,
     handleSelectedcar,
     SelectedCarData,
-    TotalFarePriceCalculationBymilesandhours,
+    TotalFarePriceCalculationByhours,
     name,
     phone,
     airportname,
     flightno,
     luggage,
     passenger,
+    hour,
     handleCreateBooking,
     isBooking
   };

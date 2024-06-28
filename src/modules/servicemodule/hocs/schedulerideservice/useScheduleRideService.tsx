@@ -56,6 +56,7 @@ const UseScheduleRide = () => {
     phone = "",
     luggage = "",
     passenger = "",
+    hour = 0,
   } = cityToCityInput || {};
 
   const handleInputChange = (name: string, value: string) => {
@@ -79,14 +80,8 @@ const UseScheduleRide = () => {
     dispatch(handleCitytocityStepNext(step - 1));
   };
 
-  // console.log("pickupdate", pickupdate);
-  // console.log("pickuptime", pickuptime);
-
-  // Remove 'km' and convert the distance to a number
-  const numericDistance = parseFloat(distance.replace(" mi", ""));
-
   const TotalFarePriceCalculationBymilesandhours = (
-    numericDistance * SelectedCarData.perhourPrice
+    distance * SelectedCarData.perMilePrice
   ).toFixed(2);
 
   const handleCreateBooking = async () => {
@@ -115,6 +110,7 @@ const UseScheduleRide = () => {
       status: "Pending",
       renterName: name,
       renterPhone: phone,
+      hour: hour
     };
     try {
       const response = await postMethod({
@@ -154,6 +150,7 @@ const UseScheduleRide = () => {
     phone,
     luggage,
     passenger,
+    hour,
     handleCreateBooking,
     isBooking
   };

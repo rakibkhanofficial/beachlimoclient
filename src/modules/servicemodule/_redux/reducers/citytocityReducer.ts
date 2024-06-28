@@ -32,7 +32,7 @@ const initialState: ICitytoCityCreateReducer = {
     pickuptime: currentTimeString,  // Set initial pickuptime to current time
     dropoffLocation: "",
     dropoffAddress: "",
-    distance: "",
+    distance: 0,
     name: "",
     phone: "",
     luggage: "",
@@ -40,7 +40,8 @@ const initialState: ICitytoCityCreateReducer = {
     triptype: "",
     area: "",
     adressdescription: "",
-    adress: ""
+    adress: "",
+    hour: 0,
   },
   isSubmitting: false,
   errors: "",

@@ -10,9 +10,9 @@ import {
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
 import { MdArrowForwardIos } from "react-icons/md";
-import UseScheduleRide from "~@/modules/servicemodule/hocs/schedulerideservice/useScheduleRideService";
 import { useSession } from "next-auth/react";
 import { handleCitytoCityInputChange } from "~@/modules/servicemodule/_redux/actions/citytocityActions";
+import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 
 type selectedCarType = {
   id: number;
@@ -42,7 +42,7 @@ const OtherInformation = () => {
     pickupAddress,
     dropoffAddress,
     TotalFarePriceCalculationBymilesandhours,
-  } = UseScheduleRide();
+  } = UseBytheHour();
 
   const SelectedCarData: selectedCarType = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,

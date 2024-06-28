@@ -1,7 +1,7 @@
 export const Cardata = [
   {
     id: 1,
-    Carname: "CHEVROLET SUBURBAN SUV ",
+    Carname: "Chevrolet Suburban SUV ",
     Model: "2024",
     image: "/carimages/2024-CHEVROLET-SUBURBAN-SUV.png",
     perhourPrice: 79,
@@ -14,7 +14,7 @@ export const Cardata = [
   },
   {
     id: 2,
-    Carname: "GMC Yukon",
+    Carname: "GMC Yukon SUV",
     Model: "2024",
     image: "/carimages/2024_GMC_Yukon.png",
     perhourPrice: 79,
@@ -27,7 +27,7 @@ export const Cardata = [
   },
   {
     id: 3,
-    Carname: "Cadillac-Escalade",
+    Carname: "Cadillac-Escalade SUV",
     Model: "2024",
     image: "/carimages/2024-cadillac-escalade-esv.png",
     perhourPrice: 85,
@@ -40,7 +40,7 @@ export const Cardata = [
   },
   {
     id: 4,
-    Carname: "Lincoln MKT ",
+    Carname: "Lincoln MKT Luxury",
     Model: "2018",
     image: "/carimages/LINCOLN-MKT.png",
     perhourPrice: 75,
@@ -53,7 +53,7 @@ export const Cardata = [
   },
   {
     id: 5,
-    Carname: "Mercedes-S-Class ",
+    Carname: "Mercedes-S-Class Premier",
     Model: "S-350",
     image: "/carimages/mercedes-s-class-s-350.png",
     perhourPrice: 79,

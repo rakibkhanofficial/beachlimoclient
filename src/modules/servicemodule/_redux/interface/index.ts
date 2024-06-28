@@ -10,14 +10,15 @@ export interface ICitytoCityCreateReducer {
     pickuptime: string;
     dropoffLocation: string;
     dropoffAddress: string;
-    distance: string;
+    distance: number;
     adress: string;
     adressdescription: string;
     name: string;
     phone: string;
     luggage: string;
     passenger: string;
-    triptype: string
+    triptype: string;
+    hour: number;
   };
   errors: string;
   step: number;

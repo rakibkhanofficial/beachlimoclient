@@ -49,7 +49,8 @@ const CarSelection = () => {
                 <h1 className=" text-medium font-medium lg:text-lg ">
                   {data?.Carname}
                 </h1>
-                <p>Per Hour Price: {data?.perhourPrice} $</p>
+                {/* <p>Per Hour Price: {data?.perhourPrice} $</p> */}
+                <p>Per Mile Rent Price: {data?.perMilePrice}</p>
                 <p>Passenger Quantity: {data?.passenger}</p>
                 <p>Luggage Quantity: {data?.Luggage}</p>
                 {data?.isWifi === true ? (

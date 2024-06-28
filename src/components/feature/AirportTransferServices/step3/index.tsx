@@ -50,7 +50,7 @@ const OtherInformation = () => {
     isBooking,
     pickupAddress,
     dropoffAddress,
-    TotalFarePriceCalculationBymilesandhours,
+    TotalFarePriceCalculationByhours,
   } = UseAirportTransfer();
 
   useEffect(() => {
@@ -173,7 +173,7 @@ const OtherInformation = () => {
                       Total Fare Price:
                     </p>
                     <p className=" text-black dark:text-white ">
-                      {TotalFarePriceCalculationBymilesandhours} $
+                      {TotalFarePriceCalculationByhours} $
                     </p>
                   </div>
                   <div className="my-3 flex w-full items-center justify-center">
