@@ -5,8 +5,8 @@ import {
   DirectionsRenderer,
   useJsApiLoader,
 } from "@react-google-maps/api";
+import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
 import { metersToMiles } from "~@/utils/convertmeterIntoMiles";
-import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 
 const containerStyle = {
   width: "100%",
@@ -19,7 +19,7 @@ const center = {
 };
 
 const Googlemap = () => {
-  const { handleInputChange } = UseBytheHour();
+  const { handleInputChange } = UseCityToCity();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
@@ -76,15 +76,15 @@ const Googlemap = () => {
               if (status === google.maps.DirectionsStatus.OK && result) {
                 setDirectionsResponse(result);
                 const route = result.routes[0];
-                const distanceInMeters: number | undefined = route.legs[0].distance?.value;
-                const convertDistanceInMiles = metersToMiles(distanceInMeters);
+                const distanceInMeters = route.legs[0].distance?.value;
+                const convertDistanceInMiles = distanceInMeters ? metersToMiles(distanceInMeters) : undefined;
                 if (convertDistanceInMiles) {
                   handleInputChange("distance", convertDistanceInMiles);
                 }
-                
-                const durationInSeconds: number | undefined = route.legs[0].duration?.value;
-                const durationInHours = (durationInSeconds / 3600).toFixed(2);
-                if (durationInHours) {
+
+                const durationInSeconds = route.legs[0].duration?.value;
+                if (durationInSeconds) {
+                  const durationInHours = (durationInSeconds / 3600).toFixed(2);
                   handleInputChange("hour", durationInHours);
                 }
               } else {

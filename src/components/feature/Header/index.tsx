@@ -6,10 +6,6 @@ import {
   NavbarItem,
   Link,
   Button,
-  // DropdownItem,
-  // DropdownTrigger,
-  // Dropdown,
-  // DropdownMenu,
 } from "@nextui-org/react";
 import {
   ChevronDown,
@@ -24,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { DarkModeSwitch } from "../AdminDashboard/navbar/darkmodeswitch";
 import { UserDropdown } from "../UserDropDown";
+import Image from "next/image";
 
 const HeaderLandingPage = () => {
   const router = useRouter();
@@ -60,11 +57,11 @@ const HeaderLandingPage = () => {
   };
 
   return (
-    <Navbar className="bg-gray-100 text-black dark:bg-slate-800">
+    <Navbar className="bg-gray-100 text-black dark:bg-slate-800 dark:text-white">
       <NavbarBrand className="cursor-pointer" onClick={handlehome}>
-        <p className="font-bold text-black text-inherit dark:text-white">
-          Beach Limo
-        </p>
+        <div onClick={handlehome}>
+          <Image src={"/largelogo.png"} width={120} height={30} alt="Beachlimo"/>
+        </div>
       </NavbarBrand>
 
       {

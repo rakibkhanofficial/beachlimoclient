@@ -50,7 +50,7 @@ const initialState: ICitytoCityCreateReducer = {
 };
 
 const CitytoCityReducer = (state = initialState, action: AnyAction) => {
-  console.log(action.payload)
+  // console.log(action.payload)
   switch (action.type) {
     case Types.CITY_TO_CITY_INPUT_CHANGE:
       const CityToCityInputChange = { ...state.CitytoCityServiceInput, ...action.payload };

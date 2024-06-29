@@ -51,8 +51,6 @@ const BookingStatus = ({ bookingStatus }: BookingStatusType) => {
 
   const stepInfo = mapOrderStatusToStep(bookingStatus);
 
-  console.log(bookingStatus);
-
   return (
     <div className="rounded-lg bg-gray-100 p-5 text-black shadow-md dark:bg-zinc-800 dark:text-white">
       {bookingStatus ? (
@@ -86,7 +84,7 @@ const BookingStatus = ({ bookingStatus }: BookingStatusType) => {
             )}
           </div>
 
-          <div className=" mx-auto flex h-[200px] w-[200px] items-center justify-center ">
+          <div className=" mx-auto flex h-[200px] w-[320px] items-center justify-center ">
             <ZeepCarRunningAnimation />
           </div>
         </div>

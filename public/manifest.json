@@ -1,0 +1,42 @@
+{
+  "name": "Beach LimoFl",
+  "short_name": "BeachLimo",
+  "description": "Beach Limofl is a Company in USA which providing reliable car rental services in Florida, USA. Easily browse, compare, and book a range of well-maintained vehicles for a hassle-free travel experience. Explore Florida at your own pace with us!",
+  "url": "https://www.beachlimofl.com",
+  "icons": [
+    {
+      "src": "/pwaimage/icon72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwaimage/icon192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwaimage/icon522.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "splash_screen": {
+    "enabled": true,
+    "image_path": "/pwaimage/icon522.png",
+    "background_color": "#393A41",
+    "text_color": "#FDF9F9"
+  },
+  "screenshots": [
+    {
+      "src": "/pwaimage/icon522.png",
+      "sizes": "750x1334",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

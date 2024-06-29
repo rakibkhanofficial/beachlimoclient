@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import lottie, { type AnimationItem } from "lottie-web"; // Import AnimationItem
-import zeepcarrunninganimation from "./jeeprcarnobg.json";
+import zeepcarrunninganimation from "./caranimationwithbg.json";
 
 const ZeepCarRunningAnimation = () => {
   const animationContainer = useRef<HTMLDivElement>(null);

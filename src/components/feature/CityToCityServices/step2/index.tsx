@@ -18,10 +18,10 @@ const LocationSelection = () => {
   } = UseCityToCity();
 
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  const [pickupPlace, setPickupPlace] = useState<null>(null);
-  const [dropoffPlace, setDropoffPlace] = useState<null>(null);
-  const pickupInputRef = useRef(null);
-  const dropoffInputRef = useRef(null);
+  const [pickupPlace, setPickupPlace] = useState<google.maps.places.PlaceResult | null>(null);
+  const [dropoffPlace, setDropoffPlace] = useState<google.maps.places.PlaceResult | null>(null);
+  const pickupInputRef = useRef<HTMLInputElement>(null);
+  const dropoffInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loader = new Loader({
@@ -41,62 +41,66 @@ const LocationSelection = () => {
         componentRestrictions: { country: "us" }, // adjust to your country
       };
 
-      const pickupAutocomplete = new window.google.maps.places.Autocomplete(
-        pickupInputRef.current,
-        options
-      );
+      if (pickupInputRef.current) {
+        const pickupAutocomplete = new window.google.maps.places.Autocomplete(
+          pickupInputRef.current,
+          options,
+        );
 
-      pickupAutocomplete.addListener("place_changed", () => {
-        const place: google.maps.places.PlaceResult = pickupAutocomplete.getPlace();
-        setPickupPlace(place);
-        handleInputChange("pickupAddress", place.formatted_address);
-        const pickuplocationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formatted_address)}`;
-        handleInputChange("pickupLocation", pickuplocationLink);
-      });
+        pickupAutocomplete.addListener("place_changed", () => {
+          const place: google.maps.places.PlaceResult = pickupAutocomplete.getPlace();
+          setPickupPlace(place);
+          handleInputChange("pickupAddress", place.formatted_address || "");
+          const pickuplocationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formatted_address || "")}`;
+          handleInputChange("pickupLocation", pickuplocationLink);
+        });
+      }
 
-      const dropoffAutocomplete = new window.google.maps.places.Autocomplete(
-        dropoffInputRef.current,
-        options
-      );
+      if (dropoffInputRef.current) {
+        const dropoffAutocomplete = new window.google.maps.places.Autocomplete(
+          dropoffInputRef.current,
+          options,
+        );
 
-      dropoffAutocomplete.addListener("place_changed", () => {
-        const place: google.maps.places.PlaceResult = dropoffAutocomplete.getPlace();
-        setDropoffPlace(place);
-        handleInputChange("dropoffAddress", place.formatted_address);
-        const dropOfflocationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formatted_address)}`;
-        handleInputChange("dropoffLocation", dropOfflocationLink);
-      });
+        dropoffAutocomplete.addListener("place_changed", () => {
+          const place: google.maps.places.PlaceResult = dropoffAutocomplete.getPlace();
+          setDropoffPlace(place);
+          handleInputChange("dropoffAddress", place.formatted_address || "");
+          const dropOfflocationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formatted_address || "")}`;
+          handleInputChange("dropoffLocation", dropOfflocationLink);
+        });
+      }
     }
-  }, [isScriptLoaded]);
+  }, [isScriptLoaded, handleInputChange]);
 
   useEffect(() => {
     if (pickupPlace && dropoffPlace) {
-      calculateDistance();
+      calculateDistanceAndTime();
     }
   }, [pickupPlace, dropoffPlace]);
 
-  const calculateDistance = () => {
+  const calculateDistanceAndTime = () => {
     const service = new window.google.maps.DistanceMatrixService();
     service.getDistanceMatrix(
       {
-        origins: [pickupPlace.geometry.location],
-        destinations: [dropoffPlace.geometry.location],
+        origins: [pickupPlace!.geometry!.location!],
+        destinations: [dropoffPlace!.geometry!.location!],
         travelMode: window.google.maps.TravelMode.DRIVING,
       },
-      (response: google.maps.DistanceMatrixResponse | null, status) => {
+      (response, status) => {
         if (status === "OK") {
-          const element = response.rows[0].elements[0];
-          const distanceInMeters = element.distance?.value;
-          const distanceInMiles = metersToMiles(distanceInMeters); // Convert meters to miles
+          const element = response?.rows[0].elements[0];
+          const distanceInMeters = element?.distance?.value;
+          const distanceInMiles = metersToMiles(distanceInMeters || 0);
           handleInputChange("distance", distanceInMiles);
-          const durationInSeconds = element.duration?.value;
-          const durationInHours = (durationInSeconds / 3600).toFixed(2);
+
+          const durationInSeconds = element?.duration?.value;
+          const durationInHours = ((durationInSeconds || 0) / 3600).toFixed(2);
           handleInputChange("hour", durationInHours);
         }
       }
     );
   };
-
   return (
     <div className="w-full text-black dark:text-white px-2 ">
       <button

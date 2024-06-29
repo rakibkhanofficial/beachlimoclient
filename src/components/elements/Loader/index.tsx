@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import lottie, { type AnimationItem } from "lottie-web"; // Import AnimationItem
-import carrunninganimation from "./caranimation.json";
+import caranimation from "./caranimationwithbg.json";
 
-const CarRunningAnimation = () => {
+const CarLoader = () => {
   const animationContainer = useRef<HTMLDivElement>(null);
   const animationInstance = useRef<AnimationItem | null>(null); // Adjust the type here
   const parentContainer = useRef<HTMLDivElement>(null);
@@ -13,7 +13,7 @@ const CarRunningAnimation = () => {
       renderer: "svg",
       loop: true,
       autoplay: true,
-      animationData: carrunninganimation,
+      animationData: caranimation,
       // Add width and height properties here
       rendererSettings: {
         preserveAspectRatio: "xMidYMid slice", // Adjust this according to your needs
@@ -37,4 +37,4 @@ const CarRunningAnimation = () => {
   );
 };
 
-export default CarRunningAnimation;
+export default CarLoader;
