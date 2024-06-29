@@ -6,6 +6,12 @@ import Googlemap from "./googlemap";
 import { Loader } from "@googlemaps/js-api-loader";
 import { metersToMiles } from "~@/utils/convertmeterIntoMiles";
 
+// Define the props type
+interface GooglemapProps {
+  pickupPlace?: google.maps.places.PlaceResult | null;
+  dropoffPlace?: google.maps.places.PlaceResult | null;
+}
+
 const LocationSelection = () => {
   const {
     pickupAddress,
@@ -48,7 +54,7 @@ const LocationSelection = () => {
         );
 
         pickupAutocomplete.addListener("place_changed", () => {
-          const place: google.maps.places.PlaceResult = pickupAutocomplete.getPlace();
+          const place = pickupAutocomplete.getPlace();
           setPickupPlace(place);
           handleInputChange("pickupAddress", place.formatted_address || "");
           const pickuplocationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formatted_address || "")}`;
@@ -63,7 +69,7 @@ const LocationSelection = () => {
         );
 
         dropoffAutocomplete.addListener("place_changed", () => {
-          const place: google.maps.places.PlaceResult = dropoffAutocomplete.getPlace();
+          const place = dropoffAutocomplete.getPlace();
           setDropoffPlace(place);
           handleInputChange("dropoffAddress", place.formatted_address || "");
           const dropOfflocationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formatted_address || "")}`;
@@ -101,28 +107,29 @@ const LocationSelection = () => {
       }
     );
   };
+
   return (
-    <div className="w-full text-black dark:text-white px-2 ">
+    <div className="w-full text-black dark:text-white px-2">
       <button
         title="go back"
         type="button"
         onClick={handleCitytoCityBack}
-        className=" flex items-center justify-center gap-2 font-medium text-black hover:text-blue-700 dark:text-white "
+        className="flex items-center justify-center gap-2 font-medium text-black hover:text-blue-700 dark:text-white"
       >
         <span>
           <MdArrowBackIos />
         </span>
         <span>Go Back</span>
       </button>
-      <h1 className=" my-3 lg:my-10 text-center text-xl font-semibold ">
+      <h1 className="my-3 lg:my-10 text-center text-xl font-semibold">
         Select Your Pickup and Drop Off Location
       </h1>
       <div className="w-full">
-        <div className=" w-full lg:my-5 grid lg:grid-cols-2 items-center lg:justify-center gap-4 lg:px-10 lg:py-5 ">
+        <div className="w-full lg:my-5 grid lg:grid-cols-2 items-center lg:justify-center gap-4 lg:px-10 lg:py-5">
           <div className="w-full">
-            <Googlemap />
+            <Googlemap pickupPlace={pickupPlace} dropoffPlace={dropoffPlace} />
           </div>
-          <div className=" w-full flex flex-col gap-5 ">
+          <div className="w-full flex flex-col gap-5">
             <Input
               ref={pickupInputRef}
               onChange={(e) => handleInputChange("pickupAddress", e.target.value)}
@@ -141,13 +148,12 @@ const LocationSelection = () => {
             />
             <Input
               readOnly
-              // onChange={(e) => handleInputChange("distance", e.target.value)}
               label="Distance"
               placeholder="Select Pick Up Address and Drop Off Address From Map"
               className="text-black dark:text-white"
               value={`${distance} Miles`}
             />
-            <div className=" rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
+            <div className="rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
               {FarePriceCalculationBymiles !== "NaN"
                 ? FarePriceCalculationBymiles
                 : "Fair Price"}{" "}
@@ -155,15 +161,15 @@ const LocationSelection = () => {
             </div>
           </div>
         </div>
-        <div className=" my-4 flex items-center justify-center ">
+        <div className="my-4 flex items-center justify-center">
           <Button
-            className=" w-[80%] lg:w-[40%] "
+            className="w-[80%] lg:w-[40%]"
             color="success"
             isDisabled={distance === ""}
             onClick={handleCitytoCityNext}
           >
-            <span className=" text-white text-lg ">Next</span>
-            <span className=" text-white text-lg ">
+            <span className="text-white text-lg">Next</span>
+            <span className="text-white text-lg">
               <MdArrowForwardIos />
             </span>
           </Button>

@@ -136,8 +136,6 @@ const UseCityToCity = () => {
     }
   };
 
-  console.log("paymentmethod", paymentmethod)
-
   return {
     handleInputChange,
     pickupLocation,
