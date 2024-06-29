@@ -1,25 +1,20 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   GoogleMap,
   Marker,
   DirectionsRenderer,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
 import { metersToMiles } from "~@/utils/convertmeterIntoMiles";
+import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 
 const containerStyle = {
   width: "100%",
   height: "450px",
 };
 
-const center = {
-  lat: 28.5383,
-  lng: -81.3792,
-};
-
 const Googlemap = () => {
-  const { handleInputChange } = UseCityToCity();
+  const { handleInputChange } = UseBytheHour();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
@@ -28,15 +23,33 @@ const Googlemap = () => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [pickupMarker, setPickupMarker] = useState<google.maps.Marker | null>(null);
   const [dropoffMarker, setDropoffMarker] = useState<google.maps.Marker | null>(null);
+  const [userMarker, setUserMarker] = useState<google.maps.Marker | null>(null);
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
+  const [userPosition, setUserPosition] = useState<google.maps.LatLng | null>(null);
 
-  const onLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
-
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const userLatLng = new google.maps.LatLng(latitude, longitude);
+          setUserPosition(userLatLng);
+          setUserMarker(
+            new google.maps.Marker({
+              position: userLatLng,
+              map: map,
+              title: "Your Location",
+            })
+          );
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, [map]);
 
   const handleMapClick = useCallback((event: google.maps.MapMouseEvent) => {
     const latLng = event.latLng;
@@ -102,17 +115,20 @@ const Googlemap = () => {
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
-      center={center}
+      center={userPosition || { lat: 28.5383, lng: -81.3792 }}
       zoom={14}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
+      onLoad={(map) => setMap(map)}
+      onUnmount={() => setMap(null)}
       onClick={handleMapClick}
     >
       {pickupMarker && <Marker position={pickupMarker.getPosition()!} />}
       {dropoffMarker && <Marker position={dropoffMarker.getPosition()!} />}
+      {userMarker && <Marker position={userMarker.getPosition()!} />}
       {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
     </GoogleMap>
-  ) : <></>;
+  ) : (
+    <></>
+  );
 };
 
 export default React.memo(Googlemap);
