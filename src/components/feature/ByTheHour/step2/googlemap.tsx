@@ -15,28 +15,38 @@ const containerStyle = {
 };
 
 const Googlemap = () => {
-  const { handleInputChange } = UseBytheHour();
+  const { handleInputChange, pickupAddress, dropoffAddress } = UseBytheHour();
   const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
   });
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [pickupMarker, setPickupMarker] = useState<google.maps.Marker | null>(null);
-  const [dropoffMarker, setDropoffMarker] = useState<google.maps.Marker | null>(null);
+  const [pickupMarker, setPickupMarker] = useState<google.maps.Marker | null>(
+    null,
+  );
+  const [dropoffMarker, setDropoffMarker] = useState<google.maps.Marker | null>(
+    null,
+  );
   const [userMarker, setUserMarker] = useState<google.maps.Marker | null>(null);
-  const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
-  const [userPosition, setUserPosition] = useState<google.maps.LatLng | google.maps.LatLngLiteral | null>(null);
+  const [directionsResponse, setDirectionsResponse] =
+    useState<google.maps.DirectionsResult | null>(null);
+  const [userPosition, setUserPosition] = useState<
+    google.maps.LatLng | google.maps.LatLngLiteral | null
+  >(null);
   const [accuracy, setAccuracy] = useState<number>(100);
-  console.log(accuracy)
+
   useEffect(() => {
-    if (!isLoaded || !google.maps) return;
+    if (!isLoaded || typeof google === "undefined") return;
 
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          const userLatLng: google.maps.LatLngLiteral = { lat: latitude, lng: longitude };
+          const userLatLng: google.maps.LatLngLiteral = {
+            lat: latitude,
+            lng: longitude,
+          };
           setUserPosition(userLatLng);
           setAccuracy(position.coords.accuracy);
 
@@ -67,7 +77,7 @@ const Googlemap = () => {
           enableHighAccuracy: true,
           timeout: 20000,
           maximumAge: 1000,
-        }
+        },
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
@@ -75,7 +85,7 @@ const Googlemap = () => {
   }, [isLoaded, map, userMarker]);
 
   const handleGPSButtonClick = () => {
-    if (!isLoaded || !google.maps) return;
+    if (!isLoaded || typeof google === "undefined") return;
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -85,7 +95,9 @@ const Googlemap = () => {
           setUserPosition(userLatLng);
           setAccuracy(position.coords.accuracy);
           map?.panTo(userLatLng);
-          map?.setZoom(Math.round(16 - Math.log(position.coords.accuracy) / Math.LN2));
+          map?.setZoom(
+            Math.round(16 - Math.log(position.coords.accuracy) / Math.LN2),
+          );
         },
         (error) => {
           console.error("Error getting user location:", error);
@@ -94,16 +106,107 @@ const Googlemap = () => {
           enableHighAccuracy: true,
           timeout: 20000,
           maximumAge: 0,
-        }
+        },
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
   };
 
+  const geocodeAddress = useCallback(
+    (address: string, callback: (latLng: google.maps.LatLng) => void) => {
+      if (!isLoaded || typeof google === "undefined") return;
+
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === "OK" && results && results.length > 0) {
+          callback(results[0].geometry.location);
+        } else {
+          console.error(
+            "Geocode was not successful for the following reason: " + status,
+          );
+        }
+      });
+    },
+    [isLoaded],
+  );
+
+  useEffect(() => {
+    if (
+      !isLoaded ||
+      typeof google === "undefined" ||
+      !pickupAddress ||
+      !dropoffAddress
+    )
+      return;
+
+    geocodeAddress(pickupAddress, (pickupLatLng) => {
+      if (pickupMarker) {
+        pickupMarker.setPosition(pickupLatLng);
+      } else {
+        const marker = new google.maps.Marker({
+          position: pickupLatLng,
+          map: map!,
+        });
+        setPickupMarker(marker);
+      }
+
+      geocodeAddress(dropoffAddress, (dropoffLatLng) => {
+        if (dropoffMarker) {
+          dropoffMarker.setPosition(dropoffLatLng);
+        } else {
+          const marker = new google.maps.Marker({
+            position: dropoffLatLng,
+            map: map!,
+          });
+          setDropoffMarker(marker);
+        }
+
+        const directionsService = new google.maps.DirectionsService();
+        directionsService.route(
+          {
+            origin: pickupLatLng,
+            destination: dropoffLatLng,
+            travelMode: google.maps.TravelMode.DRIVING,
+          },
+          (result, status) => {
+            if (status === google.maps.DirectionsStatus.OK && result) {
+              setDirectionsResponse(result);
+              const route = result.routes[0];
+              const distanceInMeters = route.legs[0].distance?.value;
+              const convertDistanceInMiles = distanceInMeters
+                ? metersToMiles(distanceInMeters)
+                : undefined;
+              if (convertDistanceInMiles) {
+                handleInputChange("distance", convertDistanceInMiles);
+              }
+
+              const durationInSeconds = route.legs[0].duration?.value;
+              if (durationInSeconds) {
+                const durationInHours = (durationInSeconds / 3600).toFixed(2);
+                handleInputChange("hour", durationInHours);
+              }
+            } else {
+              console.error("Directions request failed due to ", status);
+            }
+          },
+        );
+      });
+    });
+  }, [
+    isLoaded,
+    pickupAddress,
+    dropoffAddress,
+    pickupMarker,
+    dropoffMarker,
+    map,
+    geocodeAddress,
+    handleInputChange,
+  ]);
+
   const handleMapClick = useCallback(
     (event: google.maps.MapMouseEvent) => {
-      if (!isLoaded || !google.maps) return;
+      if (!isLoaded || typeof google === "undefined") return;
 
       const latLng = event.latLng;
       if (!latLng) return;
@@ -143,34 +246,39 @@ const Googlemap = () => {
                   setDirectionsResponse(result);
                   const route = result.routes[0];
                   const distanceInMeters = route.legs[0].distance?.value;
-                  const convertDistanceInMiles = distanceInMeters ? metersToMiles(distanceInMeters) : undefined;
+                  const convertDistanceInMiles = distanceInMeters
+                    ? metersToMiles(distanceInMeters)
+                    : undefined;
                   if (convertDistanceInMiles) {
                     handleInputChange("distance", convertDistanceInMiles);
                   }
 
                   const durationInSeconds = route.legs[0].duration?.value;
                   if (durationInSeconds) {
-                    const durationInHours = (durationInSeconds / 3600).toFixed(2);
+                    const durationInHours = (durationInSeconds / 3600).toFixed(
+                      2,
+                    );
                     handleInputChange("hour", durationInHours);
                   }
                 } else {
                   console.error("Directions request failed due to ", status);
                 }
-              }
+              },
             );
           }
         } else {
-          console.error("Geocode was not successful for the following reason: " + status);
+          console.error(
+            "Geocode was not successful for the following reason: " + status,
+          );
         }
       });
     },
-    [isLoaded, pickupMarker, dropoffMarker, map, handleInputChange]
+    [isLoaded, pickupMarker, dropoffMarker, map, handleInputChange],
   );
 
   if (loadError) {
     return <div>Error loading maps</div>;
   }
-
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -183,14 +291,18 @@ const Googlemap = () => {
       {pickupMarker && <Marker position={pickupMarker.getPosition()!} />}
       {dropoffMarker && <Marker position={dropoffMarker.getPosition()!} />}
       {userMarker && <Marker position={userMarker.getPosition()!} />}
-      {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
+      {directionsResponse && (
+        <DirectionsRenderer directions={directionsResponse} />
+      )}
       <button
         type="button"
         title="gps"
-        className=" absolute top-20 right-3 z-[1] p-[6px] hover:text-blue-800 bg-white border shadow-lg border-gray-100 rounded-sm cursor-pointer flex gap-2 justify-center items-center"
+        className=" absolute right-3 top-20 z-[1] flex cursor-pointer items-center justify-center gap-2 rounded-sm border border-gray-100 bg-white p-[6px] shadow-lg hover:text-blue-800"
         onClick={handleGPSButtonClick}
       >
-        <span><CiGps size={25}/></span>
+        <span>
+          <CiGps size={25} />
+        </span>
         {/* <span>({Math.round(accuracy)}m)</span> */}
       </button>
     </GoogleMap>
