@@ -34,7 +34,7 @@ const SidebarWrapper = () => {
       >
         <div className="flex items-center justify-center">
           <Image
-            src="/BeachLimo.png"
+            src="/largelogo.png"
             priority={true}
             height={150}
             className="h-auto w-auto"
