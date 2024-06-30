@@ -109,8 +109,30 @@ const LocationSelection = () => {
     );
   };
 
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsScrolling(false);
+      }, 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <div className="w-full text-black dark:text-white px-2">
+    <div className="relative w-full px-2 text-black dark:text-white">
+      <div className=" w-full">
       <button
         title="go back"
         type="button"
@@ -172,19 +194,25 @@ const LocationSelection = () => {
             </div>
           </div>
         </div>
-        <div className="my-4 flex items-center justify-center">
-          <Button
-            className="w-[80%] lg:w-[40%]"
-            color="success"
-            isDisabled={distance === ""}
-            onClick={handleCitytoCityNext}
-          >
-            <span className="text-white text-lg">Next</span>
-            <span className="text-white text-lg">
-              <MdArrowForwardIos />
-            </span>
-          </Button>
-        </div>
+      </div>
+      </div>
+      <div
+        className={`fixed bottom-0 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${isScrolling ? "translate-y-full" : "translate-y-0"}`}
+      >
+        <Button
+          className={`w-[80%] lg:w-[40%] ${
+            distance === 0
+              ? "cursor-not-allowed bg-gray-300 text-black"
+              : "bg-blue-800 text-white"
+          }`}
+          onClick={handleCitytoCityNext}
+          isDisabled={distance === 0}
+        >
+          <span className="text-lg text-white">Next</span>
+          <span className="text-lg text-white">
+            <MdArrowForwardIos />
+          </span>
+        </Button>
       </div>
     </div>
   );

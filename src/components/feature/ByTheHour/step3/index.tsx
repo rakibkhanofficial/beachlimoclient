@@ -85,8 +85,10 @@ const OtherInformation = () => {
 
   return (
     <div className="relative my-5 w-full p-2 lg:p-5  ">
+
       <div className=" flex flex-col items-center justify-center">
-        <h1 className=" my-5 text-center text-xl font-semibold  ">
+
+        <h1 className=" my-5 text-center text-xl font-semibold ">
           Type This Information For booking
         </h1>
         <div className=" flex w-full flex-col gap-3 rounded-xl border border-slate-700 px-4 py-6 lg:w-[60%] ">
