@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Input,
@@ -64,6 +64,27 @@ const OtherInformation = () => {
     handleInputChange("paymentmethod", "pay-cash");
   }, [session, dispatch]);
 
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsScrolling(false);
+      }, 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <div className="my-5 w-full p-2 lg:p-5">
       <div className="flex flex-col items-center justify-center">
@@ -121,15 +142,20 @@ const OtherInformation = () => {
             </Radio>
           </RadioGroup>
         </div>
-        <div className="flex w-full items-center justify-center">
+        <div
+          className={`fixed bottom-0 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${isScrolling ? "translate-y-full" : "translate-y-0"}`}
+        >
           <Button
-            className="mt-5 w-[80%] lg:w-[50%]"
-            color="success"
+            className={`w-[80%] lg:w-[40%] ${
+              !name || !phone || !pickupdate || !pickuptime
+                ? "cursor-not-allowed bg-gray-300 text-black"
+                : "bg-blue-800 text-white"
+            }`}
             onPress={onOpen}
             isDisabled={!name || !phone || !pickupdate || !pickuptime}
           >
             <span className="text-lg text-white">Next</span>
-            <span className=" text-lg text-white ">
+            <span className="text-lg text-white">
               <MdArrowForwardIos />
             </span>
           </Button>
@@ -148,7 +174,7 @@ const OtherInformation = () => {
                       width={200}
                     />
                   </div>
-                  <div className=" grid grid-cols-2 gap-1 rounded-lg border dark:border-gray-600 mx-2 p-2 ">
+                  <div className=" mx-2 grid grid-cols-2 gap-1 rounded-lg border p-2 dark:border-gray-600 ">
                     <p className=" text-black dark:text-white ">Name:</p>
                     <p className=" text-black dark:text-white ">{name}</p>
                     <p className=" text-black dark:text-white ">Phone:</p>

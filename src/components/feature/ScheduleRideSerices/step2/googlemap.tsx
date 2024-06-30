@@ -141,17 +141,17 @@ const Googlemap = ({ pickupPlace, dropoffPlace }: GooglemapProps) => {
   const handleMapClick = useCallback(
     (event: google.maps.MapMouseEvent) => {
       if (!isLoaded || !google.maps) return;
-
+  
       const latLng = event.latLng;
       if (!latLng) return;
-
+  
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ location: latLng }, (results, status) => {
         if (status === "OK" && results && results.length > 0) {
           const formattedAddress = results[0].formatted_address;
           const locationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formattedAddress)}`;
-
-          if (!pickupPlace) {
+  
+          if (!pickupMarker) {
             const marker = new google.maps.Marker({
               position: latLng,
               map: map!,
@@ -159,7 +159,7 @@ const Googlemap = ({ pickupPlace, dropoffPlace }: GooglemapProps) => {
             setPickupMarker(marker);
             handleInputChange("pickupLocation", locationLink);
             handleInputChange("pickupAddress", formattedAddress);
-          } else if (!dropoffPlace) {
+          } else if (!dropoffMarker) {
             const marker = new google.maps.Marker({
               position: latLng,
               map: map!,
@@ -167,11 +167,11 @@ const Googlemap = ({ pickupPlace, dropoffPlace }: GooglemapProps) => {
             setDropoffMarker(marker);
             handleInputChange("dropoffLocation", locationLink);
             handleInputChange("dropoffAddress", formattedAddress);
-
+  
             const directionsService = new google.maps.DirectionsService();
             directionsService.route(
               {
-                origin: pickupPlace.geometry!.location!,
+                origin: pickupMarker.getPosition()!,
                 destination: latLng,
                 travelMode: google.maps.TravelMode.DRIVING,
               },
@@ -184,7 +184,7 @@ const Googlemap = ({ pickupPlace, dropoffPlace }: GooglemapProps) => {
                   if (convertDistanceInMiles) {
                     handleInputChange("distance", convertDistanceInMiles);
                   }
-
+  
                   const durationInSeconds = route.legs[0].duration?.value;
                   if (durationInSeconds) {
                     const durationInHours = (durationInSeconds / 3600).toFixed(2);
@@ -201,8 +201,9 @@ const Googlemap = ({ pickupPlace, dropoffPlace }: GooglemapProps) => {
         }
       });
     },
-    [isLoaded, pickupPlace, dropoffPlace, map, handleInputChange]
+    [isLoaded, pickupMarker, dropoffMarker, map, handleInputChange]
   );
+  
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -224,7 +225,7 @@ const Googlemap = ({ pickupPlace, dropoffPlace }: GooglemapProps) => {
       <button
         type="button"
         title="gps"
-        className="absolute top-20 right-3 z-[1] p-[6px] hover:text-blue-800 bg-white border shadow-lg border-gray-100 rounded-sm cursor-pointer flex gap-2 justify-center items-center"
+        className="absolute top-20 right-3 z-[1] dark:text-black p-[6px] hover:text-blue-800 bg-white border shadow-lg border-gray-100 rounded-sm cursor-pointer flex gap-2 justify-center items-center"
         onClick={handleGPSButtonClick}
       >
         <span><CiGps size={25} /></span>
