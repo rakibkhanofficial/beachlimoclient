@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Cardata } from "./data";
 import Image from "next/image";
 import { MdArrowBackIos } from "react-icons/md";
@@ -11,8 +11,30 @@ const CarSelection = () => {
   const { handleCitytoCityNext, handleSelectedcar, SelectedCarData } =
   UseBytheHour();
 
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsScrolling(false);
+      }, 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <div className="w-full">
+    <div className="relative min-h-screen w-full">
+      <div className="pb-16">
       <Link
         href="/"
         className=" flex items-center justify-start gap-2 font-medium text-black hover:text-blue-700 dark:text-white "
@@ -37,7 +59,7 @@ const CarSelection = () => {
             onClick={() => handleSelectedcar(data)}
           >
             <div className=" grid w-full grid-cols-12">
-              <div className="col-span-5 flex items-center justify-center rounded-l-md border p-3">
+              <div className="col-span-5 flex items-center justify-center rounded-l-md border dark:border-slate-800  p-3">
                 <Image
                   width={200}
                   height={200}
@@ -45,7 +67,7 @@ const CarSelection = () => {
                   src={data?.image}
                 />
               </div>
-              <div className="col-span-7 rounded-r-md border p-3">
+              <div className="col-span-7 rounded-r-md border dark:border-slate-800 p-3">
                 <h1 className=" text-medium font-medium lg:text-lg ">
                   {data?.Carname}
                 </h1>
@@ -67,14 +89,19 @@ const CarSelection = () => {
           </div>
         ))}
       </div>
-      <div className="my-4 flex items-center justify-center ">
+      </div>
+      <div className={`fixed bottom-0 left-0 w-full flex items-center justify-center py-2 px-4 bg-white dark:bg-gray-800 transition-transform duration-300 ${isScrolling ? 'translate-y-full' : 'translate-y-0'}`}>
         <Button
-          className={`w-[80%] lg:w-[40%] ${SelectedCarData.Carname === "" ? "cursor-not-allowed bg-gray-300 text-black" : " bg-blue-800 text-white "}`}
+          className={`w-[80%] lg:w-[40%] ${
+            SelectedCarData.Carname === ""
+              ? "cursor-not-allowed bg-gray-300 text-black"
+              : "bg-blue-800 text-white"
+          }`}
           onClick={handleCitytoCityNext}
           isDisabled={SelectedCarData.Carname === ""}
         >
-          <span className=" text-white text-lg ">Next</span>
-          <span className=" text-white text-lg ">
+          <span className="text-white text-lg">Next</span>
+          <span className="text-white text-lg">
             <MdArrowForwardIos />
           </span>
         </Button>
