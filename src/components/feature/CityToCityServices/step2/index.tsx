@@ -24,8 +24,10 @@ const LocationSelection = () => {
   } = UseCityToCity();
 
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  const [pickupPlace, setPickupPlace] = useState<google.maps.places.PlaceResult | null>(null);
-  const [dropoffPlace, setDropoffPlace] = useState<google.maps.places.PlaceResult | null>(null);
+  const [pickupPlace, setPickupPlace] =
+    useState<google.maps.places.PlaceResult | null>(null);
+  const [dropoffPlace, setDropoffPlace] =
+    useState<google.maps.places.PlaceResult | null>(null);
   const pickupInputRef = useRef<HTMLInputElement>(null);
   const dropoffInputRef = useRef<HTMLInputElement>(null);
 
@@ -104,76 +106,111 @@ const LocationSelection = () => {
           const durationInHours = ((durationInSeconds || 0) / 3600).toFixed(2);
           handleInputChange("hour", durationInHours);
         }
-      }
+      },
     );
   };
 
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsScrolling(false);
+      }, 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <div className="w-full text-black dark:text-white px-2">
-      <button
-        title="go back"
-        type="button"
-        onClick={handleCitytoCityBack}
-        className="flex items-center justify-center gap-2 font-medium text-black hover:text-blue-700 dark:text-white"
-      >
-        <span>
-          <MdArrowBackIos />
-        </span>
-        <span>Go Back</span>
-      </button>
-      <h1 className="my-3 lg:my-10 text-center text-xl font-semibold">
-        Select Your Pickup and Drop Off Location
-      </h1>
-      <div className="w-full">
-        <div className="w-full lg:my-5 grid lg:grid-cols-2 items-center lg:justify-center gap-4 lg:px-10 lg:py-5">
-          <div className="w-full">
-            <Googlemap pickupPlace={pickupPlace} dropoffPlace={dropoffPlace} />
-          </div>
-          <div className="w-full flex flex-col gap-5">
-            <Input
-              ref={pickupInputRef}
-              onChange={(e) => handleInputChange("pickupAddress", e.target.value)}
-              label="Pick Up Location"
-              placeholder="Select Pick Up Address From Map"
-              className="text-black dark:text-white"
-              value={pickupAddress}
-            />
-            <Input
-              ref={dropoffInputRef}
-              onChange={(e) => handleInputChange("dropoffAddress", e.target.value)}
-              label="Drop Off Location"
-              placeholder="Select Drop Off Address From Map"
-              className="text-black dark:text-white"
-              value={dropoffAddress}
-            />
-            <Input
-              readOnly
-              label="Distance"
-              placeholder="Select Pick Up Address and Drop Off Address From Map"
-              className="text-black dark:text-white"
-              value={`${distance} Miles`}
-            />
-            <div className="rounded-2xl text-black dark:text-white border border-gray-700 bg-gray-200 px-3 py-4 dark:bg-zinc-700">
-              {FarePriceCalculationBymiles !== "NaN"
-                ? FarePriceCalculationBymiles
-                : "Fair Price"}{" "}
-              $
+    <div className="relative w-full px-2 text-black dark:text-white">
+      <div className=" w-full">
+        <button
+          title="go back"
+          type="button"
+          onClick={handleCitytoCityBack}
+          className="flex items-center justify-center gap-2 font-medium text-black hover:text-blue-700 dark:text-white"
+        >
+          <span>
+            <MdArrowBackIos />
+          </span>
+          <span>Go Back</span>
+        </button>
+        <h1 className="my-3 text-center text-xl font-semibold lg:my-10">
+          Select Your Pickup and Drop Off Location
+        </h1>
+        <div className="w-full">
+          <div className="grid w-full items-center gap-4 lg:my-5 lg:grid-cols-2 lg:justify-center lg:px-10 lg:py-5">
+            <div className="w-full">
+              <Googlemap
+                pickupPlace={pickupPlace}
+                dropoffPlace={dropoffPlace}
+              />
+            </div>
+            <div className="flex w-full flex-col gap-5">
+              <Input
+                ref={pickupInputRef}
+                onChange={(e) =>
+                  handleInputChange("pickupAddress", e.target.value)
+                }
+                label="Pick Up Location"
+                placeholder="Select Pick Up Address From Map"
+                className="text-black dark:text-white"
+                value={pickupAddress}
+              />
+              <Input
+                ref={dropoffInputRef}
+                onChange={(e) =>
+                  handleInputChange("dropoffAddress", e.target.value)
+                }
+                label="Drop Off Location"
+                placeholder="Select Drop Off Address From Map"
+                className="text-black dark:text-white"
+                value={dropoffAddress}
+              />
+              <Input
+                readOnly
+                label="Distance"
+                placeholder="Select Pick Up Address and Drop Off Address From Map"
+                className="text-black dark:text-white"
+                value={`${distance} Miles`}
+              />
+              <div className="rounded-2xl border dark:border-gray-700 bg-gray-200 px-3 py-4 text-black dark:bg-zinc-700 dark:text-white">
+                {FarePriceCalculationBymiles !== "NaN"
+                  ? FarePriceCalculationBymiles
+                  : "Fair Price"}{" "}
+                $
+              </div>
             </div>
           </div>
         </div>
-        <div className="my-4 flex items-center justify-center">
-          <Button
-            className="w-[80%] lg:w-[40%]"
-            color="success"
-            isDisabled={distance === ""}
-            onClick={handleCitytoCityNext}
-          >
-            <span className="text-white text-lg">Next</span>
-            <span className="text-white text-lg">
-              <MdArrowForwardIos />
-            </span>
-          </Button>
-        </div>
+      </div>
+      <div
+        className={`fixed bottom-0 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${isScrolling ? "translate-y-full" : "translate-y-0"}`}
+      >
+        <Button
+          className={`w-[80%] lg:w-[40%] ${
+            distance === 0
+              ? "cursor-not-allowed bg-gray-300 text-black"
+              : "bg-blue-800 text-white"
+          }`}
+          onClick={handleCitytoCityNext}
+          isDisabled={distance === 0}
+        >
+          <span className="text-lg text-white">Next</span>
+          <span className="text-lg text-white">
+            <MdArrowForwardIos />
+          </span>
+        </Button>
       </div>
     </div>
   );

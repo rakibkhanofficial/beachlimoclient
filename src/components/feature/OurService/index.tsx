@@ -19,8 +19,16 @@ const OurService = () => {
               <Image
                 src={data?.image}
                 alt={data?.name}
+                width={100}
+                height={100}
+                className=" inline lg:hidden "
+              />
+              <Image
+                src={data?.image}
+                alt={data?.name}
                 width={150}
                 height={150}
+                className=" hidden lg:inline "
               />
               <h1 className="text-center text-lg font-medium">{data?.name}</h1>
             </Link>
