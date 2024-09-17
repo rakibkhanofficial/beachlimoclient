@@ -94,7 +94,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "2",
+          id: "11",
           path: "/categorymanagement",
           linkName: "Category Management",
           icon: <CiBoxList fontSize="1rem" />,
@@ -102,9 +102,17 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "3",
+          id: "12",
           path: "/subcategorymanagement",
           linkName: "Sub-Category Management",
+          icon: <CiBoxList fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "13",
+          path: "/createdcar",
+          linkName: "Add Car",
           icon: <CiBoxList fontSize="1rem" />,
           component: <></>,
           subRoutes: [],

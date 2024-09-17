@@ -139,7 +139,7 @@ const AuthModule = () => {
   }, [password]);
 
   const validatePhone = (phone: string) => {
-    const hasDigit = /\d/.test(phone);
+    const hasDigit = /\d{10}$/.test(phone);
     return hasDigit;
   };
 
