@@ -16,16 +16,16 @@ export const endPoints = {
   uploadImage: {
     uploadImageApi: "blob/upload",
   },
-  product: {
-    getAllProducts: "products",
-    getProductDetailsById: (id: number) => `product/${id}`,
-    updateProduct: (id: number) => `product/update/${id}`,
-    deleteProduct: (id: number | null) => `product/delete/${id}`,
-    addProduct: "products/create",
-    getAllPublicProductList: "products/public-list",
-    getPublictProductdetailsBySlug: (slug: string | string[]) =>
-      `products/public-details/${slug}`,
-    getAllSlugs: 'products/slugs',
+  cars: {
+    getAllCars: "cars",
+    getCarDetailsById: (id: number) => `cars/${id}`,
+    updateCar: (id: number) => `cars/update/${id}`,
+    deleteCar: (id: number | null) => `cars/delete/${id}`,
+    addCar: "cars/create",
+    getAllPublicCarList: "cars/public-list",
+    getPublicCardetailsBySlug: (slug: string | string[]) =>
+      `cars/public-details/${slug}`,
+    getAllSlugs: 'cars/slugs',
   },
   category: {
     createCategory: "categories/createCategory",

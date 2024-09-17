@@ -93,6 +93,22 @@ export const routes: any = {
           component: <></>,
           subRoutes: [],
         },
+        {
+          id: "2",
+          path: "/categorymanagement",
+          linkName: "Category Management",
+          icon: <CiBoxList fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "3",
+          path: "/subcategorymanagement",
+          linkName: "Sub-Category Management",
+          icon: <CiBoxList fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
       ],
     },
   ],
@@ -204,12 +220,12 @@ export const routes: any = {
 };
 
 export const getRoutesByRole = (role: string) => {
-  switch (role.toLowerCase()) {
-    case "admin":
+  switch (role) {
+    case "Admin":
       return routes.admin;
-    case "customer":
+    case "Customer":
       return routes.customer;
-    case "driver":
+    case "Driver":
       return routes.driver;
     default:
       return [];
