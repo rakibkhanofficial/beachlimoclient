@@ -1,18 +1,37 @@
-"use client";
-import axios, { type AxiosInstance } from "axios";
+import axios, { type AxiosInstance, type RawAxiosRequestHeaders } from "axios";
 import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
+
+type CustomSession = Session & {
+  user: Session["user"] & {
+    name?: string | null;
+    id: string;
+    _id: string;
+    username: string;
+    email?: string | null;
+    role?: string | null;
+    accessToken?: string | null;
+  };
+};
 
 export const apiSetup = async () => {
   const api: AxiosInstance = axios.create({
-    baseURL:  process.env.NEXT_PUBLIC_API_URL, 
-  })
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+  });
+  const session = (await getSession()) as CustomSession | null;
 
-  const session = await getSession();
-  // @ts-expect-error type error is not solved
   if (session?.user?.accessToken) {
-    api.defaults.headers.common["X-Frame-Options"] = "DENY";
-    // @ts-expect-error type error is not solved
-    api.defaults.headers.common.Authorization = `Bearer ${session.user.accessToken}`;
+    const commonHeaders: RawAxiosRequestHeaders = {
+      "X-Frame-Options": "DENY",
+      Authorization: `Bearer ${session.user.accessToken}`,
+    };
+
+    if (api && api.defaults && api.defaults.headers) {
+      api.defaults.headers.common = {
+        ...api.defaults.headers.common,
+        ...commonHeaders,
+      };
+    }
   }
 
   return api;

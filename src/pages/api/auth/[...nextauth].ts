@@ -1,76 +1,72 @@
-import NextAuth from 'next-auth'
-import type { NextAuthOptions, Session } from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
-import GoogleProvider from 'next-auth/providers/google'
-import FacebookProvider from 'next-auth/providers/facebook'
-import AzureADProvider from 'next-auth/providers/azure-ad'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import NextAuth from "next-auth";
+import type { NextAuthOptions, Session, User as NextAuthUser } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+import type { AdapterUser } from "next-auth/adapters";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
+import AzureADProvider from "next-auth/providers/azure-ad";
+import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
-import { endPoints } from '~@/utils/api/route'
-import { postMethod } from '../../../utils/api/postMethod/index';
+import { postMethod } from "../../../utils/api/postMethod/index";
+import { endPoints } from "~@/utils/api/route";
+import { reFreshToken } from "~@/utils/lib/refreshToken";
 
-interface User {
-  name?: string | null;
+interface User extends NextAuthUser {
   id: string;
   _id: string;
-  username: string
-  email?: string | null;
+  username: string;
   role?: string | null;
+  phone?: string | null;
   accessToken?: string | null;
+  refreshToken?: string | null;
+  access_tokenExpiresIn?: string | null;
+  refresh_tokenExpiresIn?: string | null;
 }
-
 
 interface CustomSession extends Session {
   user: User;
-  token: string
+  token?: string | null;
 }
 
-// Define a custom type for session configuration
 interface CustomSessionOptions {
   jwt: boolean;
   maxAge: number;
-  // Add other session properties as needed
 }
 
-// Define the session configuration explicitly with the correct type
 const sessionConfig: Partial<CustomSessionOptions> = {
   jwt: true,
   maxAge: 30 * 24 * 60 * 60,
 };
 
 const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
   providers: [
     DiscordProvider({
-      clientId: `${process.env.DISCORD_CLIENT_ID}`,
-      clientSecret: `${process.env.DISCORD_CLIENT_SECRET}`,
+      clientId: process.env.DISCORD_CLIENT_ID!,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET!,
     }),
     GithubProvider({
-      clientId: `${process.env.GITHUB_ID}`,
-      clientSecret: `${process.env.GITHUB_SECRET}`,
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
     }),
     FacebookProvider({
-      clientId: `${process.env.FACEBOOK_ID}`,
-      clientSecret: `${process.env.FACEBOOK_SECRET}`,
+      clientId: process.env.FACEBOOK_ID!,
+      clientSecret: process.env.FACEBOOK_SECRET!,
     }),
     AzureADProvider({
-      clientId: `${process.env.AZURE_AD_CLIENT_ID}`,
-      clientSecret: `${process.env.AZURE_AD_CLIENT_SECRET}`,
-      tenantId: `${process.env.AZURE_AD_TENANT_ID}`,
+      clientId: process.env.AZURE_AD_CLIENT_ID!,
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
+      tenantId: process.env.AZURE_AD_TENANT_ID!,
     }),
     GoogleProvider({
-      clientId: `${process.env.GOOGLE_ID}`,
-      clientSecret: `${process.env.GOOGLE_SECRET}`,
+      clientId: process.env.GOOGLE_ID!,
+      clientSecret: process.env.GOOGLE_SECRET!,
     }),
-
     CredentialsProvider({
-      type: "credentials",
+      name: "Credentials",
       credentials: {},
-      // @ts-expect-error type error is not solved
       async authorize(credentials) {
-        const user = {
-          ...credentials,
-        };
+        const user = { ...credentials } as User;
         if (user) {
           return user;
         } else {
@@ -80,67 +76,122 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
-
+  secret: process.env.NEXTAUTH_SECRET!,
   session: sessionConfig,
-
   callbacks: {
-    async signIn(params) {
-      const { user, account } = params;
-      // console.log('signIn callback triggered:', user, account);
-      if (
-        (user && account && account.provider === "github") ||
-        (account && account.provider === "google")
-      ) {
-        const { id, name, email, image } = user;
-        // console.log(name, email, image, id);
+    async signIn({ user, account }) {
+      if (account?.provider === "facebook" || account?.provider === "google") {
+        const { id, name, email, image, phone } = user;
         const RegisterData = {
+          name: name,
+          role: "Customer",
           email: email,
-          password: id,
-          username: name,
-          phone: "0123456",
           image: image,
-          role: "Customer"
+          phone: phone ? phone : "",
+          password: id,
         };
         try {
-          const response = await postMethod({route: endPoints.auth.register, postData: RegisterData})
-          if (response?.data?.statusCode === 200) {
-            const response = await postMethod({route: endPoints.auth.login, postData: { email: email, password: id}});
+          const registerResponse = await postMethod({
+            route: endPoints.auth.register,
+            postData: RegisterData,
+          });
+          if (registerResponse?.data?.statusCode === 200) {
+            await postMethod({
+              route: endPoints.auth.login,
+              postData: { email, password: id },
+            });
           } else {
-            const response = await postMethod({route: endPoints.auth.login, postData: { email: email, password: id}});
-            console.error(
-              "Error sending data to endpoint:",
-              response.data,
-            );
+            await postMethod({
+              route: endPoints.auth.login,
+              postData: { email, password: id },
+            });
           }
         } catch (error) {
-          const response = await postMethod({route: endPoints.auth.login, postData: { email: email, password: id}});
-          console.error("Error:", error);
+          console.error("Error during sign in:", error);
+          await postMethod({
+            route: endPoints.auth.login,
+            postData: { email, password: id },
+          });
         }
       }
-
       return true;
     },
 
     async jwt({ token, user, trigger, session }) {
-      if (trigger === "update") {
-        return {
-          ...token,
-          ...session.user,
-        };
+      if (trigger === "update" && session?.user) {
+        return { ...token, ...session.user };
+      }
+      if (user) {
+        token = { ...token, ...user };
+      }
+      if (
+        typeof token.access_tokenExpiresIn === "string" &&
+        typeof token.refreshToken === "string"
+      ) {
+        const currentTime = new Date();
+        const expirationDate = new Date(token.access_tokenExpiresIn);
+        console.log("Current time: ", currentTime);
+        console.log("Expiration date: ", expirationDate);
+        // const expirationDate = new Date(token.strAccess_token_expiresIn);
+        if (currentTime >= expirationDate) {
+          console.log("Token is expired, attempting to refresh.");
+          try {
+            const {
+              newaccessToken,
+              newrefreshToken,
+              newAccesstokenExpiresin,
+              newRefreshTokenExpiresIn,
+            } = await reFreshToken(token.refreshToken);
+
+            if (newaccessToken && newrefreshToken) {
+              console.log("Successfully refreshed token.");
+              return {
+                ...token,
+                accessToken: newaccessToken,
+                refreshToken: newrefreshToken,
+                access_tokenExpiresIn: newAccesstokenExpiresin,
+                refresh_tokenExpiresIn: newRefreshTokenExpiresIn,
+              };
+            }
+          } catch (error) {
+            console.error("Error refreshing token:", error);
+            return token;
+          }
+        } else {
+          console.log("Token is still valid.");
+          return token;
+        }
       }
 
-      return { ...token, ...user };
+      return token;
     },
-// @ts-expect-error type error is not solved
+
     async session({
       session,
       token,
+      user,
     }: {
-      session: CustomSession;
-      token: Partial<User>;
-    }) {
-      session.user = token as User;
-      return session;
+      session: Session;
+      token: JWT;
+      user: AdapterUser;
+    }): Promise<CustomSession> {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          userId: token.userId as string,
+          id: token.sub as string,
+          _id: (token._id as string) || "",
+          username: (token.username as string) || "",
+          role: token.role as string | null,
+          phone: token.phone as string | null,
+          image: token.image as string | null,
+          accessToken: token.accessToken as string | null,
+          refreshToken: token.refreshToken as string | null,
+          access_tokenExpiresIn: token.access_tokenExpiresIn as string | null,
+          refresh_tokenExpiresIn: token.refresh_tokenExpiresIn as string | null,
+        } as User,
+      };
     },
   },
 };
@@ -149,7 +200,4 @@ const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
 
-// Export the default handler function
 export default NextAuth(authOptions);
-
-

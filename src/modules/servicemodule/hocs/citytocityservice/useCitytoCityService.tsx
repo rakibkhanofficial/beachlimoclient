@@ -4,11 +4,12 @@ import {
   handleCitytocityStepNext,
   handleSelectedcarData,
 } from "../../_redux/actions/citytocityActions";
-import { useSession } from "next-auth/react";
 import { postMethod } from "~@/utils/api/postMethod";
 import { endPoints } from "~@/utils/api/route";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { useCustomSession } from "~@/hooks/customSessionhook";
+import { handleAuthSubmitting } from "~@/_redux/actions/authopen";
 
 type selectedCarType = {
   id: number
@@ -26,9 +27,9 @@ type selectedCarType = {
 
 const UseCityToCity = () => {
   const dispatch = useAppDispatch();
-  const { data: session } = useSession();
+  const { session } = useCustomSession();
   const [isBooking, setIsbooking] = useState(false)
-
+  console.log("session", session)
   const SelectedCarData: selectedCarType  = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
@@ -73,8 +74,13 @@ const UseCityToCity = () => {
   );
 
   const handleCitytoCityNext = () => {
-    dispatch(handleCitytocityStepNext(step + 1));
-    dispatch(handleCitytoCityInputChange("triptype", "CityToCity"));
+    if(session?.user?.accessToken !== undefined && session?.user?.accessToken !== null && session?.user?.accessToken !== "") { 
+      dispatch(handleCitytocityStepNext(step + 1));
+      dispatch(handleCitytoCityInputChange("triptype", "CityToCity"));
+    }
+    else{
+      dispatch(handleAuthSubmitting(true));
+    }
   };
 
   const handleCitytoCityBack = () => {
@@ -87,7 +93,6 @@ const UseCityToCity = () => {
 
   const handleCreateBooking = async () => {
     setIsbooking(true)
-    // @ts-expect-error type error is not solved
     const userId = session?.user?._id;
     const data = {
       userId: userId,

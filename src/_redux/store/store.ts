@@ -5,11 +5,11 @@ import {
   type ThunkAction,
   type UnknownAction,
 } from "@reduxjs/toolkit";
-import { themeRootReducer } from "../reducers/counters/themeReducer/_themeRootReducer";
 import { RegisterauthRootReducer } from "../../modules/auth/_redux/reducers/_authRootreducer";
 import { loginauthRootReducer } from "../../modules/auth/_redux/reducers/_loginauthRootreducer";
 import { citytocityRootReducer } from "~@/modules/servicemodule/_redux/reducers/citytocityRootReducer";
 import { selectedCarDataRootReducer } from "~@/modules/servicemodule/_redux/reducers/selectedcarrootreducer";
+import { authOpenRootReducer } from "../reducers/authopenrootreducer";
 
 // Define the RootState type correctly
 export type RootState = ReturnType<typeof rootReducer>;
@@ -18,9 +18,9 @@ export type RootState = ReturnType<typeof rootReducer>;
 const rootReducer = combineReducers({
   RegisterauthReducer: combineReducers(RegisterauthRootReducer),
   loginauthReducer: combineReducers(loginauthRootReducer),
-  theme: combineReducers(themeRootReducer),
   cityTocityServiceReducer: combineReducers(citytocityRootReducer),
-  selectedCarDataReducer: combineReducers(selectedCarDataRootReducer)
+  selectedCarDataReducer: combineReducers(selectedCarDataRootReducer),
+  isloginauthOpenReducer: combineReducers(authOpenRootReducer),
   // Add more modules as needed
 });
 

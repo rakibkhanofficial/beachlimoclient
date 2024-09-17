@@ -5,7 +5,6 @@ import {
   NavbarContent,
   NavbarItem,
   Link,
-  Button,
 } from "@nextui-org/react";
 import {
   ChevronDown,
@@ -16,16 +15,17 @@ import {
   TagUser,
   Scale,
 } from "./icons";
-import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { DarkModeSwitch } from "../AdminDashboard/navbar/darkmodeswitch";
 import { UserDropdown } from "../UserDropDown";
 import Image from "next/image";
+import { useCustomSession } from "~@/hooks/customSessionhook";
+import AuthModal from "../auth";
 
 const HeaderLandingPage = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { session } = useCustomSession();
 
   const icons = {
     chevron: <ChevronDown fill="currentColor" size={16} />,
@@ -60,104 +60,87 @@ const HeaderLandingPage = () => {
     <Navbar className="bg-gray-100 text-black dark:bg-slate-800 dark:text-white">
       <NavbarBrand className="cursor-pointer" onClick={handlehome}>
         <div onClick={handlehome}>
-          <Image src={"/largelogo.png"} width={120} height={30} alt="Beachlimo"/>
+          <Image
+            src={"/largelogo.png"}
+            width={120}
+            height={30}
+            alt="Beachlimo"
+          />
         </div>
       </NavbarBrand>
 
-      {
-        // @ts-expect-error type error is not solved
-        session?.user?.accessToken && pathname !== "/" ? (
-          <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-            <Link className="items-centers flex justify-center" href="/">
+      {session?.user?.accessToken && pathname !== "/" ? (
+        <NavbarContent className="hidden gap-4 sm:flex" justify="center">
+          <Link className="items-centers flex justify-center" href="/">
+            Home
+          </Link>
+        </NavbarContent>
+      ) : (
+        <NavbarContent className="hidden gap-4 sm:flex" justify="center">
+          <NavbarItem>
+            <Link
+              className="text-black dark:text-white"
+              onClick={handleScroll}
+              href="#home"
+              color="foreground"
+            >
               Home
             </Link>
-          </NavbarContent>
-        ) : (
-          <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-            <NavbarItem>
-              <Link
-                className="text-black dark:text-white"
-                onClick={handleScroll}
-                href="#home"
-                color="foreground"
-              >
-                Home
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link
-                className="text-black dark:text-white"
-                color="foreground"
-                onClick={handleScroll}
-                href="#brand"
-              >
-                Brands
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link
-                className="text-black dark:text-white"
-                onClick={handleScroll}
-                color="foreground"
-                href="#services"
-              >
-                Services
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link
-                className="text-black dark:text-white"
-                onClick={handleScroll}
-                color="foreground"
-                href="#whychoose"
-              >
-                Why Choose
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link
-                className="text-black dark:text-white"
-                onClick={handleScroll}
-                color="foreground"
-                href="#download"
-              >
-                Download
-              </Link>
-            </NavbarItem>
-          </NavbarContent>
-        )
-      }
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className="text-black dark:text-white"
+              color="foreground"
+              onClick={handleScroll}
+              href="#brand"
+            >
+              Brands
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className="text-black dark:text-white"
+              onClick={handleScroll}
+              color="foreground"
+              href="#services"
+            >
+              Services
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className="text-black dark:text-white"
+              onClick={handleScroll}
+              color="foreground"
+              href="#whychoose"
+            >
+              Why Choose
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className="text-black dark:text-white"
+              onClick={handleScroll}
+              color="foreground"
+              href="#download"
+            >
+              Download
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
+      )}
       <NavbarContent justify="end">
         <DarkModeSwitch />
       </NavbarContent>
-      {
-        // @ts-expect-error type error is not solved
-        session?.user?.accessToken ? (
-          <NavbarContent justify="end">
-            <UserDropdown />
-          </NavbarContent>
+      <NavbarContent justify="end">
+        {session?.user?.accessToken ? (
+          <UserDropdown />
         ) : (
-          <NavbarContent justify="end">
-            {pathname !== "/login" && (
-              <NavbarItem className="hidden lg:flex">
-                <Link href="/login">Login</Link>
-              </NavbarItem>
-            )}
-            {pathname !== "/register" && (
-              <NavbarItem>
-                <Button
-                  as={Link}
-                  color="primary"
-                  href="/register"
-                  variant="flat"
-                >
-                  Register
-                </Button>
-              </NavbarItem>
-            )}
-          </NavbarContent>
-        )
-      }
+          <div className="flex w-full items-center justify-center">
+            <AuthModal />
+          </div>
+        )}
+      </NavbarContent>
     </Navbar>
   );
 };

@@ -7,15 +7,56 @@ import {
   DropdownTrigger,
   NavbarItem,
 } from "@nextui-org/react";
-import React from "react";
-import { useSession } from "next-auth/react";
-import UseLogout from "~@/modules/auth/hocs/logout";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useCustomSession } from "~@/hooks/customSessionhook";
+import UseLogout from "~@/hooks/useLogout";
+import { getMethod } from "~@/utils/api/getMethod";
+import { endPoints } from "~@/utils/api/route";
+
+type UserDetails = {
+  name: string;
+  phone: string;
+  email: string;
+  image: string | null;
+  birthdaydate: string | null | undefined;
+  homeaddress: string | null | undefined;
+  officeadress: string | null | undefined;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export const UserDropdown = () => {
-  const { handleSignOut } = UseLogout();
-  const { data: session } = useSession();
+  const { handleLogout } = UseLogout();
+  const { session } = useCustomSession();
+  const userId = Number(session?.user?.userId);
+  const [userDetails, setUserDetails] = useState<UserDetails>(
+    {} as UserDetails,
+  );
   const pathname = usePathname();
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await getMethod(
+          endPoints?.user?.getUserDetailsById(userId),
+        );
+        if (response?.data?.statusCode === 200) {
+          setUserDetails(response?.data?.data as UserDetails);
+        } else {
+          console.error(
+            "Error fetching user details:",
+            response?.data?.message,
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (session?.user) {
+      fetchUserDetails();
+    }
+  }, [session?.user]);
 
   return (
     <div className="cursor-pointer">
@@ -29,59 +70,41 @@ export const UserDropdown = () => {
               placement="top-right"
             >
               <DropdownTrigger>
-                <div className=" flex px-3">
-                  <div>
-                    <Avatar
-                      isBordered
-                      color="default"
-                      src={
-                        session?.user?.image ? session?.user?.image :
-                        "https://i.ibb.co/dtt67mC/avathar.png"
-                      }
-                    />
-                  </div>
-                  <div className=" px-6 text-sm ">
-                    <p className="text-black dark:text-white">
-                      {
-                        // @ts-expect-error type error is not solved
-                        session?.user?.username
-                      }
-                    </p>
-                    <p className="text-black dark:text-white">
-                      {session?.user?.email}
-                    </p>
-                  </div>
-                </div>
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  name={userDetails?.name}
+                  size="md"
+                  src={userDetails?.image ? userDetails?.image : "/avatar.png"}
+                />
               </DropdownTrigger>
             </Badge>
           </NavbarItem>
           <DropdownMenu
-            aria-label="User menu actions"
-            onAction={(actionKey) => ({ actionKey })}
+            className="text-black dark:text-white"
+            aria-label="Profile Actions"
+            variant="flat"
           >
-            <DropdownItem
-              key="profile"
-              className="flex w-full flex-col items-start justify-start text-black dark:text-white"
-            >
-              <p className=" text-black dark:text-white ">Signed in as</p>
-              <p className=" text-black dark:text-white ">
-                {session?.user?.email}
+            <DropdownItem key="profile" className="h-14 gap-2">
+              <p className="font-semibold text-black dark:text-white">
+                Signed in as
+              </p>
+              <p className="font-semibold text-black dark:text-white">
+                {userDetails?.email}
               </p>
             </DropdownItem>
             {pathname !== "/userdashboard" &&
-            // @ts-expect-error type error is not solved
             session?.user?.role === "Customer" ? (
               <DropdownItem href="/userdashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
             ) : pathname !== "/admindashboard" &&
-              // @ts-expect-error type error is not solved
               session?.user?.role === "Admin" ? (
               <DropdownItem href="/admindashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
             ) : pathname === "/driverdashboard" &&
-              // @ts-expect-error type error is not solved
               session?.user?.role !== "Driver" ? (
               <DropdownItem href="/driverdashboar">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
@@ -90,7 +113,7 @@ export const UserDropdown = () => {
               <DropdownItem></DropdownItem>
             )}
             <DropdownItem
-              onClick={handleSignOut}
+              onClick={handleLogout}
               key="logout"
               color="danger"
               className="text-danger "
@@ -115,9 +138,10 @@ export const UserDropdown = () => {
                     <Avatar
                       isBordered
                       color="default"
+                      name={userDetails?.name}
+                      size="md"
                       src={
-                        session?.user?.image ||
-                        "https://i.ibb.co/dtt67mC/avathar.png"
+                        userDetails?.image ? userDetails?.image : "/avatar.png"
                       }
                     />
                   </div>
@@ -129,32 +153,25 @@ export const UserDropdown = () => {
             aria-label="User menu actions"
             onAction={(actionKey) => ({ actionKey })}
           >
-            <DropdownItem
-              key="profile"
-              className="flex w-full items-start justify-start text-black dark:text-white"
-            >
-              <p className=" text-black dark:text-white ">Signed in as</p>
-              <p className=" text-black dark:text-white ">
-                {
-                  // @ts-expect-error type error is not solved
-                  session?.user?.username
-                }
+            <DropdownItem key="profile" className="h-14 gap-2">
+              <p className="font-semibold text-black dark:text-white">
+                Signed in as
+              </p>
+              <p className="font-semibold text-black dark:text-white">
+                {userDetails?.email}
               </p>
             </DropdownItem>
             {pathname !== "/userdashboard" &&
-            // @ts-expect-error type error is not solved
             session?.user?.role === "Customer" ? (
               <DropdownItem href="/userdashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
             ) : pathname !== "/admindashboard" &&
-              // @ts-expect-error type error is not solved
               session?.user?.role === "Admin" ? (
               <DropdownItem href="/admindashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
             ) : pathname !== "/driverdashboard" &&
-              // @ts-expect-error type error is not solved
               session?.user?.role === "Driver" ? (
               <DropdownItem href="/driverdashboar">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
@@ -163,7 +180,7 @@ export const UserDropdown = () => {
               <DropdownItem></DropdownItem>
             )}
             <DropdownItem
-              onClick={handleSignOut}
+              onClick={handleLogout}
               key="logout"
               color="danger"
               className="text-danger "

@@ -8,7 +8,20 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["cdn.sanity.io", "i.ibb.co"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "4ijmusxcssykjcec.public.blob.vercel-storage.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -16,9 +29,9 @@ const config = {
 };
 
 // Conditionally apply next-pwa only in production
-if (process.env.NODE_ENV === 'production') {
-  const withPWA = require('next-pwa')({
-    dest: 'public',
+if (process.env.NODE_ENV === "production") {
+  const withPWA = require("next-pwa")({
+    dest: "public",
     // Add any other pwa settings here, for example:
     // disable: false,
     // register: true,

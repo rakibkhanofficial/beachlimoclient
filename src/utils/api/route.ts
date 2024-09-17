@@ -1,11 +1,47 @@
 export const endPoints = {
   auth: {
-    // sendOtp: 'auth/sendOtp',
-    // verifyOtp: 'auth/verifyOtp',
-    register: 'auth/signup',
-    login: 'auth/login',
-    updatePassword: 'auth/update-password',
-    logout: 'auth/logout',
+    register: "auth/register",
+    login: "auth/login",
+    sendOtp: "auth/send-otp",
+    verifyOtp: "auth/verify-otp",
+    updatePassword: "auth/reset-password",
+    logout: "auth/logout",
+    OAuthLogin: "auth/oauth-callback",
+    refreshToken: "auth/refresh-token",
+  },
+  user: {
+    getUserDetailsById: (Id: number) => `user/userdetails/${Id}`,
+    upDateUserDetails: (Id: number) => `user/userdetails/update/${Id}`,
+  },
+  uploadImage: {
+    uploadImageApi: "blob/upload",
+  },
+  product: {
+    getAllProducts: "products",
+    getProductDetailsById: (id: number) => `product/${id}`,
+    updateProduct: (id: number) => `product/update/${id}`,
+    deleteProduct: (id: number | null) => `product/delete/${id}`,
+    addProduct: "products/create",
+    getAllPublicProductList: "products/public-list",
+    getPublictProductdetailsBySlug: (slug: string | string[]) =>
+      `products/public-details/${slug}`,
+    getAllSlugs: 'products/slugs',
+  },
+  category: {
+    createCategory: "categories/createCategory",
+    getAllCategories: "categories",
+    getCategoryById: (id: number) => `categories/${id}`,
+    updateCategory: (id: number) => `categories/update/${id}`,
+    deleteCategory: (id: number) => `categories/delete/${id}`,
+    getAllCategoryiesPublic: "categories/publicCategory"
+  },
+  subcategory: {
+    createSubCategory: "subcategories/createSubCategory",
+    getAllSubcategories: "subcategories",
+    getSubCategoryById: (id: number) => `subcategories/${id}`,
+    updateSubCategory: (id: number) => `subcategories/update/${id}`,
+    deleteSubCategory: (id: number) => `subcategories/delete/${id}`,
+    getAllSubcategoryByCategoryId: (categoryId: number | null) => `subcategories/subcategorybycategoryId/${categoryId}`
   },
   Customer: {
     CreateBooking: "customer/createCarRental",
