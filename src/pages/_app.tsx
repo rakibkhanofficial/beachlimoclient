@@ -9,7 +9,7 @@ import store from "~@/_redux/store/store";
 import { useEffect } from "react";
 import { endPoints } from "~@/utils/api/route";
 import { postMethod } from "~@/utils/api/postMethod";
-import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
+import { useAppDispatch } from "~@/_redux/hooks/hooks";
 import { handleErros } from "~@/modules/auth/_redux/actions/login-auth-actions";
 import Head from "next/head";
 import { RecoilRoot } from 'recoil'
@@ -102,7 +102,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
 export default MyApp;
 
 const Main = ({ children }: { children: React.ReactNode }) => {
-  const theme = useAppSelector((state) => state?.theme?.themeToggle?.dark);
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
@@ -139,5 +138,5 @@ const Main = ({ children }: { children: React.ReactNode }) => {
     handleLogin();
   }, [session, dispatch]);
 
-  return <div className={`${theme ? "dark" : ""}`}>{children}</div>;
+  return <div>{children}</div>;
 };
