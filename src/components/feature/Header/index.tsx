@@ -21,6 +21,7 @@ import { UserDropdown } from "../UserDropDown";
 import Image from "next/image";
 import { useCustomSession } from "~@/hooks/customSessionhook";
 import AuthModal from "../auth";
+import { RooNavbarBurguerButton } from "./burguer-button";
 
 const HeaderLandingPage = () => {
   const router = useRouter();
@@ -58,6 +59,13 @@ const HeaderLandingPage = () => {
 
   return (
     <Navbar className="bg-gray-100 text-black dark:bg-slate-800 dark:text-white">
+      {pathname === "/allcars" && (
+        <NavbarContent justify="start" className=" md:hidden ">
+          <div className=" flex items-center justify-center ">
+            <RooNavbarBurguerButton />
+          </div>
+        </NavbarContent>
+      )}
       <NavbarBrand className="cursor-pointer" onClick={handlehome}>
         <div onClick={handlehome}>
           <Image

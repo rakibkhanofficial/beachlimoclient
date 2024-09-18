@@ -5,7 +5,10 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  Input,
   Skeleton,
+  Tab,
+  Tabs,
   Tooltip,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
@@ -23,6 +26,7 @@ import {
 import { useRouter } from "next/router";
 import { FiEye } from "react-icons/fi";
 import { BsCartPlus } from "react-icons/bs";
+import { CiSearch } from "react-icons/ci";
 
 type CarType = {
   car_id: number;
@@ -51,28 +55,24 @@ type CarType = {
   subcategoryName: string;
 };
 
-const AllCars = () => {
-  const router = useRouter();
-  const [carList, setCarList] = useState<CarType[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+type PropsType = {
+  filteredList: CarType[];
+  loading: boolean;
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  filterType: string;
+  setFilterType: React.Dispatch<React.SetStateAction<string>>;
+};
 
-  useEffect(() => {
-    const fetchCarList = async () => {
-      try {
-        const response = await getMethod(endPoints?.cars?.getAllPublicCarList);
-        if (response?.data?.statusCode === 200) {
-          setCarList(response?.data?.data as CarType[]);
-        } else {
-          console.error("Error fetching car list:", response?.data?.message);
-        }
-      } catch (error) {
-        console.error("Error fetching car list:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCarList();
-  }, []);
+const AllCars = ({
+  filteredList,
+  loading,
+  searchQuery,
+  setSearchQuery,
+  filterType,
+  setFilterType,
+}: PropsType) => {
+  const router = useRouter();
 
   const handleViewDetails = (slug: string) => {
     router.push(`/${slug}`);
@@ -203,19 +203,48 @@ const AllCars = () => {
     </Card>
   );
 
-  console.log(carList);
-
   return (
-    <div>
-      <h1 className="mb-10 mt-6 text-center text-4xl font-bold text-gray-800 dark:text-white">
-        All Your Luxury Ride
-      </h1>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-        {loading
-          ? Array.from({ length: 6 }).map((_, index) => (
-              <div key={index}>{renderSkeleton()}</div>
-            ))
-          : carList?.map(renderCarCard)}
+    <div className="w-full px-2 pt-4 lg:p-5 lg:pb-4 lg:pt-8 2xl:p-10">
+      <div className="min-h-[60vh]">
+        <h1 className="mb-10 mt-6 text-center text-4xl font-bold text-gray-800 dark:text-white">
+          All Your Luxury Ride
+        </h1>
+        {loading ? (
+          <div className="my-5 flex w-full flex-col justify-between gap-4 md:flex-row">
+            <Skeleton className=" flex w-full justify-center rounded-lg md:justify-end" />
+            <Skeleton className="flex w-[100%] justify-end rounded-lg " />
+          </div>
+        ) : (
+          <div className="my-5 flex w-full flex-col justify-between gap-4 md:flex-row">
+            <div className="flex w-full justify-center md:justify-start">
+              <Input
+                startContent={<CiSearch className="text-gray-400" />}
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className=" w-[80%] md:w-[60%]"
+              />
+            </div>
+            <div className="flex w-[100%] justify-end">
+              <Tabs
+                aria-label="Filter options"
+                selectedKey={filterType}
+                onSelectionChange={(key) => setFilterType(key as string)}
+              >
+                <Tab key="all" title="All" />
+                <Tab key="new" title="Newest" />
+                <Tab key="old" title="Oldest" />
+              </Tabs>
+            </div>
+          </div>
+        )}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <div key={index}>{renderSkeleton()}</div>
+              ))
+            : filteredList?.map(renderCarCard)}
+        </div>
       </div>
     </div>
   );
