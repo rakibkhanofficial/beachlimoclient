@@ -15,14 +15,13 @@ import {
   Divider,
   Select,
   SelectItem,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@nextui-org/react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import Drawer, {
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-} from "~@/components/elements/drawer";
 import { endPoints } from "~@/utils/api/route";
 import { getMethod } from "~@/utils/api/getMethod";
 import { postMethod } from "~@/utils/api/postMethod";
@@ -43,7 +42,8 @@ export type SubCategoryType = {
   name: string;
   slug: string;
   description: string;
-  categoryName?: string; // Add this field
+  categoryName: string; 
+  category: CategoryType;
 };
 
 const SubCategoryManagementComponent = () => {
@@ -70,7 +70,7 @@ const SubCategoryManagementComponent = () => {
     setLoading(true);
     try {
       const response = await getMethod(
-        endPoints?.subcategory?.getAllSubcategories
+        endPoints?.subcategory?.getAllSubcategories,
       );
       if (response?.data?.statusCode === 200) {
         setSubcategories(response?.data?.data as SubCategoryType[]);
@@ -100,9 +100,11 @@ const SubCategoryManagementComponent = () => {
 
   useEffect(() => {
     if (categories.length > 0 && subcategories.length > 0) {
-      const updatedSubcategories = subcategories.map(subcategory => ({
+      const updatedSubcategories = subcategories.map((subcategory) => ({
         ...subcategory,
-        categoryName: categories.find(category => category.id === subcategory.categoryId)?.name || 'Unknown'
+        categoryName:
+          categories.find((category) => category.id === subcategory.categoryId)
+            ?.name || "Unknown",
       }));
       setSubcategories(updatedSubcategories);
     }
@@ -202,7 +204,7 @@ const SubCategoryManagementComponent = () => {
     { key: "name", label: "NAME" },
     { key: "slug", label: "SLUG" },
     { key: "description", label: "DESCRIPTION" },
-    { key: "categoryName", label: "CATEGORY" }, // Add this line
+    { key: "category", label: "CATEGORY" }, // Add this line
     { key: "actions", label: "ACTIONS" },
   ];
 
@@ -212,7 +214,7 @@ const SubCategoryManagementComponent = () => {
         return (
           <div className="flex flex-col">
             <p className="text-sm font-semibold capitalize text-gray-900 dark:text-gray-100">
-              {subcategory.name}
+              {subcategory?.name}
             </p>
           </div>
         );
@@ -220,7 +222,7 @@ const SubCategoryManagementComponent = () => {
         return (
           <div className="flex flex-col">
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              {subcategory.slug}
+              {subcategory?.slug}
             </p>
           </div>
         );
@@ -228,15 +230,15 @@ const SubCategoryManagementComponent = () => {
         return (
           <div className="flex flex-col">
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              {subcategory.description}
+              {subcategory?.description}
             </p>
           </div>
         );
-      case "categoryName":
+      case "category":
         return (
           <div className="flex flex-col">
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              {subcategory.categoryName}
+              {subcategory?.category?.name || "Unknown Category"}
             </p>
           </div>
         );
@@ -244,12 +246,12 @@ const SubCategoryManagementComponent = () => {
         return (
           <div className="relative flex items-center gap-2">
             <Tooltip color="secondary" content="Edit Sub-category">
-              <span className="text-lg cursor-pointer active:opacity-50 text-blue-600 dark:text-blue-400">
+              <span className="cursor-pointer text-lg text-blue-600 active:opacity-50 dark:text-blue-400">
                 <FaEdit onClick={() => handleEditSubCategory(subcategory)} />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete Subcategory">
-              <span className="text-lg cursor-pointer active:opacity-50 text-red-600 dark:text-red-400">
+              <span className="cursor-pointer text-lg text-red-600 active:opacity-50 dark:text-red-400">
                 <FaTrash
                   onClick={() => handleDeleteSubCategory(subcategory.id)}
                 />
@@ -258,24 +260,24 @@ const SubCategoryManagementComponent = () => {
           </div>
         );
       default:
-        return subcategory[columnKey as keyof SubCategoryType];
-    }
+        return subcategory[columnKey as keyof SubCategoryType]?.toString() || null;
+      }
   };
 
   const SkeletonRow = () => (
     <TableRow>
       {columns.map((column) => (
         <TableCell key={column.key}>
-          <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div className="h-3 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
         </TableCell>
       ))}
     </TableRow>
   );
 
   return (
-    <div className="min-h-[80vh] flex justify-center items-center p-4 bg-gray-100 dark:bg-neutral-800">
-      <Card className="w-full min-h-[75vh] max-w-[1200px] shadow-lg">
-        <CardHeader className="flex justify-between items-center p-4">
+    <div className="flex min-h-[80vh] items-center justify-center bg-gray-100 p-4 dark:bg-neutral-800">
+      <Card className="min-h-[75vh] w-full max-w-[1200px] shadow-lg">
+        <CardHeader className="flex items-center justify-between p-4">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Sub Category Management
           </h1>
@@ -323,7 +325,7 @@ const SubCategoryManagementComponent = () => {
               {(item) => (
                 <TableRow
                   key={item.id}
-                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+                  className="border-b border-gray-200 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-slate-700"
                 >
                   {(columnKey) => (
                     <TableCell>{renderCell(item, columnKey)}</TableCell>
@@ -334,108 +336,113 @@ const SubCategoryManagementComponent = () => {
           </Table>
         </CardBody>
 
-        <Drawer
+        <Modal
           isOpen={isDrawerOpen}
           onOpenChange={setIsDrawerOpen}
-          position="right"
-          blurBackground={true}
+          // position="right"
+          // blurBackground={true}
         >
-          {(onClose) => (
-            <DrawerContent>
-              <DrawerHeader className="flex flex-col gap-1 text-gray-900 dark:text-white">
-                {editingSubCategory
-                  ? "Edit Sub-Category"
-                  : "Add New Sub-Category"}
-              </DrawerHeader>
-              <DrawerBody>
-                <Select
-                  label="Select Category"
-                  className="mb-4"
-                  selectedKeys={[
-                    (editingSubCategory?.categoryId || newSubCategory.categoryId).toString(),
-                  ]}
-                  onChange={(e) => handleCategoryChange(e.target.value)}
-                >
-                  {categories.map((data) => (
-                    <SelectItem key={data.id} value={data.id.toString()}>
-                      {data.name}
-                    </SelectItem>
-                  ))}
-                </Select>
-                <Input
-                  label="Name"
-                  placeholder="Enter Sub-category name"
-                  value={editingSubCategory?.name || newSubCategory.name}
-                  onChange={(e) =>
-                    editingSubCategory
-                      ? setEditingSubCategory((prev) => ({
-                          ...prev!,
-                          name: e.target.value,
-                        }))
-                      : setNewSubCategory((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                  }
-                  className="mb-4"
-                />
-                <Input
-                  label="Slug"
-                  placeholder="Enter Sub category slug"
-                  value={editingSubCategory?.slug || newSubCategory.slug}
-                  onChange={(e) =>
-                    editingSubCategory
-                      ? setEditingSubCategory((prev) => ({
-                          ...prev!,
-                          slug: e.target.value,
-                        }))
-                      : setNewSubCategory((prev) => ({
-                          ...prev,
-                          slug: e.target.value,
-                        }))
-                  }
-                  className="mb-4"
-                />
-                <Input
-                  label="Description"
-                  placeholder="Enter Sub-category description"
-                  value={
-                    editingSubCategory?.description ||
-                    newSubCategory.description
-                  }
-                  onChange={(e) =>
-                    editingSubCategory
-                      ? setEditingSubCategory((prev) => ({
-                          ...prev!,
-                          description: e.target.value,
-                        }))
-                      : setNewSubCategory((prev) => ({
-                          ...prev,
-                          description: e.target.value,
-                        }))
-                  }
-                />
-              </DrawerBody>
-              <DrawerFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Cancel
-                </Button>
-                <Button
-                  color="primary"
-                  isLoading={isChanging}
-                  isDisabled={isChanging}
-                  onPress={
-                    editingSubCategory
-                      ? handleUpdateCategory
-                      : handleCreateSubCategory
-                  }
-                >
-                  {editingSubCategory ? "Update" : "Create"}
-                </Button>
-              </DrawerFooter>
-            </DrawerContent>
-          )}
-        </Drawer>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1 text-gray-900 dark:text-white">
+                  {editingSubCategory
+                    ? "Edit Sub-Category"
+                    : "Add New Sub-Category"}
+                </ModalHeader>
+                <ModalBody>
+                  <Select
+                    label="Select Category"
+                    className="mb-4"
+                    selectedKeys={[
+                      (
+                        editingSubCategory?.categoryId ||
+                        newSubCategory.categoryId
+                      ).toString(),
+                    ]}
+                    onChange={(e) => handleCategoryChange(e.target.value)}
+                  >
+                    {categories.map((data) => (
+                      <SelectItem key={data.id} value={data.id.toString()}>
+                        {data.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                  <Input
+                    label="Name"
+                    placeholder="Enter Sub-category name"
+                    value={editingSubCategory?.name || newSubCategory.name}
+                    onChange={(e) =>
+                      editingSubCategory
+                        ? setEditingSubCategory((prev) => ({
+                            ...prev!,
+                            name: e.target.value,
+                          }))
+                        : setNewSubCategory((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                    }
+                    className="mb-4"
+                  />
+                  <Input
+                    label="Slug"
+                    placeholder="Enter Sub category slug"
+                    value={editingSubCategory?.slug || newSubCategory.slug}
+                    onChange={(e) =>
+                      editingSubCategory
+                        ? setEditingSubCategory((prev) => ({
+                            ...prev!,
+                            slug: e.target.value,
+                          }))
+                        : setNewSubCategory((prev) => ({
+                            ...prev,
+                            slug: e.target.value,
+                          }))
+                    }
+                    className="mb-4"
+                  />
+                  <Input
+                    label="Description"
+                    placeholder="Enter Sub-category description"
+                    value={
+                      editingSubCategory?.description ||
+                      newSubCategory.description
+                    }
+                    onChange={(e) =>
+                      editingSubCategory
+                        ? setEditingSubCategory((prev) => ({
+                            ...prev!,
+                            description: e.target.value,
+                          }))
+                        : setNewSubCategory((prev) => ({
+                            ...prev,
+                            description: e.target.value,
+                          }))
+                    }
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    isLoading={isChanging}
+                    isDisabled={isChanging}
+                    onPress={
+                      editingSubCategory
+                        ? handleUpdateCategory
+                        : handleCreateSubCategory
+                    }
+                  >
+                    {editingSubCategory ? "Update" : "Create"}
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </Card>
     </div>
   );

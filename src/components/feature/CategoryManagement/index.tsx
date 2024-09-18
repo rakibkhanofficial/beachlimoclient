@@ -13,14 +13,13 @@ import {
   CardBody,
   CardHeader,
   Divider,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
 } from "@nextui-org/react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import Drawer, {
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-} from "~@/components/elements/drawer";
 import { endPoints } from "~@/utils/api/route";
 import { getMethod } from "~@/utils/api/getMethod";
 import { postMethod } from "~@/utils/api/postMethod";
@@ -40,7 +39,7 @@ const CategoryManagementComponent = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingCategory, setEditingCategory] = useState<CategoryType | null>(
-    null
+    null,
   );
   const [newCategory, setNewCategory] = useState({
     name: "",
@@ -169,12 +168,12 @@ const CategoryManagementComponent = () => {
         return (
           <div className="relative flex items-center gap-2">
             <Tooltip color="secondary" content="Edit category">
-              <span className="text-lg cursor-pointer active:opacity-50 text-blue-600 dark:text-blue-400">
+              <span className="cursor-pointer text-lg text-blue-600 active:opacity-50 dark:text-blue-400">
                 <FaEdit onClick={() => handleEditCategory(category)} />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete category">
-              <span className="text-lg cursor-pointer active:opacity-50 text-red-600 dark:text-red-400">
+              <span className="cursor-pointer text-lg text-red-600 active:opacity-50 dark:text-red-400">
                 <FaTrash onClick={() => handleDeleteCategory(category.id)} />
               </span>
             </Tooltip>
@@ -189,16 +188,16 @@ const CategoryManagementComponent = () => {
     <TableRow>
       {columns.map((column) => (
         <TableCell key={column.key}>
-          <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div className="h-3 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
         </TableCell>
       ))}
     </TableRow>
   );
 
   return (
-    <div className="min-h-[80vh] flex justify-center items-center p-4 bg-gray-100 dark:bg-neutral-800">
-      <Card className="w-full min-h-[75vh] max-w-[1200px] shadow-lg">
-        <CardHeader className="flex justify-between items-center p-4">
+    <div className="flex min-h-[80vh] items-center justify-center bg-gray-100 p-4 dark:bg-neutral-800">
+      <Card className="min-h-[75vh] w-full max-w-[1200px] shadow-lg">
+        <CardHeader className="flex items-center justify-between p-4">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Category Management
           </h1>
@@ -237,7 +236,7 @@ const CategoryManagementComponent = () => {
               {(item) => (
                 <TableRow
                   key={item.id}
-                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+                  className="border-b border-gray-200 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-slate-700"
                 >
                   {(columnKey) => (
                     <TableCell>{renderCell(item, columnKey)}</TableCell>
@@ -248,91 +247,93 @@ const CategoryManagementComponent = () => {
           </Table>
         </CardBody>
 
-        <Drawer
+        <Modal
           isOpen={isDrawerOpen}
           onOpenChange={setIsDrawerOpen}
-          position="right"
-          blurBackground={true}
+          // position="right"
+          // blurBackground={true}
         >
-          {(onClose) => (
-            <DrawerContent>
-              <DrawerHeader className="flex flex-col gap-1 text-gray-900 dark:text-white">
-                {editingCategory ? "Edit Category" : "Add New Category"}
-              </DrawerHeader>
-              <DrawerBody>
-                <Input
-                  label="Name"
-                  placeholder="Enter category name"
-                  value={editingCategory?.name || newCategory.name}
-                  onChange={(e) =>
-                    editingCategory
-                      ? setEditingCategory((prev) => ({
-                          ...prev!,
-                          name: e.target.value,
-                        }))
-                      : setNewCategory((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                  }
-                  className="mb-4"
-                />
-                <Input
-                  label="Slug"
-                  placeholder="Enter category slug"
-                  value={editingCategory?.slug || newCategory.slug}
-                  onChange={(e) =>
-                    editingCategory
-                      ? setEditingCategory((prev) => ({
-                          ...prev!,
-                          slug: e.target.value,
-                        }))
-                      : setNewCategory((prev) => ({
-                          ...prev,
-                          slug: e.target.value,
-                        }))
-                  }
-                  className="mb-4"
-                />
-                <Input
-                  label="Description"
-                  placeholder="Enter category description"
-                  value={
-                    editingCategory?.description || newCategory.description
-                  }
-                  onChange={(e) =>
-                    editingCategory
-                      ? setEditingCategory((prev) => ({
-                          ...prev!,
-                          description: e.target.value,
-                        }))
-                      : setNewCategory((prev) => ({
-                          ...prev,
-                          description: e.target.value,
-                        }))
-                  }
-                />
-              </DrawerBody>
-              <DrawerFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Cancel
-                </Button>
-                <Button
-                  color="primary"
-                  isLoading={isChanging}
-                  isDisabled={isChanging}
-                  onPress={
-                    editingCategory
-                      ? handleUpdateCategory
-                      : handleCreateCategory
-                  }
-                >
-                  {editingCategory ? "Update" : "Create"}
-                </Button>
-              </DrawerFooter>
-            </DrawerContent>
-          )}
-        </Drawer>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1 text-gray-900 dark:text-white">
+                  {editingCategory ? "Edit Category" : "Add New Category"}
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    label="Name"
+                    placeholder="Enter category name"
+                    value={editingCategory?.name || newCategory.name}
+                    onChange={(e) =>
+                      editingCategory
+                        ? setEditingCategory((prev) => ({
+                            ...prev!,
+                            name: e.target.value,
+                          }))
+                        : setNewCategory((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                    }
+                    className="mb-4"
+                  />
+                  <Input
+                    label="Slug"
+                    placeholder="Enter category slug"
+                    value={editingCategory?.slug || newCategory.slug}
+                    onChange={(e) =>
+                      editingCategory
+                        ? setEditingCategory((prev) => ({
+                            ...prev!,
+                            slug: e.target.value,
+                          }))
+                        : setNewCategory((prev) => ({
+                            ...prev,
+                            slug: e.target.value,
+                          }))
+                    }
+                    className="mb-4"
+                  />
+                  <Input
+                    label="Description"
+                    placeholder="Enter category description"
+                    value={
+                      editingCategory?.description || newCategory.description
+                    }
+                    onChange={(e) =>
+                      editingCategory
+                        ? setEditingCategory((prev) => ({
+                            ...prev!,
+                            description: e.target.value,
+                          }))
+                        : setNewCategory((prev) => ({
+                            ...prev,
+                            description: e.target.value,
+                          }))
+                    }
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    isLoading={isChanging}
+                    isDisabled={isChanging}
+                    onPress={
+                      editingCategory
+                        ? handleUpdateCategory
+                        : handleCreateCategory
+                    }
+                  >
+                    {editingCategory ? "Update" : "Create"}
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </Card>
     </div>
   );

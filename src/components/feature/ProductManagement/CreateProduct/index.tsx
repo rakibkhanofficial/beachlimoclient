@@ -19,33 +19,25 @@ import { getMethod } from "~@/utils/api/getMethod";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { postMethod } from "~@/utils/api/postMethod";
 
-interface ProductData {
+interface CarData {
   name: string;
   description: string;
   slug: string;
-  price: string;
-  offerprice: string;
-  packsize: string;
-  sku: string;
-  stockQuantity: string;
-  brand: string;
-  tags: string;
+  pricePerHour: string;
+  pricePerMile: string;
+  model: string;
+  year: string;
+  make: string;
+  seatingCapacity: string;
   isActive: boolean;
-  weight: string;
-  dimensions: {
-    length: string;
-    width: string;
-    height: string;
-  };
-  allergens: string;
-  expirationDate: string;
-  barcode: string;
-  nutritionalInfo: {
-    calories: string;
-    protein: string;
-    carbs: string;
-    fat: string;
-  };
+  hasChildSeat: boolean;
+  hasWifi: boolean;
+  luggageCapacity: string;
+  mileagePerGallon: string;
+  transmission: string;
+  fuelType: string;
+  features: string;
+  isAvailable: boolean;
 }
 
 export type CategoryType = {
@@ -61,7 +53,7 @@ export type SubCategoryType = {
   name: string;
   slug: string;
   description: string;
-  categoryName?: string; // Add this field
+  categoryName?: string;
 };
 
 type SelectedImageType = {
@@ -70,32 +62,32 @@ type SelectedImageType = {
   name: string;
 };
 
-const initialProductData: ProductData = {
+const initialCarData: CarData = {
   name: "",
   description: "",
   slug: "",
-  price: "",
-  offerprice: "",
-  packsize: "",
-  sku: "",
-  stockQuantity: "",
-  brand: "",
-  tags: "",
+  pricePerHour: "",
+  pricePerMile: "",
+  model: "",
+  year: "",
+  make: "",
+  seatingCapacity: "",
   isActive: true,
-  weight: "",
-  dimensions: { length: "", width: "", height: "" },
-  allergens: "",
-  expirationDate: "",
-  barcode: "",
-  nutritionalInfo: { calories: "", protein: "", carbs: "", fat: "" },
+  hasChildSeat: false,
+  hasWifi: false,
+  luggageCapacity: "",
+  mileagePerGallon: "",
+  transmission: "",
+  fuelType: "",
+  features: "",
+  isAvailable: true,
 };
 
-const CreateProductComponent: React.FC = () => {
+const CreateCarComponent: React.FC = () => {
   const { session } = useCustomSession();
-  const [productData, setProductData] =
-    useState<ProductData>(initialProductData);
-  const [categorId, setCaegoryId] = useState<number | null>(null);
-  const [subcategorId, setSubCaegoryId] = useState<number | null>(null);
+  const [carData, setCarData] = useState<CarData>(initialCarData);
+  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [subCategoryId, setSubCategoryId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -133,14 +125,14 @@ const CreateProductComponent: React.FC = () => {
       setLoading(true);
       try {
         const response = await getMethod(
-          endPoints?.subcategory?.getAllSubcategoryByCategoryId(categorId)
+          endPoints?.subcategory?.getAllSubcategoryByCategoryId(categoryId),
         );
         if (response?.data?.statusCode === 200) {
           setSubcategories(response?.data?.data as SubCategoryType[]);
         } else {
           console.error(
             "Error fetching subcategories",
-            response?.data?.message
+            response?.data?.message,
           );
         }
       } catch (error) {
@@ -148,61 +140,35 @@ const CreateProductComponent: React.FC = () => {
       }
       setLoading(false);
     };
-    if (categorId !== null) {
+    if (categoryId !== null) {
       fetchAllSubcategories();
     }
-  }, [categorId]);
+  }, [categoryId]);
 
   const handleCategoryChange = (value: string) => {
     const categoryId = parseInt(value);
-    setCaegoryId(categoryId);
+    setCategoryId(categoryId);
   };
 
   const handleSubCategoryChange = (value: string) => {
     const subcategoryId = parseInt(value);
-    setSubCaegoryId(subcategoryId);
+    setSubCategoryId(subcategoryId);
   };
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.target;
-    setProductData((prevData) => ({
+    setCarData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSwitchChange = (checked: boolean) => {
-    setProductData((prevData) => ({
+  const handleSwitchChange = (name: string) => (checked: boolean) => {
+    setCarData((prevData) => ({
       ...prevData,
-      isActive: checked,
-    }));
-  };
-
-  const handleDimensionsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = event.target;
-    setProductData((prevData) => ({
-      ...prevData,
-      dimensions: {
-        ...prevData.dimensions,
-        [name]: value,
-      },
-    }));
-  };
-
-  const handleNutritionalInfoChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = event.target;
-    setProductData((prevData) => ({
-      ...prevData,
-      nutritionalInfo: {
-        ...prevData.nutritionalInfo,
-        [name]: value,
-      },
+      [name]: checked,
     }));
   };
 
@@ -212,7 +178,7 @@ const CreateProductComponent: React.FC = () => {
       const imageTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!imageTypes.includes(file.type)) {
         toast.error(
-          "Invalid file type. Please select a JPEG, PNG, or JPG file."
+          "Invalid file type. Please select a JPEG, PNG, or JPG file.",
         );
       } else {
         const imageUrl = URL.createObjectURL(file);
@@ -235,7 +201,7 @@ const CreateProductComponent: React.FC = () => {
             Authorization: `Bearer ${session?.user?.accessToken}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       if (uploadResponse?.data?.statusCode === 200) {
         setUploadedImageUrl(uploadResponse?.data?.data?.url);
@@ -257,33 +223,19 @@ const CreateProductComponent: React.FC = () => {
     setErrorMessage("");
     try {
       const dataToSubmit = {
-        ...productData,
-        // userId,
-        categoryId: categorId,
-        subCategoryId: subcategorId,
-        prodimage: uploadedImageUrl,
-        brand: productData.brand.toLowerCase(),
-        expirationDate: productData.expirationDate,
-
-        tags: productData.tags.split(",").map((tag: string) => tag.trim()),
-        allergens: productData.allergens
+        ...carData,
+        categoryId,
+        subCategoryId,
+        image: uploadedImageUrl,
+        pricePerMile: parseFloat(carData.pricePerMile),
+        pricePerHour: parseFloat(carData.pricePerHour),
+        year: parseInt(carData.year),
+        seatingCapacity: parseInt(carData.seatingCapacity),
+        luggageCapacity: parseInt(carData.luggageCapacity),
+        mileagePerGallon: parseFloat(carData.mileagePerGallon),
+        features: carData.features
           .split(",")
-          .map((allergen: string) => allergen.trim()),
-        price: parseFloat(productData.price),
-        offerprice: parseFloat(productData.offerprice),
-        stockQuantity: parseInt(productData.stockQuantity),
-        weight: parseFloat(productData.weight),
-        dimensions: {
-          length: parseFloat(productData.dimensions.length),
-          width: parseFloat(productData.dimensions.width),
-          height: parseFloat(productData.dimensions.height),
-        },
-        nutritionalInfo: {
-          calories: parseInt(productData.nutritionalInfo.calories),
-          protein: parseFloat(productData.nutritionalInfo.protein),
-          carbs: parseFloat(productData.nutritionalInfo.carbs),
-          fat: parseFloat(productData.nutritionalInfo.fat),
-        },
+          .map((feature: string) => feature.trim()),
       };
 
       const response = await postMethod({
@@ -291,21 +243,21 @@ const CreateProductComponent: React.FC = () => {
         postData: dataToSubmit,
       });
       if (response?.data?.statusCode === 200) {
-        setSuccessMessage("Product created successfully!");
-        toast.success("Product created successfully!");
-        setProductData(initialProductData);
+        setSuccessMessage("Car created successfully!");
+        toast.success("Car created successfully!");
+        setCarData(initialCarData);
         setSelectedFile({
           img: null,
           imgUrl: "",
           name: "",
         });
-        setUploadedImageUrl("")
+        setUploadedImageUrl("");
       } else {
         setErrorMessage(response?.data?.message);
         toast.error(response?.data?.message);
       }
     } catch (error: any) {
-      setErrorMessage("An error occurred while creating the product.");
+      setErrorMessage("An error occurred while creating the car.");
       toast.error(error?.response?.data?.message);
     } finally {
       setIsLoading(false);
@@ -313,59 +265,66 @@ const CreateProductComponent: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-7xl mx-auto my-8 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-6">
-        <h2 className="text-2xl mr-2 font-bold">Create New Product</h2>
+    <Card className="mx-auto my-8 w-full max-w-7xl shadow-lg">
+      <CardHeader className="bg-gradient-to-r from-purple-500 to-indigo-600 p-6 text-white">
+        <h2 className="mr-2 text-2xl font-bold">Create New Car</h2>
         <p className="text-sm opacity-80">
-          Fill in the details to create a premium product
+          Fill in the details to add a new car to the fleet
         </p>
       </CardHeader>
       <CardBody className="p-6">
         {successMessage && (
-          <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-md">
+          <div className="mb-6 rounded-md bg-green-100 p-4 text-green-700">
             {successMessage}
           </div>
         )}
 
         {errorMessage && (
-          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
+          <div className="mb-6 rounded-md bg-red-100 p-4 text-red-700">
             {errorMessage}
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Input
                 label="Name"
                 name="name"
-                value={productData.name}
+                value={carData.name}
                 onChange={handleInputChange}
                 variant="bordered"
               />
               <Input
                 label="Slug"
                 name="slug"
-                value={productData.slug}
+                value={carData.slug}
                 onChange={handleInputChange}
                 variant="bordered"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
               <Input
                 type="number"
-                label="Price"
-                name="price"
-                value={productData.price}
+                label="Price Per Mile"
+                name="pricePerMile"
+                value={carData.pricePerMile}
                 onChange={handleInputChange}
                 variant="bordered"
               />
               <Input
                 type="number"
-                label="Offer Price"
-                name="offerprice"
-                value={productData.offerprice}
+                label="Price Per Hour"
+                name="pricePerHour"
+                value={carData.pricePerHour}
+                onChange={handleInputChange}
+                variant="bordered"
+              />
+              <Input
+                label="Model"
+                name="model"
+                value={carData.model}
                 onChange={handleInputChange}
                 variant="bordered"
               />
@@ -374,46 +333,84 @@ const CreateProductComponent: React.FC = () => {
             <Input
               label="Description"
               name="description"
-              value={productData.description}
+              value={carData.description}
               onChange={handleInputChange}
               variant="bordered"
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Input
-                label="Brand"
-                name="brand"
-                value={productData.brand}
+                label="Make"
+                name="make"
+                value={carData.make}
                 onChange={handleInputChange}
                 variant="bordered"
               />
               <Input
-                label="SKU"
-                name="sku"
-                value={productData.sku}
+                type="number"
+                label="Year"
+                name="year"
+                value={carData.year}
                 onChange={handleInputChange}
                 variant="bordered"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Input
                 type="number"
-                label="Stock Quantity"
-                name="stockQuantity"
-                value={productData.stockQuantity}
+                label="Seating Capacity"
+                name="seatingCapacity"
+                value={carData.seatingCapacity}
                 onChange={handleInputChange}
                 variant="bordered"
               />
               <Input
-                label="Pack Size"
-                name="packsize"
-                value={productData.packsize}
+                type="number"
+                label="Luggage Capacity"
+                name="luggageCapacity"
+                value={carData.luggageCapacity}
                 onChange={handleInputChange}
                 variant="bordered"
               />
             </div>
-            <div className="grid text-black dark:text-white grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <Input
+                label="Transmission"
+                name="transmission"
+                value={carData.transmission}
+                onChange={handleInputChange}
+                variant="bordered"
+              />
+              <Input
+                label="Fuel Type"
+                name="fuelType"
+                value={carData.fuelType}
+                onChange={handleInputChange}
+                variant="bordered"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <Input
+                type="number"
+                label="Mileage Per Gallon"
+                name="mileagePerGallon"
+                value={carData.mileagePerGallon}
+                onChange={handleInputChange}
+                variant="bordered"
+              />
+              <Input
+                label="Features (comma-separated)"
+                name="features"
+                value={carData.features}
+                onChange={handleInputChange}
+                variant="bordered"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 text-black dark:text-white md:grid-cols-2">
               <Select
                 isLoading={loading}
                 label="Select Category"
@@ -449,19 +446,18 @@ const CreateProductComponent: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-1 space-y-6">
-            <div className="bg-gray-100 dark:bg-zinc-800 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">Product Image</h3>
+          <div className="space-y-6 lg:col-span-1">
+            <div className="rounded-lg bg-gray-100 p-4 dark:bg-zinc-800">
+              <h3 className="mb-4 text-lg font-semibold">Car Image</h3>
               <div className="flex flex-col items-center">
                 <Image
                   src={
-                    selectedFile?.imgUrl ||
-                    "/image/emptyprodimage/emptyprodimage.png"
+                    selectedFile?.imgUrl || "/emptycarimage/emptycarimage.png"
                   }
-                  alt={selectedFile?.name || "Product Image"}
+                  alt={selectedFile?.name || "Car Image"}
                   width={200}
                   height={200}
-                  className="rounded-lg shadow-md mb-4"
+                  className="mb-4 rounded-lg shadow-md"
                 />
                 <input
                   type="file"
@@ -484,12 +480,12 @@ const CreateProductComponent: React.FC = () => {
                 </label>
               </div>
               {selectedFile.img && (
-                <div className="w-full flex justify-center mt-3 items-center">
+                <div className="mt-3 flex w-full items-center justify-center">
                   <Button
                     color="success"
                     variant="bordered"
                     size="md"
-                    className=" flex justify-center items-center"
+                    className=" flex items-center justify-center"
                     isLoading={uploading}
                     endContent={<AiOutlineCloudUpload />}
                     onClick={handleImageUpload}
@@ -499,136 +495,48 @@ const CreateProductComponent: React.FC = () => {
                 </div>
               )}
             </div>
-            <div className="bg-gray-100 dark:bg-zinc-800  p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">Product Status</h3>
-              <Switch
-                isSelected={productData.isActive}
-                checked={productData.isActive}
-                onValueChange={handleSwitchChange}
-              >
-                Active
-              </Switch>
+            <div className="rounded-lg bg-gray-100 p-4 dark:bg-zinc-800">
+              <h3 className="mb-4 text-lg font-semibold">Car Status</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Switch
+                  isSelected={carData.isActive}
+                  onValueChange={handleSwitchChange("isActive")}
+                >
+                  Active
+                </Switch>
+                <Switch
+                  isSelected={carData.isAvailable}
+                  onValueChange={handleSwitchChange("isAvailable")}
+                >
+                  Available
+                </Switch>
+                <Switch
+                  isSelected={carData.hasChildSeat}
+                  onValueChange={handleSwitchChange("hasChildSeat")}
+                >
+                  Has Child Seat
+                </Switch>
+                <Switch
+                  isSelected={carData.hasWifi}
+                  onValueChange={handleSwitchChange("hasWifi")}
+                >
+                  Has WiFi
+                </Switch>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="mt-8 space-y-6">
-          <div className="bg-gray-100 dark:bg-zinc-800  p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Additional Details</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="rounded-lg bg-gray-100 p-4 dark:bg-zinc-800">
+            <h3 className="mb-4 text-lg font-semibold">Additional Details</h3>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               <Input
-                label="Tags (comma-separated)"
-                name="tags"
-                value={productData.tags}
-                onChange={handleInputChange}
-                variant="bordered"
-              />
-              <Input
-                type="number"
-                label="Weight"
-                name="weight"
-                value={productData.weight}
-                onChange={handleInputChange}
-                variant="bordered"
-              />
-              <Input
-                label="Allergens (comma-separated)"
-                name="allergens"
-                value={productData.allergens}
-                onChange={handleInputChange}
-                variant="bordered"
-              />
-              <Input
-                type="date"
-                label="Expiration Date"
-                name="expirationDate"
-                value={productData.expirationDate}
-                onChange={handleInputChange}
-                variant="bordered"
-              />
-              <Input
-                label="Barcode"
-                name="barcode"
-                value={productData.barcode}
-                onChange={handleInputChange}
-                variant="bordered"
-              />
-              <Input
-                label="Image url"
+                label="Image URL"
                 name="imageUrl"
                 value={uploadedImageUrl}
                 variant="bordered"
                 onChange={(e) => setUploadedImageUrl(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="bg-gray-100 dark:bg-zinc-800  p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">Dimensions</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <Input
-                type="number"
-                label="Length"
-                name="length"
-                value={productData.dimensions.length}
-                onChange={handleDimensionsChange}
-                variant="bordered"
-              />
-              <Input
-                type="number"
-                label="Width"
-                name="width"
-                value={productData.dimensions.width}
-                onChange={handleDimensionsChange}
-                variant="bordered"
-              />
-              <Input
-                type="number"
-                label="Height"
-                name="height"
-                value={productData.dimensions.height}
-                onChange={handleDimensionsChange}
-                variant="bordered"
-              />
-            </div>
-          </div>
-
-          <div className="bg-gray-100 dark:bg-zinc-800  p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4">
-              Nutritional Information
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Input
-                type="number"
-                label="Calories"
-                name="calories"
-                value={productData.nutritionalInfo.calories}
-                onChange={handleNutritionalInfoChange}
-                variant="bordered"
-              />
-              <Input
-                type="number"
-                label="Protein"
-                name="protein"
-                value={productData.nutritionalInfo.protein}
-                onChange={handleNutritionalInfoChange}
-                variant="bordered"
-              />
-              <Input
-                type="number"
-                label="Carbs"
-                name="carbs"
-                value={productData.nutritionalInfo.carbs}
-                onChange={handleNutritionalInfoChange}
-                variant="bordered"
-              />
-              <Input
-                type="number"
-                label="Fat"
-                name="fat"
-                value={productData.nutritionalInfo.fat}
-                onChange={handleNutritionalInfoChange}
-                variant="bordered"
               />
             </div>
           </div>
@@ -640,9 +548,13 @@ const CreateProductComponent: React.FC = () => {
             size="lg"
             isLoading={isLoading}
             onClick={handleSubmit}
-            isDisabled={productData.packsize === ""}
+            isDisabled={
+              carData.name === "" ||
+              carData.pricePerHour === "" ||
+              carData.pricePerMile === ""
+            }
           >
-            {isLoading ? "Creating..." : "Create Product"}
+            {isLoading ? "Creating..." : "Create Car"}
           </Button>
         </div>
       </CardBody>
@@ -650,4 +562,4 @@ const CreateProductComponent: React.FC = () => {
   );
 };
 
-export default CreateProductComponent;
+export default CreateCarComponent;
