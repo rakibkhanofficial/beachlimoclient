@@ -13,25 +13,38 @@ import { MdArrowForwardIos } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
 import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCitytoCityService";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 import { handleCitytoCityInputChange } from "~@/modules/servicemodule/_redux/actions/citytocityActions";
+import { useCustomSession } from "~@/hooks/customSessionhook";
 
 type selectedCarType = {
-  id: number;
-  Carname: string;
-  image: string;
-  Model: string;
-  perMilePrice: number;
-  childSeat: boolean;
-  perhourPrice: number;
-  passenger: number;
-  Luggage: number;
-  totalseat: number;
-  isWifi: boolean;
+  car_id: number;
+  car_name: string;
+  car_slug: string;
+  car_image: string;
+  car_pricePerHour: string;
+  car_pricePerMile: string;
+  car_model: string;
+  car_year: number;
+  car_make: string;
+  car_seatingCapacity: number;
+  car_hasChildSeat: 0 | 1;
+  car_hasWifi: 0 | 1;
+  car_luggageCapacity: number;
+  car_mileagePerGallon: string;
+  car_transmission: string;
+  car_fuelType: string;
+  car_features: string;
+  car_categoryId: number;
+  car_subCategoryId: number;
+  car_createdAt: string;
+  car_updatedAt: string;
+  categoryName: string;
+  categorySlug: string;
+  subcategoryName: string;
 };
 
 const CitytocityOtherInformation = () => {
-  const { data: session } = useSession();
+  const { session } = useCustomSession();
   const dispatch = useAppDispatch();
   const {
     handleCreateBooking,
@@ -53,9 +66,7 @@ const CitytocityOtherInformation = () => {
 
   useEffect(() => {
     if (session?.user) {
-      // @ts-expect-error type error is not solved
-      dispatch(handleCitytoCityInputChange("name", session?.user?.username));
-      // @ts-expect-error type error is not solved
+      dispatch(handleCitytoCityInputChange("name", session?.user?.name));
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
     handleInputChange("paymentmethod", "pay-cash");
@@ -166,8 +177,8 @@ const CitytocityOtherInformation = () => {
                 </h1>
                 <div className="flex items-center justify-center">
                   <Image
-                    src={SelectedCarData?.image}
-                    alt={SelectedCarData?.Carname}
+                    src={SelectedCarData?.car_image}
+                    alt={SelectedCarData?.car_name}
                     height={200}
                     width={200}
                   />
@@ -179,7 +190,7 @@ const CitytocityOtherInformation = () => {
                   <p className=" text-black dark:text-white ">{phone}</p>
                   <p className=" text-black dark:text-white ">Car Name:</p>
                   <p className=" text-black dark:text-white ">
-                    {SelectedCarData.Carname}
+                    {SelectedCarData.car_name}
                   </p>
                   <p className=" text-black dark:text-white ">
                     Pickup Address:

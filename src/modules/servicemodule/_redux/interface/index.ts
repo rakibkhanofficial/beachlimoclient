@@ -27,16 +27,29 @@ export interface ICitytoCityCreateReducer {
 
 export type selectedCarType = {
   SelectedcarData: {
-    id: number
-    Carname: string;
-    image: string;
-    Model: string;
-    perMilePrice: number;
-    perhourPrice: number;
-    totalseat: number;
-    isWifi: boolean;
-    childSeat: boolean;
-    passenger: number;
-    Luggage: number
+    car_id: number;
+    car_name: string;
+    car_slug: string;
+    car_image: string;
+    car_pricePerHour: string;
+    car_pricePerMile: string;
+    car_model: string;
+    car_year: number;
+    car_make: string;
+    car_seatingCapacity: number;
+    car_hasChildSeat: 0 | 1;
+    car_hasWifi: 0 | 1;
+    car_luggageCapacity: number;
+    car_mileagePerGallon: string;
+    car_transmission: string;
+    car_fuelType: string;
+    car_features: string;
+    car_categoryId: number;
+    car_subCategoryId: number;
+    car_createdAt: string;
+    car_updatedAt: string;
+    categoryName: string;
+    categorySlug: string;
+    subcategoryName: string;
   };
 };

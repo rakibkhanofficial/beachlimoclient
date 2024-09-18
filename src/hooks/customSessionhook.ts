@@ -8,6 +8,7 @@ type CustomUser = Session["user"] & {
   id: string | null;
   username: string;
   email?: string | null;
+  phone?: string | null;
   role?: string | null;
   accessToken?: string | null;
   refreshToken?: string | null;

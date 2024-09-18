@@ -28,8 +28,8 @@ const initialState: ICitytoCityCreateReducer = {
     flightno: "",
     pickupLocation: "",
     pickupAddress: "",
-    pickupdate: currentDateString,  // Set initial pickupdate to current date
-    pickuptime: currentTimeString,  // Set initial pickuptime to current time
+    pickupdate: currentDateString,
+    pickuptime: currentTimeString,
     dropoffLocation: "",
     dropoffAddress: "",
     distance: 0,
@@ -50,7 +50,6 @@ const initialState: ICitytoCityCreateReducer = {
 };
 
 const CitytoCityReducer = (state = initialState, action: AnyAction) => {
-  // console.log(action.payload)
   switch (action.type) {
     case Types.CITY_TO_CITY_INPUT_CHANGE:
       const CityToCityInputChange = { ...state.CitytoCityServiceInput, ...action.payload };
