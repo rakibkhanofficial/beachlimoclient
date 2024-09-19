@@ -23,7 +23,6 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { getMethod } from "~@/utils/api/getMethod";
 import { putMethod } from "~@/utils/api/putMethod";
 import CustomCalendar from "~@/components/elements/CustomCalender";
 import { MdOutlineEditOff, MdOutlineManageAccounts } from "react-icons/md";
@@ -348,7 +347,7 @@ const ProfileComponent = ({
   }
 
   return (
-    <div className=" w-full flex justify-center m-2">
+    <div className=" w-full flex justify-center">
       <Card className="w-full shadow-lg">
         <motion.div
           variants={headerVariants}

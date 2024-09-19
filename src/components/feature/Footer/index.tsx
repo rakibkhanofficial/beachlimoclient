@@ -52,7 +52,7 @@ const FooterComponent: React.FC = () => {
 
   return (
     <footer className="bg-gray-900 py-4 text-gray-300">
-      <div className="container mx-auto px-4">
+      <div className=" mx-auto px-4">
         <div className="grid w-full grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
           {/* Schems */}
           <div className="flex flex-col items-center justify-center gap-6 lg:flex-col">

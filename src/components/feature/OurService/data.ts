@@ -7,15 +7,15 @@ export const Servicedata = [
   },
   {
     id: 2,
-    name: "By The Hour Service",
-    image: "/ourservice/bythehour.png",
-    url: "by-the-hour",
-  },
-  {
-    id: 3,
     name: "Airport Transfers",
     image: "/ourservice/airporttransfer.png",
     url: "air-port-transfer",
+  },
+  {
+    id: 3,
+    name: "By The Hour Service",
+    image: "/ourservice/bythehour.png",
+    url: "by-the-hour",
   },
   {
     id: 4,

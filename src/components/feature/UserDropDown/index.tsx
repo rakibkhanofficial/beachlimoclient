@@ -94,7 +94,7 @@ export const UserDropdown = () => {
                 {userDetails?.email}
               </p>
             </DropdownItem>
-            <DropdownItem href="/profile" key="dashboard">
+            <DropdownItem href="/profile">
               <p className=" text-black dark:text-white "> Profile</p>
             </DropdownItem>
             {pathname !== "/userdashboard" &&
@@ -163,6 +163,9 @@ export const UserDropdown = () => {
               <p className="font-semibold text-black dark:text-white">
                 {userDetails?.email}
               </p>
+            </DropdownItem>
+            <DropdownItem href="/profile">
+              <p className=" text-black dark:text-white "> Profile</p>
             </DropdownItem>
             {pathname !== "/userdashboard" &&
             session?.user?.role === "Customer" ? (

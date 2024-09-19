@@ -60,7 +60,7 @@ const ProfilePage = () => {
       <div className=" h-16 md:h-10 ">
         <HeaderLandingPage />
       </div>
-      <div className=" min-h-[70vh] p-10 grid grid-cols-2">
+      <div className="w-full min-h-[70vh] px-2 py-4 lg:p-10 lg:grid lg:grid-cols-2">
       <ProfileComponent
         isEditing={isEditing}
         setIsEditing={setIsEditing}
