@@ -90,7 +90,7 @@ const FilterCategorySidebar: React.FC<FilterCategorySidebarProps> = ({
       </Accordion>
       </ScrollShadow>
       <div className="mt-6">
-        <h2 className="font-semibold mb-2 dark:text-white">Price Range</h2>
+        <h2 className="font-semibold mb-2 dark:text-white">Price Per Mile Range</h2>
         {mounted && (
           <Slider
             label="Price"

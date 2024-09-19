@@ -49,6 +49,25 @@ type CarDetails = {
   subCategoryId: number;
   createdAt: string;
   updatedAt: string;
+  category: CategoryType;
+  subCategory: SubCategoryType;
+};
+
+export type SubCategoryType = {
+  id: number;
+  categoryId: number;
+  name: string;
+  slug: string;
+  description: string;
+  categoryName: string; 
+  category: CategoryType;
+};
+
+export type CategoryType = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
 };
 
 type PropsType = {
@@ -106,7 +125,7 @@ const PremiumCarDetails = ({ car, loading, error }: PropsType) => {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-7xl bg-gradient-to-br from-blue-50 to-purple-50 shadow-2xl dark:from-blue-900 dark:to-purple-900">
+    <Card className="mx-auto w-full max-w-7xl ">
       <CardBody className="p-6 sm:p-8">
         <div className="flex flex-col gap-8 lg:flex-row">
           <div className="w-full rounded-xl shadow-lg lg:w-1/2">
@@ -256,13 +275,13 @@ const PremiumCarDetails = ({ car, loading, error }: PropsType) => {
                   <div className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-md dark:bg-gray-800">
                     <FaCar className="text-purple-500" />
                     <span>
-                      <strong>Category ID:</strong> {car.categoryId}
+                      <strong>Category:</strong> {car.category.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-md dark:bg-gray-800">
                     <FaCar className="text-purple-500" />
                     <span>
-                      <strong>Subcategory ID:</strong> {car.subCategoryId}
+                      <strong>Subcategory:</strong> {car.subCategory.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-md dark:bg-gray-800">

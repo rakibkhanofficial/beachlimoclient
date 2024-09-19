@@ -138,8 +138,8 @@ export const AllProductLayout = () => {
 
     filtered = filtered.filter(
       (product) =>
-        parseFloat(product.car_pricePerHour) >= priceRange[0] &&
-        parseFloat(product.car_pricePerHour) <= priceRange[1]
+        parseFloat(product.car_pricePerMile) >= priceRange[0] &&
+        parseFloat(product.car_pricePerMile) <= priceRange[1]
     );
 
     if (filterType === "new") {
