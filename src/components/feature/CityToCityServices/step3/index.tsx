@@ -136,7 +136,12 @@ const CitytocityOtherInformation = () => {
             color="secondary"
             defaultValue="pay-cash"
           >
-            <Radio value="pay-online" isDisabled>
+            <Radio
+              onChange={(e) =>
+                handleInputChange("paymentmethod", e.target.value)
+              }
+              value="online"
+            >
               Online Payment{" "}
               <span className="ml-2 text-sm text-red-500">Coming Soon</span>
             </Radio>
@@ -144,7 +149,7 @@ const CitytocityOtherInformation = () => {
               onChange={(e) =>
                 handleInputChange("paymentmethod", e.target.value)
               }
-              value="pay-cash"
+              value="cash"
             >
               Cash Payment
             </Radio>

@@ -307,7 +307,7 @@ const ProfileComponent = ({
   );
 
   const ProfileSkeleton = () => (
-    <div className="w-full m-2">
+    <div className="w-full">
       <Card className="w-full shadow-lg">
         <CardHeader className="justify-between items-start">
           <div className="flex gap-5">

@@ -25,7 +25,7 @@ export const endPoints = {
     getAllPublicCarList: "cars/public-list",
     getPublicCardetailsBySlug: (slug: string | string[]) =>
       `cars/public-details/${slug}`,
-    getAllSlugs: 'cars/slugs',
+    getAllSlugs: "cars/slugs",
   },
   category: {
     createCategory: "categories/createCategory",
@@ -33,7 +33,7 @@ export const endPoints = {
     getCategoryById: (id: number) => `categories/${id}`,
     updateCategory: (id: number) => `categories/update/${id}`,
     deleteCategory: (id: number) => `categories/delete/${id}`,
-    getAllCategoryiesPublic: "categories/publicCategory"
+    getAllCategoryiesPublic: "categories/publicCategory",
   },
   subcategory: {
     createSubCategory: "subcategories/createSubCategory",
@@ -41,19 +41,34 @@ export const endPoints = {
     getSubCategoryById: (id: number) => `subcategories/${id}`,
     updateSubCategory: (id: number) => `subcategories/update/${id}`,
     deleteSubCategory: (id: number) => `subcategories/delete/${id}`,
-    getAllSubcategoryByCategoryId: (categoryId: number | null) => `subcategories/subcategorybycategoryId/${categoryId}`
+    getAllSubcategoryByCategoryId: (categoryId: number | null) =>
+      `subcategories/subcategorybycategoryId/${categoryId}`,
   },
   Customer: {
+    // old api versions
     CreateBooking: "customer/createCarRental",
     getRentAllByuserId: (userId: string) => `customer/rentalbyuser/${userId}`,
-    getPendingRentAllByuserId: (userId: string) => `customer/pendingrentalbyuser/${userId}`,
-    getAcceptedRentAllByuserId: (userId: string) => `customer/acceptedbookingbyuserid/${userId}`,
-    getAssignRentAllByuserId: (userId: string) => `customer/assignbookingbyuserid/${userId}`,
-    getCompleteRentAllByuserId: (userId: string) => `customer/completebookingbyuserid/${userId}`,
-    getCancelRentAllByuserId: (userId: string) => `customer/cancelbookingbyuserid/${userId}`,
+    getPendingRentAllByuserId: (userId: string) =>
+      `customer/pendingrentalbyuser/${userId}`,
+    getAcceptedRentAllByuserId: (userId: string) =>
+      `customer/acceptedbookingbyuserid/${userId}`,
+    getAssignRentAllByuserId: (userId: string) =>
+      `customer/assignbookingbyuserid/${userId}`,
+    getCompleteRentAllByuserId: (userId: string) =>
+      `customer/completebookingbyuserid/${userId}`,
+    getCancelRentAllByuserId: (userId: string) =>
+      `customer/cancelbookingbyuserid/${userId}`,
     getRentadetailsbyRentId: "customer/rentalbyid",
-    getAllBooking: ( userId: string) => `customer/analytics/totalbooking/${userId}`,
-    getCompleteBookingDaily: (userId: string) => `customer/analytics/dailycompletebooking/${userId}`
+    getAllBooking: (userId: string) =>
+      `customer/analytics/totalbooking/${userId}`,
+    getCompleteBookingDaily: (userId: string) =>
+      `customer/analytics/dailycompletebooking/${userId}`,
+
+    // new api versions
+    createBookingByCash: "car-bookings/createbookingbycash",
+    createPaymentIntent: '/payments/create-payment-intent',
+    createBookingAfterPayment: '/payments/create-booking-after-payment',
+    confirmPayment: '/payments/confirm-payment',
   },
   Admin: {
     allbookinglistforadmin: "admin/allrentaldata",
@@ -67,17 +82,22 @@ export const endPoints = {
     getAllCustomerList: "admin/allusersdata",
     getAllDriverList: "admin/alldriverdata",
     getTotalBookingbyAdmin: "admin/analytics/totalbooking",
-    getTotalCompletebookingDaily: "admin/analytics/dailycompletebooking"
+    getTotalCompletebookingDaily: "admin/analytics/dailycompletebooking",
   },
- Driver: {
-    getAssignBookingList: (id: string) => `driver/driverassignedrentaldata/${id}`,
+  Driver: {
+    getAssignBookingList: (id: string) =>
+      `driver/driverassignedrentaldata/${id}`,
     updateStatusByDriver: (id: string) => `driver/driverrental/status/${id}`,
-    getCompleteBookingList: (id: string) => `driver/drivercompleterentaldata/${id}`,
-    getCanceledBookingList: (id: string) => `driver/drivercancelrentaldata/${id}`,
-    getTotalBooking: (id: string) => `driver/analytics/drivertotalbookingdata/${id}`,
-    getCompleteBookingDaily: (id: string) => `driver/analytics/dailycompletebooking/${id}`
+    getCompleteBookingList: (id: string) =>
+      `driver/drivercompleterentaldata/${id}`,
+    getCanceledBookingList: (id: string) =>
+      `driver/drivercancelrentaldata/${id}`,
+    getTotalBooking: (id: string) =>
+      `driver/analytics/drivertotalbookingdata/${id}`,
+    getCompleteBookingDaily: (id: string) =>
+      `driver/analytics/dailycompletebooking/${id}`,
   },
   Subscribe: {
     CreateSubsribe: "subscriber/subscribe",
-  }
-}
+  },
+};

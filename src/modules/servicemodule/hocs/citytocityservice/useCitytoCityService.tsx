@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
 import {
   handleCitytoCityInputChange,
@@ -7,9 +8,14 @@ import {
 import { postMethod } from "~@/utils/api/postMethod";
 import { endPoints } from "~@/utils/api/route";
 import toast from "react-hot-toast";
-import { useState } from "react";
 import { useCustomSession } from "~@/hooks/customSessionhook";
 import { handleAuthSubmitting } from "~@/_redux/actions/authopen";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(
+  `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}`,
+);
 
 type CarType = {
   car_id: number;
@@ -41,18 +47,19 @@ type CarType = {
 const UseCityToCity = () => {
   const dispatch = useAppDispatch();
   const { session } = useCustomSession();
-  const [isBooking, setIsbooking] = useState(false);
+  const [isBooking, setIsBooking] = useState(false);
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const SelectedCarData: CarType = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
-  console.log("SelectedCarData", SelectedCarData);
+
   const cityToCityInput = useAppSelector(
     (state) =>
       state.cityTocityServiceReducer?.citytocity?.CitytoCityServiceInput,
   );
-
-  console.log("CityToCityInput", cityToCityInput);
 
   const {
     airportname = "",
@@ -92,11 +99,7 @@ const UseCityToCity = () => {
   );
 
   const handleCitytoCityNext = () => {
-    if (
-      session?.user?.accessToken !== undefined &&
-      session?.user?.accessToken !== null &&
-      session?.user?.accessToken !== ""
-    ) {
+    if (session?.user?.accessToken) {
       dispatch(handleCitytocityStepNext(step + 1));
       dispatch(handleCitytoCityInputChange("triptype", "CityToCity"));
     } else {
@@ -113,54 +116,116 @@ const UseCityToCity = () => {
   ).toFixed(2);
 
   const handleCreateBooking = async () => {
-    setIsbooking(true);
-    const userId = session?.user?._id;
-    const data = {
-      userId: userId,
-      triptype: triptype,
-      airportname: airportname,
-      flightno: flightno,
-      childseat: SelectedCarData.car_hasChildSeat,
+    setIsBooking(true);
+    const bookingData = {
+      carId: SelectedCarData?.car_id,
+      tripType: triptype,
+      airportName: airportname,
+      flightNo: flightno,
+      childSeat: SelectedCarData.car_hasChildSeat,
       luggage: SelectedCarData.car_luggageCapacity,
       passenger: SelectedCarData.car_seatingCapacity,
-      carModel: SelectedCarData.car_model,
-      carName: SelectedCarData.car_name,
-      mobilenumber: phone,
-      pickuplocationAdress: pickupAddress,
-      pickuplocationMapLink: pickupLocation,
+      mobileNumber: phone,
+      pickupLocationAddress: pickupAddress,
+      totalBookingPrice: parseInt(FarePriceCalculationBymiles),
+      pickupLocationMapLink: pickupLocation,
       pickupDate: pickupdate,
-      pickuptime: pickuptime,
-      dropofflocationAdress: dropoffAddress,
-      dropofflocationMapLink: dropoffLocation,
-      rentalprice: parseInt(FarePriceCalculationBymiles),
-      createdDate: new Date(),
-      status: "Pending",
-      renterName: name,
-      renterPhone: phone,
+      pickupTime: pickuptime,
+      dropoffLocationAddress: dropoffAddress,
+      dropoffLocationMapLink: dropoffLocation,
       hour: hour,
       distance: distance,
-      paymentstatus: "pending",
-      paymentmethod: paymentmethod,
-      paymentid: "",
+      paymentMethod: paymentmethod,
     };
+
     try {
-      const response = await postMethod({
-        route: endPoints.Customer.CreateBooking,
-        postData: data,
-      });
-      if (response?.data?.statusCode === 201) {
-        setIsbooking(false);
-        dispatch(handleCitytocityStepNext(step + 1));
+      if (paymentmethod === "cash") {
+        const response = await postMethod({
+          route: endPoints.Customer.createBookingByCash,
+          postData: { ...bookingData, paymentStatus: "pending" },
+        });
+        if (response?.data?.statusCode === 201) {
+          setIsBooking(false);
+          dispatch(handleCitytocityStepNext(step + 1));
+          toast.success("Booking created successfully");
+        } else {
+          setIsBooking(false);
+          toast.error("Failed to create booking. Please try again.");
+        }
       } else {
-        setIsbooking(false);
-        toast.error("Please try Again");
+        if (!stripe || !elements) {
+          toast.error(
+            "Payment processing is not available. Please try again later."
+          );
+          setIsBooking(false);
+          return;
+        }
+        setIsProcessingPayment(true);
+
+        // Create payment intent
+        const intentResponse = await postMethod({
+          route: endPoints.Customer.createPaymentIntent,
+          postData: { amount: Math.round(bookingData.totalBookingPrice * 100) },
+        });
+
+        if (intentResponse?.data?.statusCode !== 200) {
+          throw new Error("Failed to create payment intent");
+        }
+
+        const { clientSecret } = intentResponse.data.data;
+
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) {
+          throw new Error("Card element not found");
+        }
+
+        const result = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: name,
+              phone: phone,
+            },
+          },
+        });
+
+        if (result.error) {
+          toast.error(result.error.message || "Payment failed");
+          setIsProcessingPayment(false);
+          setIsBooking(false);
+        } else if (result.paymentIntent.status === "succeeded") {
+          // Create booking after successful payment
+          const bookingResponse = await postMethod({
+            route: endPoints.Customer.createBookingAfterPayment,
+            postData: {
+              ...bookingData,
+              paymentStatus: "Paid",
+              stripePaymentIntentId: result.paymentIntent.id,
+            },
+          });
+
+          if (bookingResponse?.data?.statusCode === 201) {
+            setIsBooking(false);
+            setIsProcessingPayment(false);
+            dispatch(handleCitytocityStepNext(step + 1));
+            toast.success("Payment processed and booking created successfully");
+          } else {
+            toast.error(
+              "Payment succeeded but booking creation failed. Please contact support."
+            );
+            setIsBooking(false);
+            setIsProcessingPayment(false);
+          }
+        }
       }
     } catch (error) {
-      setIsbooking(false);
+      setIsBooking(false);
+      setIsProcessingPayment(false);
       console.error(error);
-      toast.error("Please try Again");
+      toast.error("An error occurred. Please try again.");
     }
   };
+
 
   return {
     handleInputChange,
@@ -184,6 +249,7 @@ const UseCityToCity = () => {
     paymentmethod,
     handleCreateBooking,
     isBooking,
+    isProcessingPayment,
   };
 };
 
