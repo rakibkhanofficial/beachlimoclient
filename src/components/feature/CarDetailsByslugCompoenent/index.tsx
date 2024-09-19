@@ -71,7 +71,7 @@ export type CategoryType = {
 };
 
 type PropsType = {
-  car: CarDetails | null;
+  car: CarDetails;
   loading: boolean;
   error: string | null;
 };

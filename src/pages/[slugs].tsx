@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import HeaderLandingPage from "~@/components/feature/Header";
 import FooterComponent from "~@/components/feature/Footer";
 import PremiumCarDetails from "~@/components/feature/CarDetailsByslugCompoenent";
-// import ProductDetailsComponenet from "@/components/features/productdetailsbyslug";
 
 type CarDetails = {
   id: number;
@@ -33,10 +32,29 @@ type CarDetails = {
   subCategoryId: number;
   createdAt: string;
   updatedAt: string;
+  category: CategoryType;
+  subCategory: SubCategoryType;
+};
+
+export type SubCategoryType = {
+  id: number;
+  categoryId: number;
+  name: string;
+  slug: string;
+  description: string;
+  categoryName: string;
+  category: CategoryType;
+};
+
+export type CategoryType = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
 };
 
 const ProductDetails: React.FC = () => {
-  const [car, setCar] = useState<CarDetails | null>(null);
+  const [car, setCar] = useState<CarDetails>({} as CarDetails);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const pathname = usePathname();
