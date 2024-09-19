@@ -16,9 +16,9 @@ const AboutSection = () => {
   });
 
   return (
-    <section className=" h-[90vh] flex justify-center items-center  my-20 md:my-2" id="services" ref={ref}>
+    <section className=" h-[90vh] flex justify-center items-center  my-20 2xl:mt-40 md:my-2" id="services" ref={ref}>
       <div className="container mx-auto ">
-        <div className="flex flex-col xl:flex-row xl:justify-around md:gap-8 2xl:gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2">
           <div>
           <motion.div
             variants={fadeIn("up", 0.2)}
@@ -28,9 +28,9 @@ const AboutSection = () => {
             className="flex-1 mb-8 xl:mb-0"
           >
             <Image
-              className="md:rounded-[20px] "
+              className="md:rounded-[20px] max-md:w-[423px] md:h-[450px] md:w-[750px] "
               src={"/images/limocars/side.png"}
-              width={800}
+              width={320}
               height={448}
               // fill
               priority={true}

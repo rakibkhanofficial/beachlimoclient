@@ -1,3 +1,4 @@
+import { Divider } from "@nextui-org/react";
 import React from "react";
 import AboutSection from "~@/components/feature/AboutCompany";
 import BrandsSection from "~@/components/feature/brands";

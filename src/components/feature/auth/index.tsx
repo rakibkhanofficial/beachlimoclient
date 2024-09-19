@@ -46,6 +46,7 @@ const AuthModule = () => {
   const isLoginModalOpen: boolean = useAppSelector(
     (state) => state?.isloginauthOpenReducer?.authopen?.isSubmitting
   );
+  console.log('isLoginModalOpen', isLoginModalOpen)
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -393,11 +394,9 @@ const AuthModule = () => {
   return (
     <>
       <Button
-        as={Link}
         color="primary"
-        href="#"
         variant="flat"
-        onPress={() => dispatch(handleAuthSubmitting(true))}
+        onClick={() => dispatch(handleAuthSubmitting(true))}
       >
         Login
       </Button>
