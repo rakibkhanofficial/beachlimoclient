@@ -52,7 +52,8 @@ export const AllProductLayout = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filterType, setFilterType] = useState<string>("all");
-  const [priceRange, setPriceRange] = useState<number[]>([0, 10000]);
+  const [permilepriceRange, setPermilePriceRange] = useState<number[]>([0, 10000]);
+  const [perhourpriceRange, setPerhourPriceRange] = useState<number[]>([0, 10000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
     []
@@ -68,7 +69,8 @@ export const AllProductLayout = () => {
     filterProducts();
   }, [
     searchQuery,
-    priceRange,
+    permilepriceRange,
+    perhourpriceRange,
     filterType,
     selectedCategories,
     selectedSubcategories,
@@ -138,8 +140,14 @@ export const AllProductLayout = () => {
 
     filtered = filtered.filter(
       (product) =>
-        parseFloat(product.car_pricePerMile) >= priceRange[0] &&
-        parseFloat(product.car_pricePerMile) <= priceRange[1]
+        parseFloat(product.car_pricePerMile) >= permilepriceRange[0] &&
+        parseFloat(product.car_pricePerMile) <= permilepriceRange[1]
+    );
+
+    filtered = filtered.filter(
+      (product) =>
+        parseFloat(product.car_pricePerHour) >= perhourpriceRange[0] &&
+        parseFloat(product.car_pricePerHour) <= perhourpriceRange[1]
     );
 
     if (filterType === "new") {
@@ -195,10 +203,12 @@ export const AllProductLayout = () => {
           categories={categories}
           selectedCategories={selectedCategories}
           selectedSubcategories={selectedSubcategories}
-          priceRange={priceRange}
+          permilepriceRange={permilepriceRange}
           handleCategoryChange={handleCategoryChange}
           handleSubcategoryChange={handleSubcategoryChange}
-          setPriceRange={setPriceRange}
+          setPermilePriceRange={setPermilePriceRange}
+          setPerhourPriceRange={setPerhourPriceRange}
+          perhourpriceRange={perhourpriceRange}
         />
         <div className="w-full">
           <div className="w-full">

@@ -13,20 +13,24 @@ type PropsType = {
   categories: Category[];
   selectedCategories: string[];
   selectedSubcategories: string[];
-  priceRange: number[];
+  permilepriceRange: number[];
   handleCategoryChange: (category: string) => void;
   handleSubcategoryChange: (subcategory: string) => void;
-  setPriceRange: (range: number[]) => void;
+  setPermilePriceRange: (range: number[]) => void;
+  perhourpriceRange: number[];
+  setPerhourPriceRange: (range: number[]) => void;
 };
 
 const AllProductSidebarWrapper = ({
   categories,
   selectedCategories,
   selectedSubcategories,
-  priceRange,
+  permilepriceRange,
   handleCategoryChange,
   handleSubcategoryChange,
-  setPriceRange,
+  setPermilePriceRange,
+  perhourpriceRange,
+  setPerhourPriceRange,
 }: PropsType) => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useAllProductSidebarContext();
@@ -48,10 +52,12 @@ const AllProductSidebarWrapper = ({
           categories={categories}
           selectedCategories={selectedCategories}
           selectedSubcategories={selectedSubcategories}
-          priceRange={priceRange}
+          permilepriceRange={permilepriceRange}
           onCategoryChange={handleCategoryChange}
           onSubcategoryChange={handleSubcategoryChange}
-          onPriceRangeChange={setPriceRange}
+          setPermilePriceRange={setPermilePriceRange}
+          setPerhourPriceRange={setPerhourPriceRange}
+          perhourpriceRange={perhourpriceRange}
         />
       </div>
     </aside>

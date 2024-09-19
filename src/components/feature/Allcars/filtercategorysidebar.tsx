@@ -24,20 +24,24 @@ interface FilterCategorySidebarProps {
   categories: Category[];
   selectedCategories: string[];
   selectedSubcategories: string[];
-  priceRange: number[];
+  permilepriceRange: number[];
+  perhourpriceRange: number[];
   onCategoryChange: (category: string) => void;
   onSubcategoryChange: (subcategory: string) => void;
-  onPriceRangeChange: (value: number[]) => void;
+  setPermilePriceRange: (value: number[]) => void;
+  setPerhourPriceRange: (value: number[]) => void;
 }
 
 const FilterCategorySidebar: React.FC<FilterCategorySidebarProps> = ({
   categories,
   selectedCategories,
   selectedSubcategories,
-  priceRange,
+  permilepriceRange,
+  perhourpriceRange,
   onCategoryChange,
   onSubcategoryChange,
-  onPriceRangeChange,
+  setPermilePriceRange,
+  setPerhourPriceRange
 }) => {
   const [mounted, setMounted] = useState(false);
 
@@ -97,14 +101,32 @@ const FilterCategorySidebar: React.FC<FilterCategorySidebarProps> = ({
             step={10}
             minValue={0}
             maxValue={1000}
-            value={priceRange}
-            onChange={(value) => onPriceRangeChange(value as number[])}
+            value={permilepriceRange}
+            onChange={(value) => setPermilePriceRange(value as number[])}
             className="mb-4"
           />
         )}
         <div className="flex justify-between">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
+          <span>${permilepriceRange[0]}</span>
+          <span>${permilepriceRange[1]}</span>
+        </div>
+      </div>
+      <div className="mt-6">
+        <h2 className="font-semibold mb-2 dark:text-white">Price Per Hour Range</h2>
+        {mounted && (
+          <Slider
+            label="Price"
+            step={10}
+            minValue={0}
+            maxValue={1000}
+            value={perhourpriceRange}
+            onChange={(value) => setPerhourPriceRange(value as number[])}
+            className="mb-4"
+          />
+        )}
+        <div className="flex justify-between">
+          <span>${perhourpriceRange[0]}</span>
+          <span>${perhourpriceRange[1]}</span>
         </div>
       </div>
     </div>
