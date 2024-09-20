@@ -70,7 +70,7 @@ const OtherInformation = () => {
 
   useEffect(() => {
     if (session?.user) {
-      dispatch(handleCitytoCityInputChange("name", session?.user?.username));
+      dispatch(handleCitytoCityInputChange("name", session?.user?.name));
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
   }, [session, dispatch]);

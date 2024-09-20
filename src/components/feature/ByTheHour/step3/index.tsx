@@ -71,10 +71,9 @@ const OtherInformation = () => {
 
   useEffect(() => {
     if (session?.user) {
-      dispatch(handleCitytoCityInputChange("name", session?.user?.username));
+      dispatch(handleCitytoCityInputChange("name", session?.user?.name));
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
-    handleInputChange("paymentmethod", "cash");
   }, [session, dispatch]);
 
   const [isScrolling, setIsScrolling] = useState(false);
