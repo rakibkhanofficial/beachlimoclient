@@ -80,14 +80,14 @@ const AllCars = ({
 
   const renderCarCard = (car: CarType) => (
     <Card key={car.car_id} isPressable>
-      <CardHeader className="bg-slate-100 dark:bg-slate-800">
+      <CardHeader>
         <div className="flex w-full items-end justify-end">
           <Chip color="primary" variant="shadow" size="sm">
             {car.categoryName}
           </Chip>
         </div>
       </CardHeader>
-      <CardBody className=" bg-slate-50 dark:bg-gray-800 md:p-2">
+      <CardBody className=" md:p-2">
         <div className=" mx-auto flex h-48 items-center justify-center">
           <Image
             src={car.car_image}
@@ -125,7 +125,7 @@ const AllCars = ({
               </Chip>
             </div>
           </div>
-          <div className="mb-4 grid w-full grid-cols-2 gap-2">
+          <div className="mb-4 flex justify-between">
             <Chip
               startContent={<MdWifi />}
               variant="dot"
@@ -140,7 +140,9 @@ const AllCars = ({
             >
               {car.car_hasChildSeat === 1 ? "Child Seat" : "No Child Seat"}
             </Chip>
-            <Chip startContent={<MdLocalGasStation />} variant="flat">
+          </div>
+          <div className="flex justify-between">
+          <Chip startContent={<MdLocalGasStation />} variant="flat">
               {car.car_fuelType}
             </Chip>
             <Chip startContent={<MdSettings />} variant="flat">
@@ -149,7 +151,7 @@ const AllCars = ({
           </div>
         </div>
       </CardBody>
-      <CardFooter className="flex justify-between border-t border-gray-200 bg-gray-50 p-2 dark:border-slate-700 dark:bg-slate-800">
+      <CardFooter className="flex justify-between border-t border-gray-200 bg-gray-50 p-2 dark:border-slate-700 dark:bg-zinc-900">
         <Tooltip color="primary" content="View Details">
           <Button
             onClick={() => handleViewDetails(car.car_slug)}
@@ -238,7 +240,7 @@ const AllCars = ({
             </div>
           </div>
         )}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 my-3">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div key={index}>{renderSkeleton()}</div>

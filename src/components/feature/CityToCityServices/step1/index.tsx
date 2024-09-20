@@ -69,21 +69,21 @@ const CarSelection: React.FC = () => {
 
   const [isScrolling, setIsScrolling] = useState(false);
 
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    const handleScroll = () => {
-      setIsScrolling(true);
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setIsScrolling(false);
-      }, 100);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  // useEffect(() => {
+  //   let timeoutId: ReturnType<typeof setTimeout>;
+  //   const handleScroll = () => {
+  //     setIsScrolling(true);
+  //     clearTimeout(timeoutId);
+  //     timeoutId = setTimeout(() => {
+  //       setIsScrolling(false);
+  //     }, 100);
+  //   };
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, []);
 
   const renderCarCard = (car: CarType) => (
     <Card
@@ -203,7 +203,7 @@ const CarSelection: React.FC = () => {
         </div>
       </div>
       <div
-        className={`fixed bottom-0 left-0 z-10 w-full bg-white/80 p-4 shadow-lg backdrop-blur-md transition-transform duration-300 dark:bg-gray-800/80 ${
+        className={`fixed bottom-0 left-0 z-10 w-full bg-white/80 p-2 shadow-lg backdrop-blur-md transition-transform duration-300 dark:bg-gray-800/80 ${
           isScrolling ? "translate-y-full" : "translate-y-0"
         }`}
       >
@@ -211,7 +211,7 @@ const CarSelection: React.FC = () => {
           <Button
             className="mx-auto w-full max-w-md text-lg font-semibold"
             color="primary"
-            size="lg"
+            size="md"
             onClick={handleCitytoCityNext}
             isDisabled={SelectedCarData.car_name === ""}
             endContent={<MdArrowForwardIos />}

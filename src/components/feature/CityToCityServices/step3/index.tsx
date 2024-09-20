@@ -78,16 +78,16 @@ const CitytocityOtherInformation: React.FC = () => {
     handleInputChange("paymentmethod", "cash");
   }, [session, dispatch]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true);
-      const timeoutId = setTimeout(() => setIsScrolling(false), 100);
-      return () => clearTimeout(timeoutId);
-    };
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setIsScrolling(true);
+  //     const timeoutId = setTimeout(() => setIsScrolling(false), 100);
+  //     return () => clearTimeout(timeoutId);
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   return (
     <div className="relative my-5 w-full p-2 lg:p-5">
@@ -152,7 +152,7 @@ const CitytocityOtherInformation: React.FC = () => {
         </div>
       </div>
       <div
-        className={`fixed bottom-0 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${
+        className={`fixed bottom-0 z-50 left-0 flex w-full items-center justify-center bg-white px-2 py-2 transition-transform duration-300 dark:bg-gray-800 ${
           isScrolling ? "translate-y-full" : "translate-y-0"
         }`}
       >
@@ -171,7 +171,7 @@ const CitytocityOtherInformation: React.FC = () => {
           </span>
         </Button>
       </div>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="auto">
+        <Modal className=" bg-gray-100 dark:bg-slate-900 " isOpen={isOpen} onOpenChange={onOpenChange} placement="auto">
           <ModalContent>
             {(onClose) => (
               <>

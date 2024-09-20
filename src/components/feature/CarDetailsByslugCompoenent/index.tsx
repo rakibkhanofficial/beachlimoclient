@@ -84,7 +84,7 @@ const PremiumCarDetails = ({ car, loading, error }: PropsType) => {
   if (loading) {
     return (
       <Card className="mx-auto w-full max-w-7xl bg-gradient-to-br from-gray-50 to-gray-100 shadow-2xl dark:from-gray-900 dark:to-gray-800">
-        <CardBody className="p-6 sm:p-8">
+        <CardBody className="p-2 sm:p-8">
           <div className="flex flex-col gap-8 lg:flex-row">
             <Skeleton className="h-[400px] w-full rounded-xl lg:w-1/2" />
             <div className="w-full space-y-6 lg:w-1/2">
@@ -125,8 +125,8 @@ const PremiumCarDetails = ({ car, loading, error }: PropsType) => {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-7xl ">
-      <CardBody className="p-6 sm:p-8">
+    <Card className="mx-auto rounded-lg w-full max-w-7xl ">
+      <CardBody className="p-2 sm:p-8">
         <div className="flex flex-col gap-8 lg:flex-row">
           <div className="w-full rounded-xl shadow-lg lg:w-1/2">
             <ImageZoom
@@ -241,7 +241,7 @@ const PremiumCarDetails = ({ car, loading, error }: PropsType) => {
           className="mt-8"
         >
           <Tab key="specifications" title="Specifications" className="text-lg">
-            <ScrollShadow className="h-[300px] p-4">
+            <ScrollShadow className="h-[300px] px-1">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-md dark:bg-gray-800">
