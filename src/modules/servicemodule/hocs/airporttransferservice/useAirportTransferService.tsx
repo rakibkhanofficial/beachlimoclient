@@ -10,26 +10,38 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { endPoints } from '../../../../utils/api/route';
 
-type selectedCarType = {
-  id: number
-  Carname: string;
-  image: string;
-  Model: string;
-  perMilePrice: number;
-  childSeat: boolean;
-  perhourPrice : number
-  passenger: number;
-  Luggage: number;
-  totalseat: number;
-  isWifi: boolean
+type CarType = {
+  car_id: number;
+  car_name: string;
+  car_slug: string;
+  car_image: string;
+  car_pricePerHour: string;
+  car_pricePerMile: string;
+  car_model: string;
+  car_year: number;
+  car_make: string;
+  car_seatingCapacity: number;
+  car_hasChildSeat: 0 | 1;
+  car_hasWifi: 0 | 1;
+  car_luggageCapacity: number;
+  car_mileagePerGallon: string;
+  car_transmission: string;
+  car_fuelType: string;
+  car_features: string;
+  car_categoryId: number;
+  car_subCategoryId: number;
+  car_createdAt: string;
+  car_updatedAt: string;
+  categoryName: string;
+  categorySlug: string;
+  subcategoryName: string;
 };
 
 const UseAirportTransfer = () => {
   const dispatch = useAppDispatch();
-  const { data: session } = useSession();
   const [isBooking, setIsbooking] = useState(false)
 
-  const SelectedCarData: selectedCarType  = useAppSelector(
+  const SelectedCarData: CarType  = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
 
@@ -64,7 +76,7 @@ const UseAirportTransfer = () => {
     dispatch(handleCitytoCityInputChange(name, value));
   };
 
-  const handleSelectedcar = (value: selectedCarType) => {
+  const handleSelectedcar = (value: CarType) => {
     dispatch(handleSelectedcarData(value));
   };
 
@@ -82,45 +94,58 @@ const UseAirportTransfer = () => {
   };
 
   const TotalFarePriceCalculationByhours = (
-    hour * SelectedCarData.perhourPrice
+    hour * Number(SelectedCarData.car_pricePerHour)
   ).toFixed(2);
+
+  const onlinebookingData = {
+    carId: SelectedCarData?.car_id,
+    tripType: triptype,
+    airportName: airportname,
+    flightNo: flightno,
+    childSeat: SelectedCarData.car_hasChildSeat,
+    luggage: SelectedCarData.car_luggageCapacity,
+    passenger: SelectedCarData.car_seatingCapacity,
+    mobileNumber: phone,
+    pickupLocationAddress: pickupAddress,
+    totalBookingPrice: parseInt(TotalFarePriceCalculationByhours),
+    pickupLocationMapLink: pickupLocation,
+    pickupDate: pickupdate,
+    pickupTime: pickuptime,
+    dropoffLocationAddress: dropoffAddress,
+    dropoffLocationMapLink: dropoffLocation,
+    hour: hour,
+    distance: distance,
+    paymentMethod: paymentmethod,
+  };
 
   const handleCreateBooking = async () => {
     setIsbooking(true)
-    // @ts-expect-error type error is not solved
-    const userId = session?.user?._id;
-    const data = {
-      userId: userId,
-      triptype: triptype,
-      airportname: airportname,
-      flightno: flightno,
-      childseat: SelectedCarData.childSeat,
-      luggage: SelectedCarData.Luggage,
-      passenger: SelectedCarData.passenger,
-      carModel: SelectedCarData.Model,
-      carName: SelectedCarData.Carname,
-      mobilenumber: phone,
-      pickuplocationAdress: pickupAddress,
-      pickuplocationMapLink: pickupLocation,
+    const CashbookingData = {
+      carId: SelectedCarData?.car_id,
+      tripType: triptype,
+      airportName: airportname,
+      flightNo: flightno,
+      childSeat: SelectedCarData.car_hasChildSeat,
+      luggage: SelectedCarData.car_luggageCapacity,
+      passenger: SelectedCarData.car_seatingCapacity,
+      mobileNumber: phone,
+      pickupLocationAddress: pickupAddress,
+      totalBookingPrice: parseInt(TotalFarePriceCalculationByhours),
+      pickupLocationMapLink: pickupLocation,
       pickupDate: pickupdate,
-      pickuptime: pickuptime,
-      dropofflocationAdress: dropoffAddress,
-      dropofflocationMapLink: dropoffLocation,
-      rentalprice: parseInt(TotalFarePriceCalculationByhours),
-      createdDate: new Date(),
-      status: "Pending",
-      renterName: name,
-      renterPhone: phone,
+      pickupTime: pickuptime,
+      dropoffLocationAddress: dropoffAddress,
+      dropoffLocationMapLink: dropoffLocation,
       hour: hour,
       distance: distance,
-      paymentstatus: "pending",
-      paymentmethod: paymentmethod,
-      paymentid: "",
+      paymentMethod: paymentmethod,
+      name: name,
+      paymentStatus: "pending"
     };
     try {
       const response = await postMethod({
-        route: endPoints.Customer.CreateBooking,
-        postData: data,
+        route: endPoints.Customer.createBookingByCash,
+        postData: CashbookingData,
       });
       if (response?.data?.statusCode === 201) {
         setIsbooking(false)
@@ -160,6 +185,8 @@ const UseAirportTransfer = () => {
     hour,
     paymentmethod,
     handleCreateBooking,
+    onlinebookingData,
+    step,
     isBooking
   };
 };
