@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Button,
   Input,
-  TimeInput,
-  DatePicker,
   Modal,
   ModalContent,
   useDisclosure,
@@ -11,30 +9,44 @@ import {
   RadioGroup,
   Radio,
 } from "@nextui-org/react";
-import UseBytheHour from "~@/modules/servicemodule/hocs/bythehourservice/usebythehourService";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "~@/_redux/hooks/hooks";
 import { MdArrowForwardIos } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import UseScheduleRide from "~@/modules/servicemodule/hocs/schedulerideservice/useScheduleRideService";
 import { handleCitytoCityInputChange } from "~@/modules/servicemodule/_redux/actions/citytocityActions";
+import { useCustomSession } from "~@/hooks/customSessionhook";
+import PaymentForm from "~@/components/elements/paymentform";
 
 type selectedCarType = {
-  id: number;
-  Carname: string;
-  image: string;
-  Model: string;
-  perMilePrice: number;
-  childSeat: boolean;
-  perhourPrice: number;
-  passenger: number;
-  Luggage: number;
-  totalseat: number;
-  isWifi: boolean;
+  car_id: number;
+  car_name: string;
+  car_slug: string;
+  car_image: string;
+  car_pricePerHour: string;
+  car_pricePerMile: string;
+  car_model: string;
+  car_year: number;
+  car_make: string;
+  car_seatingCapacity: number;
+  car_hasChildSeat: 0 | 1;
+  car_hasWifi: 0 | 1;
+  car_luggageCapacity: number;
+  car_mileagePerGallon: string;
+  car_transmission: string;
+  car_fuelType: string;
+  car_features: string;
+  car_categoryId: number;
+  car_subCategoryId: number;
+  car_createdAt: string;
+  car_updatedAt: string;
+  categoryName: string;
+  categorySlug: string;
+  subcategoryName: string;
 };
 
 const OtherInformation = () => {
-  const { data: session } = useSession();
+  const { session } = useCustomSession();
   const dispatch = useAppDispatch();
   const {
     handleCreateBooking,
@@ -47,6 +59,8 @@ const OtherInformation = () => {
     pickupAddress,
     dropoffAddress,
     paymentmethod,
+    onlinebookingData,
+    step,
     TotalFarePriceCalculationBymilesandhours,
   } = UseScheduleRide();
   const SelectedCarData: selectedCarType = useAppSelector(
@@ -56,34 +70,31 @@ const OtherInformation = () => {
 
   useEffect(() => {
     if (session?.user) {
-      // @ts-expect-error type error is not solved
       dispatch(handleCitytoCityInputChange("name", session?.user?.username));
-      // @ts-expect-error type error is not solved
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
-    handleInputChange("paymentmethod", "pay-cash");
   }, [session, dispatch]);
 
   const [isScrolling, setIsScrolling] = useState(false);
 
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
+  // useEffect(() => {
+  //   let timeoutId: ReturnType<typeof setTimeout>;
 
-    const handleScroll = () => {
-      setIsScrolling(true);
+  //   const handleScroll = () => {
+  //     setIsScrolling(true);
 
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setIsScrolling(false);
-      }, 100);
-    };
+  //     clearTimeout(timeoutId);
+  //     timeoutId = setTimeout(() => {
+  //       setIsScrolling(false);
+  //     }, 100);
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, []);
 
   return (
     <div className="my-5 w-full p-2 lg:p-5">
@@ -124,26 +135,30 @@ const OtherInformation = () => {
             onChange={(e) => handleInputChange("pickuptime", e.target.value)}
           />
           <RadioGroup
-            label="Select Your Payment"
+            label="Select Your Payment Method"
             color="secondary"
-            defaultValue="pay-cash"
+            defaultValue="cash"
           >
-            <Radio value="pay-online" isDisabled>
+            <Radio
+              onChange={(e) =>
+                handleInputChange("paymentmethod", e.target.value)
+              }
+              value="online"
+            >
               Online Payment
-              <span className="ml-2 text-sm text-red-500">Coming Soon</span>
             </Radio>
             <Radio
               onChange={(e) =>
                 handleInputChange("paymentmethod", e.target.value)
               }
-              value="pay-cash"
+              value="cash"
             >
               Cash Payment
             </Radio>
           </RadioGroup>
         </div>
         <div
-          className={`fixed bottom-0 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${isScrolling ? "translate-y-full" : "translate-y-0"}`}
+          className={`fixed bottom-0 z-50 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${isScrolling ? "translate-y-full" : "translate-y-0"}`}
         >
           <Button
             className={`w-[80%] lg:w-[40%] ${
@@ -168,8 +183,8 @@ const OtherInformation = () => {
                   </h1>
                   <div className="flex items-center justify-center">
                     <Image
-                      src={SelectedCarData?.image}
-                      alt={SelectedCarData?.Carname}
+                      src={SelectedCarData?.car_image}
+                      alt={SelectedCarData?.car_name}
                       height={200}
                       width={200}
                     />
@@ -181,7 +196,7 @@ const OtherInformation = () => {
                     <p className=" text-black dark:text-white ">{phone}</p>
                     <p className=" text-black dark:text-white ">Car Name:</p>
                     <p className=" text-black dark:text-white ">
-                      {SelectedCarData.Carname}
+                      {SelectedCarData.car_name}
                     </p>
                     <p className=" text-black dark:text-white ">
                       Pickup Address:
@@ -214,6 +229,13 @@ const OtherInformation = () => {
                       {paymentmethod}
                     </p>
                   </div>
+                  {paymentmethod === "online" ? (
+                  <PaymentForm
+                    amount={parseFloat(TotalFarePriceCalculationBymilesandhours)}
+                    bookingData={onlinebookingData}
+                    currentStep={step}
+                  />
+                ) : (
                   <div className="my-3 flex w-full items-center justify-center">
                     <Button
                       className="mt-5 w-[80%] lg:w-[50%]"
@@ -221,7 +243,7 @@ const OtherInformation = () => {
                       onPress={handleCreateBooking}
                       isDisabled={!name || !phone || !pickupdate || !pickuptime}
                     >
-                      <span className="text-lg text-white">
+                      <span className="text-white">
                         {isBooking ? (
                           <Spinner color="primary" />
                         ) : (
@@ -230,11 +252,7 @@ const OtherInformation = () => {
                       </span>
                     </Button>
                   </div>
-                  {/* <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
-                      Close
-                    </Button>
-                  </ModalFooter> */}
+                )}
                 </>
               )}
             </ModalContent>

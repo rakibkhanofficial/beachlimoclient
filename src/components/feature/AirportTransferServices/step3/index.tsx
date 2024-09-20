@@ -77,7 +77,6 @@ const OtherInformation = () => {
       dispatch(handleCitytoCityInputChange("name", session?.user?.name));
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
-    handleInputChange("paymentmethod", "cash");
   }, [session, dispatch]);
 
   const [isScrolling, setIsScrolling] = useState(false);

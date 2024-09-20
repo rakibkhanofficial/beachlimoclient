@@ -203,7 +203,7 @@ const CarSelection: React.FC = () => {
         </div>
       </div>
       <div
-        className={`fixed bottom-0 left-0 z-10 w-full bg-white/80 p-2 shadow-lg backdrop-blur-md transition-transform duration-300 dark:bg-gray-800/80 ${
+        className={`fixed bottom-0 left-0 z-50 w-full bg-white/80 p-2 shadow-lg backdrop-blur-md transition-transform duration-300 dark:bg-gray-800/80 ${
           isScrolling ? "translate-y-full" : "translate-y-0"
         }`}
       >

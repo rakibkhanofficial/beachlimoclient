@@ -111,24 +111,24 @@ const LocationSelection = () => {
 
   const [isScrolling, setIsScrolling] = useState(false);
 
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
+  // useEffect(() => {
+  //   let timeoutId: ReturnType<typeof setTimeout>;
 
-    const handleScroll = () => {
-      setIsScrolling(true);
+  //   const handleScroll = () => {
+  //     setIsScrolling(true);
 
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setIsScrolling(false);
-      }, 100);
-    };
+  //     clearTimeout(timeoutId);
+  //     timeoutId = setTimeout(() => {
+  //       setIsScrolling(false);
+  //     }, 100);
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, []);
 
   return (
     <div className="relative w-full px-2 text-black dark:text-white">
@@ -200,7 +200,7 @@ const LocationSelection = () => {
       </div>
       </div>
       <div
-        className={`fixed bottom-0 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${isScrolling ? "translate-y-full" : "translate-y-0"}`}
+        className={`fixed bottom-0 z-50 left-0 flex w-full items-center justify-center bg-white px-4 py-2 transition-transform duration-300 dark:bg-gray-800 ${isScrolling ? "translate-y-full" : "translate-y-0"}`}
       >
         <Button
           className={`w-[80%] lg:w-[40%] ${

@@ -75,7 +75,6 @@ const CitytocityOtherInformation: React.FC = () => {
       dispatch(handleCitytoCityInputChange("name", session?.user?.name));
       dispatch(handleCitytoCityInputChange("phone", session?.user?.phone));
     }
-    handleInputChange("paymentmethod", "cash");
   }, [session, dispatch]);
 
   // useEffect(() => {

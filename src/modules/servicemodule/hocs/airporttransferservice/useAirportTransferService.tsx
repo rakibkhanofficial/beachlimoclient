@@ -4,11 +4,12 @@ import {
   handleCitytocityStepNext,
   handleSelectedcarData,
 } from "../../_redux/actions/citytocityActions";
-import { useSession } from "next-auth/react";
 import { postMethod } from "../../../../utils/api/postMethod";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { endPoints } from '../../../../utils/api/route';
+import { useCustomSession } from "~@/hooks/customSessionhook";
+import { handleAuthSubmitting } from "~@/_redux/actions/authopen";
 
 type CarType = {
   car_id: number;
@@ -38,6 +39,7 @@ type CarType = {
 };
 
 const UseAirportTransfer = () => {
+  const { session } = useCustomSession();
   const dispatch = useAppDispatch();
   const [isBooking, setIsbooking] = useState(false)
 
@@ -85,8 +87,12 @@ const UseAirportTransfer = () => {
   );
 
   const handleCitytoCityNext = () => {
-    dispatch(handleCitytocityStepNext(step + 1));
-    dispatch(handleCitytoCityInputChange("triptype", "AirPortTransfer"));
+    if (session?.user?.accessToken) {
+      dispatch(handleCitytocityStepNext(step + 1));
+      dispatch(handleCitytoCityInputChange("triptype", "AirPortTransfer"));
+    } else {
+      dispatch(handleAuthSubmitting(true));
+    }
   };
 
   const handleCitytoCityBack = () => {
