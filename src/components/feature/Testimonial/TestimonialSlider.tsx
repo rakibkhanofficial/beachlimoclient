@@ -58,9 +58,9 @@ const TestimonialSlider = () => {
           const { message, avatar, name, job } = person;
           return (
             <SwiperSlide key={index}>
-              <div className="flex flex-col justify-center items-center text-center ">
-                <FaQuoteLeft className="text-7xl text-accent mb-6" />
-                <div className="text-2xl xl:text-4xl max-w-[874px] mb-12 font-medium ">
+              <div className="flex flex-col items-center justify-center text-center ">
+                <FaQuoteLeft className="text-accent mb-6 text-7xl text-black dark:text-white" />
+                <div className="mb-12 max-w-[874px] text-2xl font-medium text-black dark:text-white xl:text-4xl ">
                   {message}
                 </div>
                 <Image
@@ -70,7 +70,9 @@ const TestimonialSlider = () => {
                   width={64}
                   className="mb-4"
                 />
-                <div className="text-lg font-medium">{name}</div>
+                <div className="text-lg font-medium text-black dark:text-white">
+                  {name}
+                </div>
                 {/* <div className="text-secondary">{job}</div> */}
               </div>
             </SwiperSlide>

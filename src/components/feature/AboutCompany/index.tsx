@@ -16,36 +16,40 @@ const AboutSection = () => {
   });
 
   return (
-    <section className=" h-[90vh] flex justify-center items-center  my-20 2xl:mt-40 md:my-2" id="services" ref={ref}>
+    <section
+      className=" my-20 flex h-[90vh] items-center justify-center bg-white  dark:bg-slate-800 lg:my-0 2xl:mt-40"
+      id="services"
+      ref={ref}
+    >
       <div className="container mx-auto ">
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div>
-          <motion.div
-            variants={fadeIn("up", 0.2)}
-            initial="hidden"
-            whileInView={"show"}
-            viewport={{ once: false, amount: 0.6 }}
-            className="flex-1 mb-8 xl:mb-0"
-          >
-            <Image
-              className="md:rounded-[20px] max-md:w-[423px] md:h-[450px] md:w-[750px] "
-              src={"/images/limocars/side.png"}
-              width={320}
-              height={448}
-              // fill
-              priority={true}
-              alt="cars"
-            />
-          </motion.div>
+            <motion.div
+              variants={fadeIn("up", 0.2)}
+              initial="hidden"
+              whileInView={"show"}
+              viewport={{ once: false, amount: 0.6 }}
+              className="mb-8 flex-1 xl:mb-0"
+            >
+              <Image
+                className="max-md:w-[423px] md:h-[450px] md:w-[750px] md:rounded-[20px] "
+                src={"/images/limocars/side.png"}
+                width={320}
+                height={448}
+                // fill
+                priority={true}
+                alt="cars"
+              />
+            </motion.div>
           </div>
-          <div className="flex-1 flex items-center xl:justify-center ">
+          <div className="flex flex-1 items-center xl:justify-center ">
             <div className=" w-[auto] xl:max-w-[517px]">
               <motion.h2
                 variants={fadeIn("up", 0.4)}
                 initial="hidden"
                 whileInView={"show"}
                 viewport={{ once: false, amount: 0.6 }}
-                className=" text-[2.5rem] md:text-[4rem] font-bold text-center md:text-start"
+                className=" text-center text-[2.5rem] font-bold text-black dark:text-white md:text-start md:text-[4rem]"
               >
                 Cars Services Simplified
               </motion.h2>
@@ -54,7 +58,7 @@ const AboutSection = () => {
                 initial="hidden"
                 whileInView={"show"}
                 viewport={{ once: false, amount: 0.6 }}
-                className="mb-[42px] text-lg text-opacity-25 max-w-md text-center md:text-start"
+                className="mb-[42px] max-w-md text-center text-lg text-black text-opacity-25 dark:text-white md:text-start"
               >
                 Rent, choose, and repair with ease. Our convinent locations,
                 diverse car types, and reliable repair points ensure a seamless
@@ -65,46 +69,46 @@ const AboutSection = () => {
                 initial="hidden"
                 whileInView={"show"}
                 viewport={{ once: false, amount: 0.2 }}
-                className="flex justify-center lg:justify-start items-center gap-8 mb-12"
+                className="mb-12 flex items-center justify-center gap-8 lg:justify-start"
               >
-                <div className="flex justify-center items-center md:justify-start md:items-start flex-col md:w-[100px]">
-                  <MdOutlineDirectionsCar className="text-5xl text-[#f13024] mb-2" />
-                  <div className="text-3xl font-black mb-2">
+                <div className="flex flex-col items-center justify-center md:w-[100px] md:items-start md:justify-start">
+                  <MdOutlineDirectionsCar className="mb-2 text-5xl text-[#f13024]" />
+                  <div className="mb-2 text-3xl font-black text-black dark:text-white">
                     {inView ? (
                       <CountUp start={0} end={50} duration={3} delay={1} />
                     ) : null}
                     +
                   </div>
-                  <div className="uppercase text-[13px] font-semibold text-secondary ">
+                  <div className="text-[13px] font-semibold uppercase text-black dark:text-white ">
                     car <br />
                     types
                   </div>
                 </div>
 
-                <div className="flex  justify-center items-center md:justify-start md:items-start flex-col md:w-[100px]">
-                  <MdOutlineMapsHomeWork className="text-5xl text-[#f13024] mb-2" />
-                  <div className="text-3xl font-black mb-2">
+                <div className="flex  flex-col items-center justify-center md:w-[100px] md:items-start md:justify-start">
+                  <MdOutlineMapsHomeWork className="mb-2 text-5xl text-[#f13024]" />
+                  <div className="mb-2 text-3xl font-black text-black dark:text-white">
                     {inView ? (
                       <CountUp start={0} end={135} duration={3} delay={1} />
                     ) : null}
                     +
                   </div>
-                  <div className="uppercase text-[13px] font-semibold text-secondary ">
+                  <div className="text-[13px] font-semibold uppercase text-black dark:text-white ">
                     rental
                     <br />
                     outlets
                   </div>
                 </div>
 
-                <div className="flex justify-center items-center md:justify-start md:items-start flex-col md:w-[100px]">
-                  <MdOutlineBuildCircle className="text-5xl text-[#f13024] mb-2" />
-                  <div className="text-3xl font-black mb-2">
+                <div className="flex flex-col items-center justify-center md:w-[100px] md:items-start md:justify-start">
+                  <MdOutlineBuildCircle className="mb-2 text-5xl text-[#f13024]" />
+                  <div className="mb-2 text-3xl font-black text-black dark:text-white">
                     {inView ? (
                       <CountUp start={0} end={35} duration={3} delay={1} />
                     ) : null}
                     +
                   </div>
-                  <div className="uppercase text-[13px] font-semibold text-secondary ">
+                  <div className="text-[13px] font-semibold uppercase text-black dark:text-white ">
                     repair <br />
                     points
                   </div>
@@ -115,8 +119,8 @@ const AboutSection = () => {
                 initial="hidden"
                 whileInView={"show"}
                 viewport={{ once: false, amount: 0.6 }}
-                className="hidden xl:block bg-accent hover:bg-accent-hover rounded-[10px] w-full h-16 
-                uppercase font-medium text-white tracking-[2px] text-[13px] max-w-[184px]"
+                className="bg-accent hover:bg-accent-hover hidden h-16 w-full max-w-[184px] rounded-[10px] 
+                text-[13px] font-medium uppercase tracking-[2px] text-black dark:text-white xl:block"
               >
                 See all cars
               </motion.button>

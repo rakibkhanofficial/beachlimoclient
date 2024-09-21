@@ -11,7 +11,7 @@ import HeroSectionCarousel from "./CarouselSetup";
 const HeroSection = () => {
   // const searchActive = useContext(SearchContext);
   return (
-    <section className=" h-auto bg-[#b2b7c2]/10 xl:h-[70vh] " id="home">
+    <section className=" h-auto bg-[#b2b7c2]/10 dark:bg-slate-800 xl:h-[70vh] " id="home">
       <div className="container mx-auto ">
         <div className=" grid grid-cols-1 md:grid-cols-2 justify-center items-center md:justify-between ">
           <div className="text-center xl:mt-0 xl:max-w-xl xl:text-left">
@@ -20,7 +20,7 @@ const HeroSection = () => {
               initial="hidden"
               whileInView={"show"}
               viewport={{ once: false, amount: 0.6 }}
-              className=" mb-2 text-[3rem] font-bold md:text-[3rem] xl:text-[4rem] "
+              className=" mb-2 text-[3rem] text-black dark:text-white font-bold md:text-[3rem] xl:text-[4rem] "
             >
               Explore the Finest <span className="text-[#f11717]">Global</span>
               Service
@@ -30,7 +30,7 @@ const HeroSection = () => {
               initial="hidden"
               whileInView={"show"}
               viewport={{ once: false, amount: 0.6 }}
-              className="description mx-auto mb-6 max-w-[550px] xl:mx-0 xl:mb-10 "
+              className="description mx-auto text-black dark:text-white mb-6 max-w-[550px] xl:mx-0 xl:mb-10 "
             >
               Find your ideal ride for any adventure with our diverse range of
               affordable and dependable car rentals.

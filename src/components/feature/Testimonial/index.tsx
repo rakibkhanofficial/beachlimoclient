@@ -1,14 +1,17 @@
-'use client'
+"use client";
 import TestimonialSlider from "./TestimonialSlider";
 
- const Testimonial = () => {
+const Testimonial = () => {
   return (
-    <section className="section flex items-center" id="testimonials">
+    <section
+      className="section- flex items-center bg-white dark:bg-slate-800"
+      id="testimonials"
+    >
       <div className="container mx-auto ">
-        <TestimonialSlider/>
+        <TestimonialSlider />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Testimonial
+export default Testimonial;

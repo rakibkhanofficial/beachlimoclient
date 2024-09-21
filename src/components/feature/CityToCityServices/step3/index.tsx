@@ -134,7 +134,7 @@ const CitytocityOtherInformation: React.FC = () => {
           <RadioGroup
             label="Select Your Payment Method"
             color="secondary"
-            defaultValue="online"
+            defaultValue="cash"
           >
             <Radio
               onChange={(e) =>
