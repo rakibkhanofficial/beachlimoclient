@@ -153,8 +153,8 @@ const AuthModule = () => {
   const validateUserName = (username: string) => {
     const hasUppercase = /[A-Z]/.test(username);
     const hasLowercase = /[a-z]/.test(username);
-    const hasDigit = /\d/.test(username);
-    return hasUppercase && hasLowercase && hasDigit;
+    // const hasDigit = /\d/.test(username);
+    return hasUppercase && hasLowercase;
   };
 
   const isInvalidusername = useMemo(() => {
@@ -533,9 +533,9 @@ const AuthModule = () => {
                           isClearable
                           onClear={() => setUserName("")}
                           type="text"
-                          label="User Name"
+                          label="Name"
                           variant="bordered"
-                          placeholder="Enter your User Name"
+                          placeholder="Enter your Name"
                           className="text-black dark:text-white"
                           errorMessage="Please Enter a valid User Name"
                           isRequired

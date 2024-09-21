@@ -16,7 +16,8 @@ import UseCityToCity from "~@/modules/servicemodule/hocs/citytocityservice/useCi
 import { handleCitytoCityInputChange } from "~@/modules/servicemodule/_redux/actions/citytocityActions";
 import { useCustomSession } from "~@/hooks/customSessionhook";
 import PaymentForm from "~@/components/elements/paymentform";
-
+import CustomCalendar from "~@/components/elements/CustomCalender";
+import CustomTimeInput from "~@/components/elements/CustomTimeInput";
 
 type SelectedCarType = {
   car_id: number;
@@ -88,6 +89,10 @@ const CitytocityOtherInformation: React.FC = () => {
   //   return () => window.removeEventListener("scroll", handleScroll);
   // }, []);
 
+  const handleDateChange = (date: Date, formattedDate: string) => {
+    handleInputChange("pickupdate", formattedDate);
+  };
+
   return (
     <div className="relative my-5 w-full p-2 lg:p-5">
       <div className="flex flex-col items-center justify-center">
@@ -110,14 +115,14 @@ const CitytocityOtherInformation: React.FC = () => {
             value={phone}
             onChange={(e) => handleInputChange("phone", e.target.value)}
           />
-          <Input
-            value={pickupdate}
-            placeholder="Select Date"
-            label="Pick Up Date"
-            type="date"
-            className="rounded-xl"
-            onChange={(e) => handleInputChange("pickupdate", e.target.value)}
-          />
+          <div className="w-full">
+            <label className="text-gray-400">Pick Up Time</label>
+            <CustomCalendar
+              maxValue={new Date(2025, 11, 31)}
+              onChange={handleDateChange}
+              disablePastDates={false}
+            />
+          </div>
           <Input
             value={pickuptime}
             placeholder="Select Time"
@@ -129,7 +134,7 @@ const CitytocityOtherInformation: React.FC = () => {
           <RadioGroup
             label="Select Your Payment Method"
             color="secondary"
-            defaultValue="cash"
+            defaultValue="online"
           >
             <Radio
               onChange={(e) =>
@@ -151,7 +156,7 @@ const CitytocityOtherInformation: React.FC = () => {
         </div>
       </div>
       <div
-        className={`fixed bottom-0 z-50 left-0 flex w-full items-center justify-center bg-white px-2 py-2 transition-transform duration-300 dark:bg-gray-800 ${
+        className={`fixed bottom-0 left-0 z-50 flex w-full items-center justify-center bg-white px-2 py-2 transition-transform duration-300 dark:bg-gray-800 ${
           isScrolling ? "translate-y-full" : "translate-y-0"
         }`}
       >
@@ -170,79 +175,80 @@ const CitytocityOtherInformation: React.FC = () => {
           </span>
         </Button>
       </div>
-        <Modal className=" bg-gray-100 dark:bg-slate-900 " isOpen={isOpen} onOpenChange={onOpenChange} placement="auto">
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <h1 className="my-3 text-center text-xl font-semibold text-black dark:text-white">
-                  Booking Information
-                </h1>
-                <div className="flex items-center justify-center">
-                  <Image
-                    src={SelectedCarData?.car_image}
-                    alt={SelectedCarData?.car_name}
-                    height={200}
-                    width={200}
-                  />
+      <Modal
+        className=" bg-gray-100 dark:bg-slate-900 "
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement="auto"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <h1 className="my-3 text-center text-xl font-semibold text-black dark:text-white">
+                Booking Information
+              </h1>
+              <div className="flex items-center justify-center">
+                <Image
+                  src={SelectedCarData?.car_image}
+                  alt={SelectedCarData?.car_name}
+                  height={200}
+                  width={200}
+                />
+              </div>
+              <div className="mx-2 grid grid-cols-2 gap-1 rounded-lg border p-2 dark:border-gray-600">
+                <p className="text-black dark:text-white">Name:</p>
+                <p className="text-black dark:text-white">{name}</p>
+                <p className="text-black dark:text-white">Phone:</p>
+                <p className="text-black dark:text-white">{phone}</p>
+                <p className="text-black dark:text-white">Car Name:</p>
+                <p className="text-black dark:text-white">
+                  {SelectedCarData.car_name}
+                </p>
+                <p className="text-black dark:text-white">Pickup Address:</p>
+                <p className="text-black dark:text-white">{pickupAddress}</p>
+                <p className="text-black dark:text-white">Drop Off Address:</p>
+                <p className="text-black dark:text-white">{dropoffAddress}</p>
+                <p className="text-black dark:text-white">
+                  PickUp Time & Date:
+                </p>
+                <p className="text-black dark:text-white">
+                  {pickuptime}, {pickupdate}
+                </p>
+                <p className="text-black dark:text-white">Total Fare Price:</p>
+                <p className="text-black dark:text-white">
+                  {FarePriceCalculationBymiles} $
+                </p>
+                <p className="text-black dark:text-white">Payment Method:</p>
+                <p className="text-black dark:text-white">{paymentmethod}</p>
+              </div>
+              {paymentmethod === "online" ? (
+                <PaymentForm
+                  amount={parseFloat(FarePriceCalculationBymiles)}
+                  bookingData={onlinebookingData}
+                  currentStep={step}
+                />
+              ) : (
+                <div className="my-3 flex w-full items-center justify-center">
+                  <Button
+                    className="mt-5 w-[80%] lg:w-[50%]"
+                    color="success"
+                    onPress={handleCreateBooking}
+                    isDisabled={!name || !phone || !pickupdate || !pickuptime}
+                  >
+                    <span className="text-white">
+                      {isBooking ? (
+                        <Spinner color="primary" />
+                      ) : (
+                        "Confirm Booking"
+                      )}
+                    </span>
+                  </Button>
                 </div>
-                <div className="mx-2 grid grid-cols-2 gap-1 rounded-lg border p-2 dark:border-gray-600">
-                  <p className="text-black dark:text-white">Name:</p>
-                  <p className="text-black dark:text-white">{name}</p>
-                  <p className="text-black dark:text-white">Phone:</p>
-                  <p className="text-black dark:text-white">{phone}</p>
-                  <p className="text-black dark:text-white">Car Name:</p>
-                  <p className="text-black dark:text-white">
-                    {SelectedCarData.car_name}
-                  </p>
-                  <p className="text-black dark:text-white">Pickup Address:</p>
-                  <p className="text-black dark:text-white">{pickupAddress}</p>
-                  <p className="text-black dark:text-white">
-                    Drop Off Address:
-                  </p>
-                  <p className="text-black dark:text-white">{dropoffAddress}</p>
-                  <p className="text-black dark:text-white">
-                    PickUp Time & Date:
-                  </p>
-                  <p className="text-black dark:text-white">
-                    {pickuptime}, {pickupdate}
-                  </p>
-                  <p className="text-black dark:text-white">
-                    Total Fare Price:
-                  </p>
-                  <p className="text-black dark:text-white">
-                    {FarePriceCalculationBymiles} $
-                  </p>
-                  <p className="text-black dark:text-white">Payment Method:</p>
-                  <p className="text-black dark:text-white">{paymentmethod}</p>
-                </div>
-                {paymentmethod === "online" ? (
-                  <PaymentForm
-                    amount={parseFloat(FarePriceCalculationBymiles)}
-                    bookingData={onlinebookingData}
-                    currentStep={step}
-                  />
-                ) : (
-                  <div className="my-3 flex w-full items-center justify-center">
-                    <Button
-                      className="mt-5 w-[80%] lg:w-[50%]"
-                      color="success"
-                      onPress={handleCreateBooking}
-                      isDisabled={!name || !phone || !pickupdate || !pickuptime}
-                    >
-                      <span className="text-white">
-                        {isBooking ? (
-                          <Spinner color="primary" />
-                        ) : (
-                          "Confirm Booking"
-                        )}
-                      </span>
-                    </Button>
-                  </div>
-                )}
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+              )}
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
