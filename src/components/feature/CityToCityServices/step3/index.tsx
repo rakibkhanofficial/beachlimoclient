@@ -116,7 +116,7 @@ const CitytocityOtherInformation: React.FC = () => {
             onChange={(e) => handleInputChange("phone", e.target.value)}
           />
           <div className="w-full">
-            <label className="text-gray-400">Pick Up Time</label>
+            <label className="text-gray-400">Pick Up Date</label>
             <CustomCalendar
               maxValue={new Date(2025, 11, 31)}
               onChange={handleDateChange}

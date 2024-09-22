@@ -145,7 +145,7 @@ const UseScheduleRide = () => {
       dropoffLocationMapLink: dropoffLocation,
       hour: hour,
       distance: distance,
-      paymentMethod: paymentmethod,
+      paymentMethod: "cash",
       name: name,
       paymentStatus: "Pending",
       rideStatus: "Pending",
