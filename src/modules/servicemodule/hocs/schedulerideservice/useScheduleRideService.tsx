@@ -122,6 +122,7 @@ const UseScheduleRide = () => {
     hour: hour,
     distance: distance,
     paymentMethod: paymentmethod,
+    rideStatus: "Pending",
   };
 
   const handleCreateBooking = async () => {
@@ -146,7 +147,8 @@ const UseScheduleRide = () => {
       distance: distance,
       paymentMethod: paymentmethod,
       name: name,
-      paymentStatus: "pending",
+      paymentStatus: "Pending",
+      rideStatus: "Pending",
     };
     try {
       const response = await postMethod({

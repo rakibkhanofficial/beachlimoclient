@@ -125,6 +125,7 @@ const UseCityToCity = () => {
     hour: hour,
     distance: distance,
     paymentMethod: paymentmethod,
+    rideStatus: "Pending",
   };
 
   const handleCreateBooking = async () => {
@@ -149,7 +150,8 @@ const UseCityToCity = () => {
       distance: distance,
       paymentMethod: paymentmethod,
       name: name,
-      paymentStatus: "pending"
+      paymentStatus: "Pending",
+      rideStatus: "Pending",
     };
 
     try {

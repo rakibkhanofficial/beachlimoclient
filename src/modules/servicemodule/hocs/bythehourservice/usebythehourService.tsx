@@ -7,7 +7,7 @@ import {
 import { postMethod } from "../../../../utils/api/postMethod";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { endPoints } from '../../../../utils/api/route';
+import { endPoints } from "../../../../utils/api/route";
 import { useCustomSession } from "~@/hooks/customSessionhook";
 import { handleAuthSubmitting } from "~@/_redux/actions/authopen";
 
@@ -41,9 +41,9 @@ type selectedCarType = {
 const UseBytheHour = () => {
   const dispatch = useAppDispatch();
   const { session } = useCustomSession();
-  const [isBooking, setIsbooking] = useState(false)
+  const [isBooking, setIsbooking] = useState(false);
 
-  const SelectedCarData: selectedCarType  = useAppSelector(
+  const SelectedCarData: selectedCarType = useAppSelector(
     (state) => state.selectedCarDataReducer?.selectedCaradata?.SelectedcarData,
   );
 
@@ -71,7 +71,7 @@ const UseBytheHour = () => {
     luggage = "",
     passenger = "",
     hour = 0,
-    paymentmethod = ""
+    paymentmethod = "",
   } = cityToCityInput || {};
 
   const handleInputChange = (name: string, value: string) => {
@@ -122,10 +122,11 @@ const UseBytheHour = () => {
     hour: hour,
     distance: distance,
     paymentMethod: paymentmethod,
+    rideStatus: "Pending",
   };
 
   const handleCreateBooking = async () => {
-    setIsbooking(true)
+    setIsbooking(true);
     const CashbookingData = {
       carId: SelectedCarData?.car_id,
       tripType: triptype,
@@ -146,7 +147,8 @@ const UseBytheHour = () => {
       distance: distance,
       paymentMethod: paymentmethod,
       name: name,
-      paymentStatus: "pending"
+      paymentStatus: "Pending",
+      rideStatus: "Pending",
     };
     try {
       const response = await postMethod({
@@ -154,14 +156,14 @@ const UseBytheHour = () => {
         postData: CashbookingData,
       });
       if (response?.data?.statusCode === 201) {
-        setIsbooking(false)
+        setIsbooking(false);
         dispatch(handleCitytocityStepNext(step + 1));
       } else {
-        setIsbooking(false)
+        setIsbooking(false);
         toast.error("Please try Again");
       }
     } catch (error) {
-      setIsbooking(false)
+      setIsbooking(false);
       console.error(error);
       toast.error("Please try Again");
     }
@@ -191,7 +193,7 @@ const UseBytheHour = () => {
     handleCreateBooking,
     onlinebookingData,
     step,
-    isBooking
+    isBooking,
   };
 };
 
