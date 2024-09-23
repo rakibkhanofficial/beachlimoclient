@@ -11,7 +11,7 @@ import HeroSectionCarousel from "./CarouselSetup";
 const HeroSection = () => {
   // const searchActive = useContext(SearchContext);
   return (
-    <section className=" h-auto bg-[#b2b7c2]/10 dark:bg-slate-800 xl:h-[70vh] " id="home">
+    <section className=" h-auto " id="home">
       <div className="container mx-auto ">
         <div className=" grid grid-cols-1 md:grid-cols-2 justify-center items-center md:justify-between ">
           <div className="text-center xl:mt-0 xl:max-w-xl xl:text-left">
@@ -95,7 +95,7 @@ const HeroSection = () => {
           </motion.div>
         </div>
       )} */}
-      <div className=" mt-10 ">
+      <div>
         <OurService />
       </div>
     </section>

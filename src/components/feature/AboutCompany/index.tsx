@@ -17,7 +17,7 @@ const AboutSection = () => {
 
   return (
     <section
-      className=" my-20 flex h-[90vh] items-center justify-center bg-white  dark:bg-slate-800 lg:my-0 2xl:mt-40"
+      className=" flex h-[90vh] items-center justify-center"
       id="services"
       ref={ref}
     >

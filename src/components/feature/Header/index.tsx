@@ -98,16 +98,6 @@ const HeaderLandingPage = () => {
           <NavbarItem>
             <Link
               className="text-black dark:text-white"
-              color="foreground"
-              onClick={handleScroll}
-              href="#brand"
-            >
-              Brands
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link
-              className="text-black dark:text-white"
               onClick={handleScroll}
               color="foreground"
               href="#services"
@@ -133,6 +123,16 @@ const HeaderLandingPage = () => {
               href="#download"
             >
               Download
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link
+              className="text-black dark:text-white"
+              color="foreground"
+              onClick={handleScroll}
+              href="#brand"
+            >
+              Brands
             </Link>
           </NavbarItem>
         </NavbarContent>

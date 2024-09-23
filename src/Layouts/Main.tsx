@@ -11,7 +11,7 @@ import Whychoose from "~@/components/feature/whychoose";
 
 const Main = () => {
   return (
-    <div className=" w-full bg-white text-black ">
+    <div className=" w-full bg-white dark:bg-slate-800 ">
       <HeroSection/>
       {/* <Collections />
       <OurBrands/> */}
