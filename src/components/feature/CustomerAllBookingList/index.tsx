@@ -32,7 +32,7 @@ import BookingStatus from "./bookingStatus";
 import ListSkeleton from "../commontableListSkeleton/tableListskeleton";
 import { motion } from "framer-motion";
 import { IoIosSearch } from "react-icons/io";
-import { FaCheckSquare, FaEye } from "react-icons/fa";
+import { FaCheckSquare, FaEye, FaFilter } from "react-icons/fa";
 import { formatDate } from "~@/utils/formatdate";
 
 type userBookingListType = {
@@ -64,6 +64,7 @@ const BookingListComponent = () => {
   const limit = 10;
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [statusmodalShow, setModalShow] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string>("");
   const [status, setStatus] = useState("");
   const [sortBy, setSortBy] = useState<string>("newest");
 
@@ -91,13 +92,24 @@ const BookingListComponent = () => {
     void fetchUserBookingList();
   }, []);
 
-  const filteredProducts = userBookingList.filter(
-    (product) =>
-      product.dropoffLocationAddress
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) &&
-      product.rideStatus.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const statusOptions = [
+    "Pending",
+    "Accepted",
+    "Assigned",
+    "Completed",
+    "Canceled",
+  ];
+
+  const filteredProducts = userBookingList.filter((product) => {
+    const matchesSearch =
+      product.dropoffLocationAddress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.rideStatus.toLowerCase().includes(searchQuery.toLowerCase());
+  
+    const matchesStatusFilter =
+      statusFilter === "" || product.rideStatus === statusFilter;
+  
+    return matchesSearch && matchesStatusFilter;
+  });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortBy === "newest") {
@@ -112,7 +124,6 @@ const BookingListComponent = () => {
     currentPage * limit,
   );
 
-  const statusOptions = ["all", "active", "inactive"];
   const sortOptions = [
     { label: "Newest First", value: "newest" },
     { label: "Oldest First", value: "oldest" },
@@ -122,11 +133,11 @@ const BookingListComponent = () => {
     switch (status) {
       case "Pending":
         return "warning";
-      case "Approved":
+      case "Accepted":
         return "primary";
       case "Assigned":
         return "secondary";
-      case "Complete":
+      case "Completed":
         return "success";
       case "Canceled":
         return "danger";
@@ -157,14 +168,14 @@ const BookingListComponent = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gray-50 px-2 py-2 dark:bg-zinc-900"
+      className="min-h-screen bg-white md:px-2 py-2 dark:bg-zinc-900"
     >
       <Card shadow="none" className="mx-auto">
-        <CardHeader className="flex flex-col items-center justify-between space-y-4 px-6 py-8 lg:flex-row sm:space-y-0">
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
+        <CardHeader className="flex flex-col items-center justify-between space-y-4 px-6 py-8 sm:space-y-0 lg:flex-row">
+          <h1 className="my-4 text-2xl font-bold text-gray-800 dark:text-white lg:my-0 xl:text-3xl 2xl:text-4xl">
             Booking List
           </h1>
-          <div className=" flex flex-col gap-3 lg:flex-row  items-center space-x-4">
+          <div className=" flex flex-col justify-between gap-3 lg:flex-row lg:items-center lg:space-x-4">
             <Input
               startContent={<IoIosSearch fontSize="1.5rem" />}
               placeholder="Search..."
@@ -172,6 +183,30 @@ const BookingListComponent = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-64"
             />
+            <div className=" flex justify-between lg:justify-center lg:gap-3 ">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button endContent={<FaFilter />} color="secondary">
+                  Filter by Status
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                selectionMode="single"
+                selectedKeys={new Set([statusFilter])}
+                onSelectionChange={(keys) => {
+                  const selectedKey = Array.from(keys)[0];
+                  if (selectedKey) {
+                    setStatusFilter(selectedKey as string);
+                  }
+                }}
+              >
+                {statusOptions.map((status) => (
+                  <DropdownItem key={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
             <Dropdown>
               <DropdownTrigger>
                 <Button variant="bordered" color="default">
@@ -193,6 +228,7 @@ const BookingListComponent = () => {
                 ))}
               </DropdownMenu>
             </Dropdown>
+            </div>
           </div>
         </CardHeader>
         <CardBody>
@@ -204,7 +240,7 @@ const BookingListComponent = () => {
           <Table
             aria-label="Registered product list table"
             className="min-w-full"
-            shadow="none"
+            shadow="sm"
             isHeaderSticky
           >
             <TableHeader>

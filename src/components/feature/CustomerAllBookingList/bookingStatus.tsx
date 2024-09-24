@@ -29,7 +29,7 @@ const BookingStatus = ({ bookingStatus }: BookingStatusType) => {
         percentage = 66.66;
         currentStep = 3;
         break;
-      case "Complete":
+      case "Completed":
         percentage = 100;
         currentStep = 4;
         break;
@@ -52,7 +52,7 @@ const BookingStatus = ({ bookingStatus }: BookingStatusType) => {
   const stepInfo = mapOrderStatusToStep(bookingStatus);
 
   return (
-    <div className="rounded-lg bg-gray-50 p-5 text-black shadow-sm dark:bg-zinc-800 dark:text-white">
+    <div className="rounded-lg bg-gray-50 py-5 text-black shadow-sm dark:bg-zinc-900 dark:text-white">
       {bookingStatus ? (
         <div>
           <div className="relative flex w-full items-center justify-between">
@@ -63,7 +63,7 @@ const BookingStatus = ({ bookingStatus }: BookingStatusType) => {
                 width: `${stepInfo.percentage}%`,
               }}
             ></div>
-            {["Pending", "Accepted", "Assigned", "Complete"].map(
+            {["Pending", "Accepted", "Assigned", "Completed"].map(
               (status, stepIndex) => (
                 <div
                   key={stepIndex}
