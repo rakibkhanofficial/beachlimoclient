@@ -47,7 +47,8 @@ export const endPoints = {
   Customer: {
     // old api versions
     CreateBooking: "customer/createCarRental",
-    getRentAllByuserId: (userId: string) => `customer/rentalbyuser/${userId}`,
+    getRentAllByuserId: (page: number, limit: number) =>
+      `car-bookings/carBookingsbyuser/${page}/${limit}`,
     getPendingRentAllByuserId: (userId: string) =>
       `customer/pendingrentalbyuser/${userId}`,
     getAcceptedRentAllByuserId: (userId: string) =>
@@ -66,9 +67,9 @@ export const endPoints = {
 
     // new api versions
     createBookingByCash: "car-bookings/createbookingbycash",
-    createPaymentIntent: '/payments/create-payment-intent',
-    createBookingAfterPayment: '/payments/create-booking-after-payment',
-    confirmPayment: '/payments/confirm-payment',
+    createPaymentIntent: "/payments/create-payment-intent",
+    createBookingAfterPayment: "/payments/create-booking-after-payment",
+    confirmPayment: "/payments/confirm-payment",
   },
   Admin: {
     allbookinglistforadmin: "admin/allrentaldata",

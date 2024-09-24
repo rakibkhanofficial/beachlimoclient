@@ -1,41 +1,83 @@
-import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { IuserBookingListType } from "~@/types";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
-import Link from "next/link";
 import {
-  Spinner,
+  Input,
+  Button,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Chip,
+  Card,
+  CardBody,
+  CardHeader,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Tooltip,
+  Pagination,
+  Image,
+  Link,
   Modal,
   ModalContent,
-  ModalFooter,
-  Button,
   ModalBody,
+  ModalFooter,
 } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
-import { MdRemoveRedEye } from "react-icons/md";
 import BookingStatus from "./bookingStatus";
+import ListSkeleton from "../commontableListSkeleton/tableListskeleton";
+import { motion } from "framer-motion";
+import { IoIosSearch } from "react-icons/io";
+import { FaCheckSquare, FaEye } from "react-icons/fa";
+import { formatDate } from "~@/utils/formatdate";
+
+type userBookingListType = {
+  id: number;
+  tripType: string;
+  rideStatus: string;
+  carImage: string;
+  totalBookingPrice: string;
+  paymentStatus: string;
+  paymentMethod: string;
+  pickupLocationAddress: string;
+  pickupLocationMapLink: string;
+  pickupDate: string;
+  pickupTime: string;
+  dropoffLocationAddress: string;
+  dropoffLocationMapLink: string;
+  hour: string;
+  distance: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 const BookingListComponent = () => {
-  const [userBookingList, setBookingList] = useState<IuserBookingListType[]>(
+  const [userBookingList, setUserBookingList] = useState<userBookingListType[]>(
     [],
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { data: session } = useSession();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const limit = 10;
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [statusmodalShow, setModalShow] = useState(false);
   const [status, setStatus] = useState("");
+  const [sortBy, setSortBy] = useState<string>("newest");
 
   useEffect(() => {
-    // @ts-expect-error type error is not solved
-    const UserId = session?.user?._id;
     const fetchUserBookingList = async () => {
       setIsLoading(true);
       try {
         const response = await getMethod(
-          endPoints.Customer.getRentAllByuserId(UserId),
+          endPoints.Customer.getRentAllByuserId(currentPage, limit),
         );
         if (response?.data?.statusCode === 200) {
-          setBookingList(response?.data?.data as IuserBookingListType[]);
+          setUserBookingList(
+            response?.data?.data?.data as userBookingListType[],
+          );
           setIsLoading(false);
         } else {
           setIsLoading(false);
@@ -46,199 +88,247 @@ const BookingListComponent = () => {
         console.error(error);
       }
     };
-    if (UserId) {
-      void fetchUserBookingList();
+    void fetchUserBookingList();
+  }, []);
+
+  const filteredProducts = userBookingList.filter(
+    (product) =>
+      product.dropoffLocationAddress
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
+      product.rideStatus.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === "newest") {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    } else {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     }
-    // @ts-expect-error type error is not solved
-  }, [session?.user?._id]);
+  });
+
+  const paginatedProducts = sortedProducts.slice(
+    (currentPage - 1) * limit,
+    currentPage * limit,
+  );
+
+  const statusOptions = ["all", "active", "inactive"];
+  const sortOptions = [
+    { label: "Newest First", value: "newest" },
+    { label: "Oldest First", value: "oldest" },
+  ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Pending":
+        return "warning";
+      case "Approved":
+        return "primary";
+      case "Assigned":
+        return "secondary";
+      case "Complete":
+        return "success";
+      case "Canceled":
+        return "danger";
+      default:
+        return "default";
+    }
+  };
+
+  const handleDropDown = (value: string) => {
+    setSortBy(value);
+  };
 
   const handleOpenStatusModal = (status: string) => {
     setStatus(status);
     setModalShow(true);
   };
 
+  if (isLoading) {
+    return (
+      <div>
+        <ListSkeleton />
+      </div>
+    );
+  }
+
   return (
-    <div className=" min-h-screen bg-white px-2 dark:bg-slate-900 lg:px-10">
-      {isLoading === true ? (
-        <div className=" flex min-h-screen items-center justify-center ">
-          <Spinner size="lg" label="Loading..." color="warning" />
-        </div>
-      ) : (
-        <div>
-          <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
-            All Booking List
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gray-50 px-2 py-2 dark:bg-zinc-900"
+    >
+      <Card shadow="none" className="mx-auto">
+        <CardHeader className="flex flex-col items-center justify-between space-y-4 px-6 py-8 lg:flex-row sm:space-y-0">
+          <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
+            Booking List
           </h1>
-          <div className=" hidden lg:inline ">
-            <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
-              <p className=" col-span-1 text-center text-black dark:text-white">
-                trip No
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                Name
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                Phone
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                PickUp time
-              </p>
-              <p className=" col-span-1 text-center text-black dark:text-white">
-                Status
-              </p>
-              <p className=" col-span-3 text-center text-black dark:text-white">
-                Pick Up Adress
-              </p>
-              <p className=" col-span-1 text-center text-black dark:text-white">
-                Action
-              </p>
-            </div>
-            <div className=" my-4">
-              {userBookingList.length > 0 ? (
-                userBookingList?.map((data, index) => (
-                  <div
-                    key={index}
-                    className=" mb-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  >
-                    <p className=" col-span-1 text-center text-black dark:text-white">
-                      {index + 1}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.renterName}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.renterPhone}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.pickupDate.slice(0, 10)}
-                      {convertTo12HourFormat(data?.pickuptime)}
-                    </p>
-                    {data?.status === "pending" ? (
-                      <p className=" col-span-1 text-center text-blue-500">
-                        {data?.status}
-                      </p>
-                    ) : (
-                      <p className=" col-span-1 text-center text-green-500">
-                        {data?.status}
-                      </p>
-                    )}
+          <div className=" flex flex-col gap-3 lg:flex-row  items-center space-x-4">
+            <Input
+              startContent={<IoIosSearch fontSize="1.5rem" />}
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-64"
+            />
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="bordered" color="default">
+                  Sort by Date
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                selectionMode="single"
+                selectedKeys={new Set([sortBy])}
+                onSelectionChange={(keys) => {
+                  const selectedKey = Array.from(keys)[0];
+                  if (selectedKey) {
+                    handleDropDown(selectedKey as string);
+                  }
+                }}
+              >
+                {sortOptions.map((option) => (
+                  <DropdownItem key={option.value}>{option.label}</DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        </CardHeader>
+        <CardBody>
+          <div className="mb-4 flex justify-between">
+            <p className="text-sm text-gray-700 dark:text-gray-200">
+              Total Products: {userBookingList.length}
+            </p>
+          </div>
+          <Table
+            aria-label="Registered product list table"
+            className="min-w-full"
+            shadow="none"
+            isHeaderSticky
+          >
+            <TableHeader>
+              <TableColumn>SL No</TableColumn>
+              <TableColumn>Car Image</TableColumn>
+              <TableColumn>Trip Type</TableColumn>
+              <TableColumn>Status</TableColumn>
+              <TableColumn>Pick up</TableColumn>
+              <TableColumn>Drop off</TableColumn>
+              <TableColumn>Distance: Hour</TableColumn>
+              <TableColumn>Date: Time</TableColumn>
+              <TableColumn>Booking price</TableColumn>
+              <TableColumn>Actions</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {paginatedProducts.map((product, index) => (
+                <TableRow
+                  key={index}
+                  className="hover:rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  <TableCell>{index + 1 + (currentPage - 1) * limit}</TableCell>
+                  <TableCell>
+                    <Image
+                      src={product.carImage}
+                      alt={"car image"}
+                      width={70}
+                      height={70}
+                    />
+                  </TableCell>
+                  <TableCell>{product.tripType}</TableCell>
+                  <TableCell>
+                    <Chip
+                      startContent={<FaCheckSquare size={18} />}
+                      color={getStatusColor(product.rideStatus)}
+                      variant={product.rideStatus ? "faded" : "flat"}
+                    >
+                      {product.rideStatus}
+                    </Chip>
+                  </TableCell>
+                  <TableCell>
                     <Link
-                      target="_blank"
-                      href={data?.pickuplocationMapLink}
-                      className=" col-span-3 cursor-pointer text-center text-black dark:text-white"
+                      isExternal={true}
+                      href={product.pickupLocationMapLink}
+                      showAnchorIcon
                     >
-                      {data?.pickuplocationAdress}
+                      {product.pickupLocationAddress.slice(0, 10)}
                     </Link>
-                    <div className=" col-span-1 text-center text-black dark:text-white">
-                      <button
-                        onClick={() => handleOpenStatusModal(data?.status)}
-                        title="view"
-                        type="button"
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      isExternal={true}
+                      href={product.dropoffLocationMapLink}
+                      showAnchorIcon
+                    >
+                      {product.dropoffLocationAddress.slice(0, 10)}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    {product.distance} Miles - {product.hour} hours
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <span>{formatDate(product.pickupDate)}</span>
+                      <span>{convertTo12HourFormat(product.pickupTime)}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>${product.totalBookingPrice}</TableCell>
+                  <TableCell>
+                    <Tooltip content="View Details">
+                      <Button
+                        color="primary"
+                        size="sm"
+                        onPress={() => {
+                          handleOpenStatusModal(product?.rideStatus);
+                        }}
+                        isIconOnly
                       >
-                        <MdRemoveRedEye />
-                      </button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  No Booking Data Aailable Please Book your car!
-                </div>
-              )}
-            </div>
-            <Modal
-              backdrop="blur"
-              isOpen={statusmodalShow}
-              onOpenChange={() => setModalShow(!statusmodalShow)}
-              placement="auto"
-              size="4xl"
-            >
-              <ModalContent>
-                <>
-                  <ModalBody>
-                    <h1 className="mb-6 text-center text-2xl font-semibold text-black dark:text-white">
-                      Your Booking Status
-                    </h1>
-                    <BookingStatus bookingStatus={status} />
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button
-                      color="danger"
-                      variant="light"
-                      onPress={() => setModalShow(!statusmodalShow)}
-                    >
-                      Close
-                    </Button>
-                  </ModalFooter>
-                </>
-              </ModalContent>
-            </Modal>
+                        <FaEye />
+                      </Button>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="my-3 flex items-center justify-center">
+            <Pagination
+              initialPage={1}
+              showControls
+              total={Math.ceil(paginatedProducts.length / limit)}
+              page={currentPage}
+              onChange={setCurrentPage}
+            />
           </div>
-          <div className=" inline lg:hidden ">
-            <div className=" grid grid-cols-1 text-black dark:text-white md:grid-cols-2 md:gap-2 ">
-              {userBookingList.length > 0 ? (
-                userBookingList?.map((data, index) => (
-                  <div>
-                    <div
-                      key={index}
-                      className=" mb-3 grid grid-cols-12 rounded-md border dark:border-slate-800 "
-                    >
-                      <div className=" col-span-4 flex flex-col gap-3 border-r px-2 py-2 text-sm dark:border-slate-800 ">
-                        <p className=" text-black dark:text-white">Name:</p>
-                        <p className=" text-black dark:text-white">Phone:</p>
-                        <p className=" text-black dark:text-white">
-                          Pickup Adress:
-                        </p>
-                        <p className=" text-black dark:text-white">
-                          Pickup Date:
-                        </p>
-                        <p className=" text-black dark:text-white">Status:</p>
-                      </div>
-                      <div className=" col-span-8 flex flex-col gap-2 py-2 pl-2 text-sm ">
-                        <p className=" text-black dark:text-white">
-                          {data?.renterName}
-                        </p>
-                        <p className=" text-black dark:text-white">
-                          {data?.renterPhone}
-                        </p>
-                        <Link
-                          target="_blank"
-                          href={data?.pickuplocationMapLink}
-                          className=" col-span-3 cursor-pointer text-center text-black dark:text-white"
-                        >
-                          {data?.pickuplocationAdress}
-                        </Link>
-                        <p className=" text-black dark:text-white">
-                          {data?.pickupDate.slice(0, 10)},{" "}
-                          {convertTo12HourFormat(data?.pickuptime)}
-                        </p>
-                        {data?.status === "pending" ? (
-                          <p className=" text-green-500">{data?.status}</p>
-                        ) : (
-                          <p className=" text-blue-500">{data?.status}</p>
-                        )}
-                        <div className="text-center text-black dark:text-white">
-                          <button
-                            onClick={() => handleOpenStatusModal(data?.status)}
-                            title="view"
-                            type="button"
-                          >
-                            <MdRemoveRedEye />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  No Booking Data Aailable Please Book your car!
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        </CardBody>
+      </Card>
+      <Modal
+        backdrop="blur"
+        isOpen={statusmodalShow}
+        onOpenChange={() => setModalShow(!statusmodalShow)}
+        placement="auto"
+        size="4xl"
+      >
+        <ModalContent>
+          <>
+            <ModalBody>
+              <h1 className="mb-6 text-center text-2xl font-semibold text-black dark:text-white">
+                Your Booking Status
+              </h1>
+              <BookingStatus bookingStatus={status} />
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="danger"
+                variant="light"
+                onPress={() => setModalShow(!statusmodalShow)}
+              >
+                Close
+              </Button>
+            </ModalFooter>
+          </>
+        </ModalContent>
+      </Modal>
+    </motion.div>
   );
 };
 
