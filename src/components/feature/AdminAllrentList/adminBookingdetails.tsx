@@ -1,25 +1,32 @@
+import React, { useEffect, useState } from "react";
 import {
-  Button,
   Modal,
-  ModalBody,
   ModalContent,
+  ModalBody,
   ModalFooter,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
   Tabs,
   Tab,
-  Card,
-  CardBody,
-  CardHeader,
   Chip,
   Select,
   SelectItem,
-  Divider,
   Image,
+  Link,
+  Skeleton,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import {
+  FaCar,
+  FaInfoCircle,
+  FaUser,
+  FaMapMarkerAlt,
+  FaClock,
+  FaDollarSign,
+} from "react-icons/fa";
 import { getMethod } from "~@/utils/api/getMethod";
-import { endPoints } from "../../../utils/api/route";
-import BookingDetailsSkeleton from "./bookingDetailsSkeleton";
-import { FaCar, FaInfoCircle, FaUser } from "react-icons/fa";
+import { endPoints } from "~@/utils/api/route";
 
 type PropsType = {
   selectedId: number | null;
@@ -77,14 +84,14 @@ interface BookingData {
   user: User;
 }
 
-const AdminBookinglistDetails = ({
+const AdminBookingDetailsModal = ({
   selectedId,
   ismodalShow,
   setModalShow,
   isStatusUpdate,
   setIsStatusUpdate,
 }: PropsType) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [bookingDetails, setBookingDetails] = useState<BookingData>(
     {} as BookingData,
   );
@@ -115,31 +122,147 @@ const AdminBookinglistDetails = ({
   }, [selectedId]);
 
   const handleStatusChange = (value: string) => {
-    // Implement status change logic here
     console.log("New status:", value);
   };
 
+  const BookingInfoTab = () => (
+    <div className="space-y-6">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="h-56 w-full rounded-lg object-contain shadow-lg">
+          <Image
+            src={bookingDetails.carImage}
+            alt="Car Image"
+            className="h-56 w-full rounded-lg object-contain shadow-lg"
+          />
+        </div>
+        <div className="relative h-56 w-full rounded-lg shadow-lg">
+          <div className="absolute left-1 top-28 lg:top-20 rounded-lg bg-opacity-90 p-3 shadow-md">
+            <p className="flex items-center text-3xl font-bold text-green-600">
+              <FaDollarSign className="mr-1" />
+              {bookingDetails.totalBookingPrice}
+            </p>
+            <p className="text-sm text-gray-600">
+              {bookingDetails.paymentStatus}
+            </p>
+          </div>
+          <div className="lg:flex items-center justify-between px-1">
+            <div className="flex lg:flex-col gap-3 lg:gap-2">
+              <p className="mb-2 text-lg font-semibold">Ride Status</p>
+              <Chip
+                color={
+                  bookingDetails.rideStatus === "Completed"
+                    ? "success"
+                    : "warning"
+                }
+                variant="shadow"
+                size="lg"
+              >
+                {bookingDetails.rideStatus}
+              </Chip>
+            </div>
+            <Select
+              label="Change Ride Status"
+              placeholder="Select new status"
+              selectedKeys={[bookingDetails.rideStatus]}
+              onChange={(e) => handleStatusChange(e.target.value)}
+              className="max-w-xs"
+            >
+              {["Pending", "Accepted", "Assigned", "Completed", "Canceled"].map(
+                (status) => (
+                  <SelectItem
+                    className="text-black dark:text-white"
+                    key={status}
+                    value={status}
+                  >
+                    {status}
+                  </SelectItem>
+                ),
+              )}
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <InfoCard
+          icon={<FaMapMarkerAlt className="text-blue-500" />}
+          title="Pickup"
+          content={bookingDetails.pickupLocationAddress}
+          link={bookingDetails.pickupLocationMapLink}
+        />
+        <InfoCard
+          icon={<FaMapMarkerAlt className="text-red-500" />}
+          title="Drop-off"
+          content={bookingDetails.dropoffLocationAddress}
+          link={bookingDetails.dropoffLocationMapLink}
+        />
+        <InfoCard
+          icon={<FaClock className="text-orange-500" />}
+          title="Date & Time"
+          content={`${bookingDetails.pickupDate} at ${bookingDetails.pickupTime}`}
+        />
+        <InfoCard
+          icon={<FaCar className="text-purple-500" />}
+          title="Trip Details"
+          content={`${bookingDetails.tripType} • ${bookingDetails.distance} • ${bookingDetails.hour} hours`}
+        />
+      </div>
+    </div>
+  );
+
+  const CarInfoTab = () => (
+    <div className="space-y-4 ">
+      <h3 className="mb-4 text-xl font-semibold">Vehicle Information</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <InfoItem label="Name" value={bookingDetails.car?.name} />
+        <InfoItem label="Model" value={bookingDetails.car?.model} />
+        <InfoItem label="Year" value={`${bookingDetails.car?.year}`} />
+        <InfoItem label="Make" value={bookingDetails.car?.make} />
+        <InfoItem
+          label="Seating Capacity"
+          value={`${bookingDetails.car?.seatingCapacity}`}
+        />
+        <InfoItem label="Fuel Type" value={bookingDetails.car?.fuelType} />
+      </div>
+    </div>
+  );
+
+  const UserInfoTab = () => (
+    <div className="space-y-4">
+      <h3 className="mb-4 text-xl font-semibold">Customer Information</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <InfoItem label="Name" value={bookingDetails.user?.name} />
+        <InfoItem label="Email" value={bookingDetails.user?.email} />
+        <InfoItem label="Phone" value={bookingDetails.user?.phone} />
+      </div>
+    </div>
+  );
+
   return (
-    <div>
-      <Modal
-        backdrop="blur"
-        isOpen={ismodalShow}
-        onOpenChange={() => setModalShow(!ismodalShow)}
-        placement="auto"
-        size="5xl"
-        scrollBehavior="inside"
-      >
-        <ModalContent>
-          <ModalBody className="p-0">
-            <Card className="w-full">
-              <CardHeader className="flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 p-4 text-white">
-                <h1 className="text-3xl font-bold">Booking Details</h1>
-              </CardHeader>
-              <CardBody>
+    <Modal
+      backdrop="blur"
+      isOpen={ismodalShow}
+      onOpenChange={() => setModalShow(!ismodalShow)}
+      placement="auto"
+      size="5xl"
+      scrollBehavior="inside"
+    >
+      <ModalContent>
+        <ModalBody className="p-0">
+          <Card className="w-full">
+            <CardHeader className="flex flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+              <h1 className="text-3xl font-bold">Booking Details</h1>
+              <p className="mt-2 text-lg">Booking ID: #{bookingDetails.id}</p>
+            </CardHeader>
+            <CardBody>
+              {isLoading ? (
+                <BookingDetailsSkeleton />
+              ) : (
                 <Tabs
                   aria-label="Booking Details"
                   color="primary"
                   variant="underlined"
+                  size="lg"
                 >
                   <Tab
                     key="booking"
@@ -150,128 +273,7 @@ const AdminBookinglistDetails = ({
                       </div>
                     }
                   >
-                    <div>
-                      <div className="flex items-center justify-center">
-                        <Image
-                          src={bookingDetails.carImage}
-                          alt="Car Image"
-                          className="h-60 w-full object-cover"
-                        />
-                      </div>
-                      <div className="mt-4 grid grid-cols-3 gap-4 px-5 text-start">
-                        <div className="w-full">
-                          <p>
-                            <strong>Trip Type:</strong>{" "}
-                            {bookingDetails.tripType}
-                          </p>
-                          <p>
-                            <strong>Pickup:</strong>{" "}
-                            {bookingDetails.pickupLocationAddress}
-                          </p>
-                          <p>
-                            <strong>Dropoff:</strong>{" "}
-                            {bookingDetails.dropoffLocationAddress}
-                          </p>
-                          <p>
-                            <strong>Pickup Date:</strong>{" "}
-                            {bookingDetails.pickupDate}
-                          </p>
-                          <p>
-                            <strong>Pickup Time:</strong>{" "}
-                            {bookingDetails.pickupTime}
-                          </p>
-                        </div>
-                        <div className="w-full">
-                          <p>
-                            <strong>Total Price:</strong>{" "}
-                            {bookingDetails.totalBookingPrice}
-                          </p>
-                          <p>
-                            <strong>Distance:</strong> {bookingDetails.distance}
-                          </p>
-                          <p>
-                            <strong>Duration:</strong> {bookingDetails.hour}{" "}
-                            hours
-                          </p>
-                          <p>
-                            <strong>Payment Method:</strong>{" "}
-                            {bookingDetails.paymentMethod}
-                          </p>
-                          <div>
-                            <strong>Ride Status: </strong>
-                            <Chip
-                              color={
-                                bookingDetails.rideStatus === "Completed"
-                                  ? "success"
-                                  : "warning"
-                              }
-                              variant="shadow"
-                              size="sm"
-                            >
-                              {bookingDetails.rideStatus}
-                            </Chip>
-                          </div>
-                          <div>
-                            <strong>Payment Status: </strong>
-                            <Chip
-                              color={
-                                bookingDetails.paymentStatus === "Paid"
-                                  ? "success"
-                                  : "danger"
-                              }
-                              variant="shadow"
-                              size="sm"
-                            >
-                              {bookingDetails.paymentStatus}
-                            </Chip>
-                          </div>
-                        </div>
-                        <div className=" w-full">
-                          <Select
-                            label="Change Ride Status"
-                            placeholder="Select new status"
-                            selectedKeys={bookingDetails?.rideStatus}
-                            onChange={(e) => handleStatusChange(e.target.value)}
-                          >
-                            <SelectItem
-                              className="text-black dark:text-white"
-                              key="Pending"
-                              value="Pending"
-                            >
-                              Pending
-                            </SelectItem>
-                            <SelectItem
-                              className="text-black dark:text-white"
-                              key="Accepted"
-                              value="Accepted"
-                            >
-                              Accepted
-                            </SelectItem>
-                            <SelectItem
-                              className="text-black dark:text-white"
-                              key="Assigned"
-                              value="Assigned"
-                            >
-                              Assigned
-                            </SelectItem>
-                            <SelectItem
-                              className="text-black dark:text-white"
-                              key="Completed"
-                              value="Completed"
-                            >
-                              Completed
-                            </SelectItem>
-                            <SelectItem
-                              className="text-black dark:text-white"
-                              key="Canceled"
-                              value="Canceled"
-                            >
-                              Canceled
-                            </SelectItem>
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
+                    <BookingInfoTab />
                   </Tab>
                   <Tab
                     key="car"
@@ -282,28 +284,7 @@ const AdminBookinglistDetails = ({
                       </div>
                     }
                   >
-                    <div className="px-5 text-start">
-                      <p>
-                        <strong>Name:</strong> {bookingDetails.car?.name}
-                      </p>
-                      <p>
-                        <strong>Model:</strong> {bookingDetails.car?.model}
-                      </p>
-                      <p>
-                        <strong>Year:</strong> {bookingDetails.car?.year}
-                      </p>
-                      <p>
-                        <strong>Make:</strong> {bookingDetails.car?.make}
-                      </p>
-                      <p>
-                        <strong>Seating Capacity:</strong>{" "}
-                        {bookingDetails.car?.seatingCapacity}
-                      </p>
-                      <p>
-                        <strong>Fuel Type:</strong>{" "}
-                        {bookingDetails.car?.fuelType}
-                      </p>
-                    </div>
+                    <CarInfoTab />
                   </Tab>
                   <Tab
                     key="user"
@@ -314,35 +295,79 @@ const AdminBookinglistDetails = ({
                       </div>
                     }
                   >
-                    <div className="px-5 text-start">
-                      <p>
-                        <strong>Name:</strong> {bookingDetails.user?.name}
-                      </p>
-                      <p>
-                        <strong>Email:</strong> {bookingDetails.user?.email}
-                      </p>
-                      <p>
-                        <strong>Phone:</strong> {bookingDetails.user?.phone}
-                      </p>
-                    </div>
+                    <UserInfoTab />
                   </Tab>
                 </Tabs>
-              </CardBody>
-            </Card>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="danger"
-              variant="light"
-              onPress={() => setModalShow(!ismodalShow)}
-            >
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </div>
+              )}
+            </CardBody>
+          </Card>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            variant="light"
+            onPress={() => setModalShow(false)}
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
-export default AdminBookinglistDetails;
+type infoCardType = {
+  icon: React.ReactNode;
+  title: string;
+  content: string;
+  link?: string;
+};
+
+const InfoCard = ({ icon, title, content, link }: infoCardType) => (
+  <div className="rounded-lg bg-gray-100 p-4 shadow dark:bg-zinc-800">
+    <div className="mb-2 flex items-center">
+      {icon}
+      <h3 className="ml-2 text-lg font-semibold">{title}</h3>
+    </div>
+    <p className="text-gray-700">{content}</p>
+    {link && (
+      <Link
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-2 inline-block text-blue-500 hover:underline"
+      >
+        View on Map
+      </Link>
+    )}
+  </div>
+);
+
+type selectItemProps = {
+  value: string;
+  label: React.ReactNode;
+};
+
+const InfoItem = ({ label, value }: selectItemProps) => (
+  <div>
+    <p className="text-sm text-gray-600">{label}</p>
+    <p className="font-semibold">{value}</p>
+  </div>
+);
+
+const BookingDetailsSkeleton = () => (
+  <div className="space-y-6">
+    <Skeleton className="h-64 w-full rounded-lg" />
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      {[...Array(4)].map((_, index) => (
+        <Skeleton key={index} className="h-32 rounded-lg" />
+      ))}
+    </div>
+    <div className="flex items-center justify-between">
+      <Skeleton className="h-10 w-32 rounded-lg" />
+      <Skeleton className="h-10 w-48 rounded-lg" />
+    </div>
+  </div>
+);
+
+export default AdminBookingDetailsModal;
