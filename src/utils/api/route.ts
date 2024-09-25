@@ -72,7 +72,12 @@ export const endPoints = {
     confirmPayment: "/payments/confirm-payment",
   },
   Admin: {
-    allbookinglistforadmin: "admin/allrentaldata",
+    getRentAllforAdmin: (page: number, limit: number) =>
+      `car-bookings/admincarBookinlist/${page}/${limit}`,
+    getBookingDetails: (id: number | null) =>
+      `car-bookings/admincarbookingdetails/${id}`,
+
+    // old route
     getAllPendinBooking: "admin/pendingrentadata",
     updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`,
     getAcceptedBookingList: "admin/acceptedrentadata",

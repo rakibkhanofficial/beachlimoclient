@@ -121,7 +121,7 @@ const UseBytheHour = () => {
     dropoffLocationMapLink: dropoffLocation,
     hour: hour,
     distance: distance,
-    paymentMethod: "cash",
+    paymentMethod: "online",
     rideStatus: "Pending",
   };
 
@@ -145,9 +145,9 @@ const UseBytheHour = () => {
       dropoffLocationMapLink: dropoffLocation,
       hour: hour,
       distance: distance,
-      paymentMethod: paymentmethod,
+      paymentMethod: "cash",
       name: name,
-      paymentStatus: "Pending",
+      paymentStatus: "Unpaid",
       rideStatus: "Pending",
     };
     try {

@@ -121,7 +121,7 @@ const UseScheduleRide = () => {
     dropoffLocationMapLink: dropoffLocation,
     hour: hour,
     distance: distance,
-    paymentMethod: paymentmethod,
+    paymentMethod: "online",
     rideStatus: "Pending",
   };
 
@@ -147,7 +147,7 @@ const UseScheduleRide = () => {
       distance: distance,
       paymentMethod: "cash",
       name: name,
-      paymentStatus: "Pending",
+      paymentStatus: "Unpaid",
       rideStatus: "Pending",
     };
     try {
