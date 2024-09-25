@@ -102,12 +102,14 @@ const BookingListComponent = () => {
 
   const filteredProducts = userBookingList.filter((product) => {
     const matchesSearch =
-      product.dropoffLocationAddress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.dropoffLocationAddress
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
       product.rideStatus.toLowerCase().includes(searchQuery.toLowerCase());
-  
+
     const matchesStatusFilter =
       statusFilter === "" || product.rideStatus === statusFilter;
-  
+
     return matchesSearch && matchesStatusFilter;
   });
 
@@ -168,7 +170,7 @@ const BookingListComponent = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-white md:px-2 py-2 dark:bg-zinc-900"
+      className="min-h-screen bg-white py-2 dark:bg-zinc-900 md:px-2"
     >
       <Card shadow="none" className="mx-auto">
         <CardHeader className="flex flex-col items-center justify-between space-y-4 px-6 py-8 sm:space-y-0 lg:flex-row">
@@ -184,50 +186,58 @@ const BookingListComponent = () => {
               className="w-64"
             />
             <div className=" flex justify-between lg:justify-center lg:gap-3 ">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button endContent={<FaFilter />} color="secondary">
-                  Filter by Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                selectionMode="single"
-                selectedKeys={new Set([statusFilter])}
-                onSelectionChange={(keys) => {
-                  const selectedKey = Array.from(keys)[0];
-                  if (selectedKey) {
-                    setStatusFilter(selectedKey as string);
-                  }
-                }}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger>
-                <Button variant="bordered" color="default">
-                  Sort by Date
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                selectionMode="single"
-                selectedKeys={new Set([sortBy])}
-                onSelectionChange={(keys) => {
-                  const selectedKey = Array.from(keys)[0];
-                  if (selectedKey) {
-                    handleDropDown(selectedKey as string);
-                  }
-                }}
-              >
-                {sortOptions.map((option) => (
-                  <DropdownItem key={option.value}>{option.label}</DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button endContent={<FaFilter />} color="secondary">
+                    Filter by Status
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  selectionMode="single"
+                  selectedKeys={new Set([statusFilter])}
+                  onSelectionChange={(keys) => {
+                    const selectedKey = Array.from(keys)[0];
+                    if (selectedKey) {
+                      setStatusFilter(selectedKey as string);
+                    }
+                  }}
+                >
+                  {statusOptions.map((status) => (
+                    <DropdownItem
+                      className="text-black dark:text-white"
+                      key={status}
+                    >
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button variant="bordered" color="default">
+                    Sort by Date
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  selectionMode="single"
+                  selectedKeys={new Set([sortBy])}
+                  onSelectionChange={(keys) => {
+                    const selectedKey = Array.from(keys)[0];
+                    if (selectedKey) {
+                      handleDropDown(selectedKey as string);
+                    }
+                  }}
+                >
+                  {sortOptions.map((option) => (
+                    <DropdownItem
+                      className="text-black dark:text-white"
+                      key={option.value}
+                    >
+                      {option.label}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </div>
         </CardHeader>

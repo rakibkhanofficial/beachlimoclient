@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { CollapseItems } from "./collapse-items";
 import { SidebarItem } from "./sidebar-item";
@@ -7,16 +6,15 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useSidebarContext } from "../layout/layout-context";
 import { GiAutoRepair } from "react-icons/gi";
-import { useSession } from "next-auth/react";
 import { getRoutesByRole } from "../../privateRouting/PrivateRouts.data";
 import Link from "next/link";
+import { useCustomSession } from "~@/hooks/customSessionhook";
 
 const SidebarWrapper = () => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
-  const { data: session } = useSession();
+  const { session } = useCustomSession();
 
- // @ts-expect-error type error is not solved
   const filteredRoutes = getRoutesByRole(session?.user?.role ?? "---");
 
   return (
@@ -43,7 +41,7 @@ const SidebarWrapper = () => {
           />
         </div>
         <Link href="/" className=" text-center cursor-pointer text-xl text-black dark:text-white font-bold ">Beach Limo</Link>
-        <div className="flex h-full overflow-y-scroll flex-col justify-between">
+        <div className="flex h-full overflow-y-auto flex-col justify-between">
           <div className="mt-6 flex flex-col gap-4 px-2">
             {filteredRoutes &&
               filteredRoutes?.length > 0 &&
