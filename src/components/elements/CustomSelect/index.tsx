@@ -1,76 +1,81 @@
-import React, { useState, useEffect, useRef, ReactNode, useMemo } from 'react';
+import React, { useState, useEffect, useRef, ReactNode, useMemo } from "react";
+import { FaChevronDown, FaTimes, FaSpinner } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SelectOption {
-  value: string | number;
+  value: string | number | boolean;
   children: ReactNode;
 }
 
 interface SelectProps {
   children: ReactNode;
-  value?: string | number | null;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  value?: string | number | boolean | null;
+  onChange: (value: string | number | boolean) => void;
   placeholder?: string;
   showSearch?: boolean;
   allowClear?: boolean;
+  isLoading?: boolean;
 }
 
-const CustomSelect: React.FC<SelectProps> & { Option: React.FC<SelectOption> } = ({
+const CustomSelect: React.FC<SelectProps> & {
+  Option: React.FC<SelectOption>;
+} = ({
   children,
   value,
   onChange,
-  placeholder = 'Select an option',
+  placeholder = "Select an option",
   showSearch = false,
   allowClear = false,
+  isLoading = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<SelectOption[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const options = useMemo(
     () =>
-      React.Children.toArray(children).filter(React.isValidElement) as React.ReactElement<SelectOption>[],
-    [children]
+      React.Children.toArray(children).filter(
+        React.isValidElement,
+      ) as React.ReactElement<SelectOption>[],
+    [children],
   );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   useEffect(() => {
     const filtered = options.filter((option) => {
       const children = option.props.children;
-      return typeof children === 'string' && children.toLowerCase().includes(search.toLowerCase());
+      return (
+        typeof children === "string" &&
+        children.toLowerCase().includes(search.toLowerCase())
+      );
     });
     setFilteredOptions(filtered.map((option) => option.props));
   }, [options, search]);
 
-  const handleOptionClick = (optionValue: string | number) => {
-    const event = {
-      target: {
-        value: optionValue.toString(),
-      },
-    } as React.ChangeEvent<HTMLSelectElement>;
-    onChange(event);
+  const handleOptionClick = (optionValue: string | number | boolean) => {
+    onChange(optionValue);
     setIsOpen(false);
   };
 
-  const clearSelection = () => {
-    const event = {
-      target: {
-        value: '',
-      },
-    } as React.ChangeEvent<HTMLSelectElement>;
-    onChange(event);
+  const clearSelection = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange("");
   };
 
   const selectedOption = options.find((option) => option.props.value === value);
@@ -78,64 +83,80 @@ const CustomSelect: React.FC<SelectProps> & { Option: React.FC<SelectOption> } =
   return (
     <div className="relative" ref={dropdownRef}>
       <div
-        className="flex items-center justify-between px-4 py-2 bg-white border rounded cursor-pointer"
+        className={`flex cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2 shadow-sm transition-all duration-200 dark:bg-zinc-800 ${
+          isOpen
+            ? "border-transparent ring-1 ring-blue-500"
+            : "hover:border-gray-400"
+        }`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-gray-700 w-full">
+        <span className="w-full truncate text-gray-700 dark:text-gray-300">
           {selectedOption && selectedOption.props.children
             ? selectedOption.props.children
             : placeholder}
         </span>
-        {allowClear && selectedOption && (
-          <button
-            className="ml-2 text-gray-500 hover:text-gray-700"
-            onClick={(e) => {
-              e.stopPropagation();
-              clearSelection();
-            }}
-          >
-            &times;
-          </button>
-        )}
-        <svg
-          className={`w-4 h-4 fill-current transition-transform transform ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-          viewBox="0 0 20 20"
-        >
-          <path d="M5 8l5 5 5-5H5z" />
-        </svg>
-      </div>
-      {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg">
-          {showSearch && (
-            <div className="px-4 py-2">
-              <input
-                type="text"
-                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                placeholder="Search..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
+        <div className="flex items-center">
+          {isLoading && (
+            <FaSpinner className="mr-2 h-3 w-3 animate-spin text-gray-400" />
           )}
-          <div className="max-h-60 overflow-y-auto">
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((option, index) => (
-                <div
-                  key={index}
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleOptionClick(option.value)}
-                >
-                  {option.children}
-                </div>
-              ))
-            ) : (
-              <div className="px-4 py-2 text-gray-700">No options found</div>
-            )}
-          </div>
+          {allowClear && selectedOption && (
+            <motion.button
+              className="mr-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+              onClick={clearSelection}
+              whileHover={{ scale: 0.9 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaTimes className="h-3 w-3" />
+            </motion.button>
+          )}
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <FaChevronDown className="h-3 w-3 text-gray-400" />
+          </motion.div>
         </div>
-      )}
+      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-zinc-800"
+          >
+            {showSearch && (
+              <div className="border-b border-gray-200 px-4 py-2  dark:border-gray-700">
+                <input
+                  type="text"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:border-transparent  focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:text-gray-200"
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            )}
+            <div className="max-h-60 overflow-y-auto">
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map((option, index) => (
+                  <motion.div
+                    key={index}
+                    className="cursor-pointer px-4 py-2 text-sm text-gray-700 transition-colors duration-150 hover:bg-slate-200 dark:text-gray-200 dark:hover:bg-gray-700"
+                    onClick={() => handleOptionClick(option.value)}
+                  >
+                    {option.children}
+                  </motion.div>
+                ))
+              ) : (
+                <div className="px-4 py-2 text-sm text-gray-500">
+                  No options found
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -147,3 +168,29 @@ const Option: React.FC<SelectOption> = ({ value, children }) => (
 CustomSelect.Option = Option;
 
 export default CustomSelect;
+
+// example of its use Case
+
+// import React, { useState } from 'react';
+// import CustomSelect from './CustomSelect';
+
+// function App() {
+//   const [value, setValue] = useState<string | number | boolean | null>(null);
+
+//   return (
+//     <CustomSelect
+//       value={value}
+//       onChange={(newValue) => setValue(newValue)}
+//       placeholder="Select an option"
+//       showSearch={true}
+//       allowClear={true}
+//       isLoading={false}
+//     >
+//       <CustomSelect.Option value="string_value">String Option</CustomSelect.Option>
+//       <CustomSelect.Option value={42}>Number Option</CustomSelect.Option>
+//       <CustomSelect.Option value={true}>Boolean Option</CustomSelect.Option>
+//     </CustomSelect>
+//   );
+// }
+
+// export default App;

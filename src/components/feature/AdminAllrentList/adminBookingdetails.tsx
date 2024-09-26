@@ -11,8 +11,6 @@ import {
   Tabs,
   Tab,
   Chip,
-  Select,
-  SelectItem,
   Image,
   Link,
   Skeleton,
@@ -29,10 +27,12 @@ import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
 import toast from "react-hot-toast";
 import { putMethod } from "~@/utils/api/putMethod";
+import CustomSelect from "~@/components/elements/CustomSelect";
 
 type PropsType = {
   selectedId: number | null | undefined;
   ismodalShow: boolean;
+  isStatusUpdate: boolean;
   setModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   setIsStatusUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -90,12 +90,15 @@ const AdminBookingDetailsModal = ({
   ismodalShow,
   setModalShow,
   setIsStatusUpdate,
+  isStatusUpdate,
 }: PropsType) => {
   const [isLoading, setIsLoading] = useState(true);
   const [bookingDetails, setBookingDetails] = useState<BookingData>(
     {} as BookingData,
   );
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<
+    string | number | boolean | null
+  >(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -123,28 +126,26 @@ const AdminBookingDetailsModal = ({
     }
   }, [selectedId]);
 
-  const handleStatusChange = async (value: string) => {
-    setIsStatusUpdate(true);
-    setSelectedStatus(value);
+  const handleStatusChange = async () => {
     try {
+      setIsStatusUpdate(true);
       const response = await putMethod({
         route: endPoints?.Admin.updateBookingStatusById(selectedId),
         updateData: {
-          status: value,
+          status: selectedStatus,
         },
       });
       if (response?.data?.statusCode === 200) {
-        setIsStatusUpdate(false);
-        setModalShow(!ismodalShow);
         toast.success("Status updated successfully!");
-      } else {
         setIsStatusUpdate(false);
+      } else {
         toast.error("Failed to update status. Please try again.");
+        setIsStatusUpdate(false);
       }
     } catch (error) {
-      setIsStatusUpdate(false);
       console.error("Error updating status:", error);
       toast.error("Failed to update status. Please try again.");
+      setIsStatusUpdate(false);
     }
   };
 
@@ -184,12 +185,13 @@ const AdminBookingDetailsModal = ({
               </Chip>
             </div>
             <div className="flex w-full flex-col gap-2">
-              <Select
-                label="Change Ride Status"
-                placeholder="Select new status"
-                selectedKeys={[selectedStatus]}
+              <CustomSelect
                 value={selectedStatus}
-                onChange={(e) => handleStatusChange(e.target.value)}
+                onChange={(newValue) => setSelectedStatus(newValue)}
+                placeholder="Select an option"
+                showSearch={false}
+                allowClear={false}
+                isLoading={false}
               >
                 {[
                   "Pending",
@@ -198,15 +200,21 @@ const AdminBookingDetailsModal = ({
                   "Completed",
                   "Canceled",
                 ].map((status) => (
-                  <SelectItem
-                    className="text-black dark:text-white"
-                    key={status}
-                    value={status}
-                  >
+                  <CustomSelect.Option key={status} value={status}>
                     {status}
-                  </SelectItem>
+                  </CustomSelect.Option>
                 ))}
-              </Select>
+              </CustomSelect>
+              <Button
+                className="w-full"
+                size="sm"
+                color="secondary"
+                disabled={selectedStatus === null}
+                onClick={handleStatusChange}
+                isLoading={isStatusUpdate}
+              >
+                Update Status
+              </Button>
             </div>
           </div>
         </div>
@@ -266,7 +274,7 @@ const AdminBookingDetailsModal = ({
       </div>
     </div>
   );
-
+  console.log("ismodalShow", ismodalShow);
   return (
     <Modal
       backdrop="blur"
@@ -277,73 +285,77 @@ const AdminBookingDetailsModal = ({
       // scrollBehavior="inside"
     >
       <ModalContent>
-        <ModalBody className="p-0">
-          <Card className="w-full">
-            <CardHeader className="flex flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 text-white xl:p-2 2xl:p-4">
-              <h1 className=" text-xl font-bold xl:text-2xl 2xl:text-3xl">
-                Booking Details
-              </h1>
-              <p className=" mt-1 text-lg 2xl:mt-2">
-                Booking ID: #{bookingDetails.id}
-              </p>
-            </CardHeader>
-            <CardBody className=" h-[35rem] md:h-[36.5rem] lg:h-[25rem] xl:h-[25rem] 2xl:h-[36.5rem] ">
-              {isLoading ? (
-                <BookingDetailsSkeleton />
-              ) : (
-                <Tabs
-                  aria-label="Booking Details"
-                  color="primary"
-                  variant="underlined"
-                  size="lg"
-                >
-                  <Tab
-                    key="booking"
-                    title={
-                      <div className="flex items-center space-x-2">
-                        <FaInfoCircle />
-                        <span>Booking Info</span>
-                      </div>
-                    }
-                  >
-                    <BookingInfoTab />
-                  </Tab>
-                  <Tab
-                    key="car"
-                    title={
-                      <div className="flex items-center space-x-2">
-                        <FaCar />
-                        <span>Car Info</span>
-                      </div>
-                    }
-                  >
-                    <CarInfoTab />
-                  </Tab>
-                  <Tab
-                    key="user"
-                    title={
-                      <div className="flex items-center space-x-2">
-                        <FaUser />
-                        <span>User Info</span>
-                      </div>
-                    }
-                  >
-                    <UserInfoTab />
-                  </Tab>
-                </Tabs>
-              )}
-            </CardBody>
-          </Card>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="danger"
-            variant="light"
-            onPress={() => setModalShow(false)}
-          >
-            Close
-          </Button>
-        </ModalFooter>
+        {(onClose) => (
+          <>
+            <ModalBody className="p-0">
+              <Card className="w-full">
+                <CardHeader className="flex flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 text-white xl:p-2 2xl:p-4">
+                  <h1 className=" text-xl font-bold xl:text-2xl 2xl:text-3xl">
+                    Booking Details
+                  </h1>
+                  <p className=" mt-1 text-lg 2xl:mt-2">
+                    Booking ID: #{bookingDetails.id}
+                  </p>
+                </CardHeader>
+                <CardBody className=" h-[30rem] md:h-[36.5rem] lg:h-[25rem] xl:h-[25rem] 2xl:h-[36.5rem] ">
+                  {isLoading ? (
+                    <BookingDetailsSkeleton />
+                  ) : (
+                    <Tabs
+                      aria-label="Booking Details"
+                      color="primary"
+                      variant="underlined"
+                      size="lg"
+                    >
+                      <Tab
+                        key="booking"
+                        title={
+                          <div className="flex items-center space-x-2">
+                            <FaInfoCircle />
+                            <span>Booking Info</span>
+                          </div>
+                        }
+                      >
+                        <BookingInfoTab />
+                      </Tab>
+                      <Tab
+                        key="car"
+                        title={
+                          <div className="flex items-center space-x-2">
+                            <FaCar />
+                            <span>Car Info</span>
+                          </div>
+                        }
+                      >
+                        <CarInfoTab />
+                      </Tab>
+                      <Tab
+                        key="user"
+                        title={
+                          <div className="flex items-center space-x-2">
+                            <FaUser />
+                            <span>User Info</span>
+                          </div>
+                        }
+                      >
+                        <UserInfoTab />
+                      </Tab>
+                    </Tabs>
+                  )}
+                </CardBody>
+              </Card>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="danger"
+                variant="light"
+                onPress={() => setModalShow(!ismodalShow)}
+              >
+                Close
+              </Button>
+            </ModalFooter>
+          </>
+        )}
       </ModalContent>
     </Modal>
   );

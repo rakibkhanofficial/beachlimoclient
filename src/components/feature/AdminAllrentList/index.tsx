@@ -63,8 +63,10 @@ const AdminAllBookingListComponent = () => {
   const [sortBy, setSortBy] = useState<string>("newest");
   // Details modal
   const [selectedId, setSelectedId] = useState<number | null | undefined>(null);
-  const [ismodalShow, setModalShow] = useState(false);
+  const [ismodalShow, setModalShow] = useState<boolean>(false);
   const [isStatusUpdate, setIsStatusUpdate] = useState(false);
+
+  console.log("selectedId", selectedId);
 
   useEffect(() => {
     const fetchUserBookingList = async () => {
@@ -148,11 +150,6 @@ const AdminAllBookingListComponent = () => {
 
   const handleDropDown = (value: string) => {
     setSortBy(value);
-  };
-
-  const handleOpenDetailsModal = (Id: number) => {
-    setSelectedId(Id);
-    setModalShow(true);
   };
 
   if (isLoading) {
@@ -322,7 +319,8 @@ const AdminAllBookingListComponent = () => {
                         color="primary"
                         size="sm"
                         onPress={() => {
-                          handleOpenDetailsModal(product?.id);
+                          setSelectedId(product?.id);
+                          setModalShow(true);
                         }}
                         isIconOnly
                       >
@@ -350,6 +348,7 @@ const AdminAllBookingListComponent = () => {
         setModalShow={setModalShow}
         selectedId={selectedId}
         setIsStatusUpdate={setIsStatusUpdate}
+        isStatusUpdate={isStatusUpdate}
       />
     </motion.div>
   );
