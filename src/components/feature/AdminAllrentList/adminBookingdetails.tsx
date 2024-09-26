@@ -27,6 +27,8 @@ import {
 } from "react-icons/fa";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
+import toast from "react-hot-toast";
+import { putMethod } from "~@/utils/api/putMethod";
 
 type PropsType = {
   selectedId: number | null;
@@ -95,6 +97,7 @@ const AdminBookingDetailsModal = ({
   const [bookingDetails, setBookingDetails] = useState<BookingData>(
     {} as BookingData,
   );
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   useEffect(() => {
     setIsLoading(true);
@@ -106,6 +109,7 @@ const AdminBookingDetailsModal = ({
         if (response?.data?.statusCode === 200) {
           const data = response?.data?.data;
           setBookingDetails(data);
+          setSelectedStatus(data.rideStatus);
           setIsLoading(false);
         }
       } catch (error) {
@@ -122,12 +126,37 @@ const AdminBookingDetailsModal = ({
   }, [selectedId]);
 
   const handleStatusChange = (value: string) => {
-    console.log("New status:", value);
+    setSelectedStatus(value);
+  };
+
+  const handleStatusUpdate = async () => {
+    setIsStatusUpdate(true);
+    try {
+      const response = await putMethod({
+        route: endPoints?.Admin.updateBookingStatusById(
+          selectedId,
+          selectedStatus,
+        ),
+        updateData: "",
+      });
+      if (response?.data?.statusCode === 200) {
+        setIsStatusUpdate(false);
+        setModalShow(false);
+        toast.success("Status updated successfully!");
+      } else {
+        setIsStatusUpdate(false);
+        toast.error("Failed to update status. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      setIsStatusUpdate(false);
+      toast.error("Failed to update status. Please try again.");
+    }
   };
 
   const BookingInfoTab = () => (
     <div className="space-y-6">
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid gap-4 md:grid-cols-2">
         <div className="h-56 w-full rounded-lg object-contain shadow-lg">
           <Image
             src={bookingDetails.carImage}
@@ -136,7 +165,7 @@ const AdminBookingDetailsModal = ({
           />
         </div>
         <div className="relative h-56 w-full rounded-lg shadow-lg">
-          <div className="absolute left-1 top-28 lg:top-20 rounded-lg bg-opacity-90 p-3 shadow-md">
+          <div className=" top-36 lg:top-25 absolute left-1 rounded-lg bg-opacity-90 p-3 shadow-md">
             <p className="flex items-center text-3xl font-bold text-green-600">
               <FaDollarSign className="mr-1" />
               {bookingDetails.totalBookingPrice}
@@ -145,9 +174,9 @@ const AdminBookingDetailsModal = ({
               {bookingDetails.paymentStatus}
             </p>
           </div>
-          <div className="lg:flex items-center justify-between px-1">
-            <div className="flex lg:flex-col gap-3 lg:gap-2">
-              <p className="mb-2 text-lg font-semibold">Ride Status</p>
+          <div className="w-full grid-cols-2 items-center justify-between px-1 lg:grid">
+            <div className="flex gap-3 lg:gap-2">
+              <p className="mb-2 text-lg font-semibold">Ride Status:</p>
               <Chip
                 color={
                   bookingDetails.rideStatus === "Completed"
@@ -155,20 +184,27 @@ const AdminBookingDetailsModal = ({
                     : "warning"
                 }
                 variant="shadow"
-                size="lg"
+                size="sm"
               >
                 {bookingDetails.rideStatus}
               </Chip>
             </div>
-            <Select
-              label="Change Ride Status"
-              placeholder="Select new status"
-              selectedKeys={[bookingDetails.rideStatus]}
-              onChange={(e) => handleStatusChange(e.target.value)}
-              className="max-w-xs"
-            >
-              {["Pending", "Accepted", "Assigned", "Completed", "Canceled"].map(
-                (status) => (
+            <div className="flex w-full flex-col gap-2">
+              <Select
+                label="Change Ride Status"
+                placeholder="Select new status"
+                selectedKeys={[selectedStatus]}
+                value={selectedStatus}
+                onChange={(e) => handleStatusChange(e.target.value)}
+                className="max-w-sm"
+              >
+                {[
+                  "Pending",
+                  "Accepted",
+                  "Assigned",
+                  "Completed",
+                  "Canceled",
+                ].map((status) => (
                   <SelectItem
                     className="text-black dark:text-white"
                     key={status}
@@ -176,9 +212,20 @@ const AdminBookingDetailsModal = ({
                   >
                     {status}
                   </SelectItem>
-                ),
-              )}
-            </Select>
+                ))}
+              </Select>
+              <Button
+                className="w-full hover:bg-blue-800 hover:text-white"
+                size="lg"
+                variant="bordered"
+                color="primary"
+                onClick={handleStatusUpdate}
+                isLoading={isStatusUpdate}
+                isDisabled={isStatusUpdate}
+              >
+                Update Status
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -245,16 +292,20 @@ const AdminBookingDetailsModal = ({
       onOpenChange={() => setModalShow(!ismodalShow)}
       placement="auto"
       size="5xl"
-      scrollBehavior="inside"
+      // scrollBehavior="inside"
     >
       <ModalContent>
         <ModalBody className="p-0">
           <Card className="w-full">
-            <CardHeader className="flex flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
-              <h1 className="text-3xl font-bold">Booking Details</h1>
-              <p className="mt-2 text-lg">Booking ID: #{bookingDetails.id}</p>
+            <CardHeader className="flex flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 text-white xl:p-2 2xl:p-4">
+              <h1 className=" text-xl font-bold xl:text-2xl 2xl:text-3xl">
+                Booking Details
+              </h1>
+              <p className=" mt-1 text-lg 2xl:mt-2">
+                Booking ID: #{bookingDetails.id}
+              </p>
             </CardHeader>
-            <CardBody>
+            <CardBody className=" h-[35rem] md:h-[36.5rem] lg:h-[25rem] xl:h-[25rem] 2xl:h-[36.5rem] ">
               {isLoading ? (
                 <BookingDetailsSkeleton />
               ) : (

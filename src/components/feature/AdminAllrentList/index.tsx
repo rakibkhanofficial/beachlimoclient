@@ -22,10 +22,6 @@ import {
   Pagination,
   Image,
   Link,
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
 } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import ListSkeleton from "../commontableListSkeleton/tableListskeleton";

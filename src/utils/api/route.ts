@@ -76,6 +76,8 @@ export const endPoints = {
       `car-bookings/admincarBookinlist/${page}/${limit}`,
     getBookingDetails: (id: number | null) =>
       `car-bookings/admincarbookingdetails/${id}`,
+    updateBookingStatusById: (id: number | null, status: string) =>
+      `car-bookings/ride-status-update/${id}/${status}`,
 
     // old route
     getAllPendinBooking: "admin/pendingrentadata",
