@@ -125,21 +125,18 @@ const AdminBookingDetailsModal = ({
     }
   }, [selectedId]);
 
-  const handleStatusChange = (value: string) => {
+  const handleStatusChange = async (value: string) => {
     setSelectedStatus(value);
-  };
-
-  const handleStatusUpdate = async () => {
     setIsStatusUpdate(true);
     try {
       const response = await putMethod({
         route: endPoints?.Admin.updateBookingStatusById(selectedId),
         updateData: {
-          status: selectedStatus,
+          status: value,
         },
       });
       if (response?.data?.statusCode === 200) {
-        setIsStatusUpdate(false);
+        setIsStatusUpdate(true);
         setModalShow(false);
         toast.success("Status updated successfully!");
       } else {
@@ -213,17 +210,6 @@ const AdminBookingDetailsModal = ({
                   </SelectItem>
                 ))}
               </Select>
-              <Button
-                className="w-full hover:bg-blue-800 hover:text-white"
-                size="lg"
-                variant="bordered"
-                color="primary"
-                onClick={handleStatusUpdate}
-                isLoading={isStatusUpdate}
-                isDisabled={isStatusUpdate}
-              >
-                Update Status
-              </Button>
             </div>
           </div>
         </div>
