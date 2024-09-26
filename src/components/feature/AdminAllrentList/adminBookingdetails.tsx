@@ -127,7 +127,6 @@ const AdminBookingDetailsModal = ({
 
   const handleStatusChange = async (value: string) => {
     setSelectedStatus(value);
-    setIsStatusUpdate(true);
     try {
       const response = await putMethod({
         route: endPoints?.Admin.updateBookingStatusById(selectedId),
@@ -137,15 +136,13 @@ const AdminBookingDetailsModal = ({
       });
       if (response?.data?.statusCode === 200) {
         setIsStatusUpdate(true);
-        setModalShow(false);
+        setModalShow(!ismodalShow);
         toast.success("Status updated successfully!");
       } else {
-        setIsStatusUpdate(false);
         toast.error("Failed to update status. Please try again.");
       }
     } catch (error) {
       console.error("Error updating status:", error);
-      setIsStatusUpdate(false);
       toast.error("Failed to update status. Please try again.");
     }
   };
