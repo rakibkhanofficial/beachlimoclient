@@ -190,7 +190,6 @@ const AdminBookingDetailsModal = ({
                 selectedKeys={[selectedStatus]}
                 value={selectedStatus}
                 onChange={(e) => handleStatusChange(e.target.value)}
-                className="max-w-sm"
               >
                 {[
                   "Pending",
