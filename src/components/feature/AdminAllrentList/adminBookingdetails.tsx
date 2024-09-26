@@ -133,11 +133,10 @@ const AdminBookingDetailsModal = ({
     setIsStatusUpdate(true);
     try {
       const response = await putMethod({
-        route: endPoints?.Admin.updateBookingStatusById(
-          selectedId,
-          selectedStatus,
-        ),
-        updateData: "",
+        route: endPoints?.Admin.updateBookingStatusById(selectedId),
+        updateData: {
+          status: selectedStatus,
+        },
       });
       if (response?.data?.statusCode === 200) {
         setIsStatusUpdate(false);
@@ -165,7 +164,7 @@ const AdminBookingDetailsModal = ({
           />
         </div>
         <div className="relative h-56 w-full rounded-lg shadow-lg">
-          <div className=" top-36 lg:top-25 absolute left-1 rounded-lg bg-opacity-90 p-3 shadow-md">
+          <div className=" lg:top-25 absolute left-1 top-36 rounded-lg bg-opacity-90 p-3 shadow-md">
             <p className="flex items-center text-3xl font-bold text-green-600">
               <FaDollarSign className="mr-1" />
               {bookingDetails.totalBookingPrice}
