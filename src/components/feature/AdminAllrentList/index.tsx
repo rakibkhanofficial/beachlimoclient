@@ -349,7 +349,6 @@ const AdminAllBookingListComponent = () => {
         ismodalShow={ismodalShow}
         setModalShow={setModalShow}
         selectedId={selectedId}
-        isStatusUpdate={isStatusUpdate}
         setIsStatusUpdate={setIsStatusUpdate}
       />
     </motion.div>

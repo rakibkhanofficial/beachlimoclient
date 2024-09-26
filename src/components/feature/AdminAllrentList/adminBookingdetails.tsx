@@ -34,7 +34,6 @@ type PropsType = {
   selectedId: number | null;
   ismodalShow: boolean;
   setModalShow: React.Dispatch<React.SetStateAction<boolean>>;
-  isStatusUpdate: boolean;
   setIsStatusUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -90,7 +89,6 @@ const AdminBookingDetailsModal = ({
   selectedId,
   ismodalShow,
   setModalShow,
-  isStatusUpdate,
   setIsStatusUpdate,
 }: PropsType) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -126,6 +124,7 @@ const AdminBookingDetailsModal = ({
   }, [selectedId]);
 
   const handleStatusChange = async (value: string) => {
+    setIsStatusUpdate(true);
     setSelectedStatus(value);
     try {
       const response = await putMethod({
@@ -135,13 +134,15 @@ const AdminBookingDetailsModal = ({
         },
       });
       if (response?.data?.statusCode === 200) {
-        setIsStatusUpdate(true);
+        setIsStatusUpdate(false);
         setModalShow(!ismodalShow);
         toast.success("Status updated successfully!");
       } else {
+        setIsStatusUpdate(false);
         toast.error("Failed to update status. Please try again.");
       }
     } catch (error) {
+      setIsStatusUpdate(false);
       console.error("Error updating status:", error);
       toast.error("Failed to update status. Please try again.");
     }
