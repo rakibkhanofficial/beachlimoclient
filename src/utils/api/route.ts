@@ -74,9 +74,9 @@ export const endPoints = {
   Admin: {
     getRentAllforAdmin: (page: number, limit: number) =>
       `car-bookings/admincarBookinlist/${page}/${limit}`,
-    getBookingDetails: (id: number | null) =>
+    getBookingDetails: (id: number | null | undefined) =>
       `car-bookings/admincarbookingdetails/${id}`,
-    updateBookingStatusById: (id: number | null) =>
+    updateBookingStatusById: (id: number | null | undefined) =>
       `car-bookings/update-status/${id}`,
 
     // old route

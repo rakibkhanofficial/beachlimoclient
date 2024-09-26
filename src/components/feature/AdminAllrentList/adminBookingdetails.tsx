@@ -31,7 +31,7 @@ import toast from "react-hot-toast";
 import { putMethod } from "~@/utils/api/putMethod";
 
 type PropsType = {
-  selectedId: number | null;
+  selectedId: number | null | undefined;
   ismodalShow: boolean;
   setModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   setIsStatusUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -118,7 +118,7 @@ const AdminBookingDetailsModal = ({
       }
     };
 
-    if (selectedId !== null) {
+    if (selectedId !== null && selectedId !== undefined) {
       fetchBookingDetails();
     }
   }, [selectedId]);

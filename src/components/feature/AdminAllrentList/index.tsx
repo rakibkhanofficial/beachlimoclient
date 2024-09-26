@@ -62,7 +62,7 @@ const AdminAllBookingListComponent = () => {
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("newest");
   // Details modal
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null | undefined>(null);
   const [ismodalShow, setModalShow] = useState(false);
   const [isStatusUpdate, setIsStatusUpdate] = useState(false);
 
