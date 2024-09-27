@@ -1,16 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { signIn } from "next-auth/react";
-// import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "../../../../_redux/hooks/hooks";
 import {
-  // handleChangeRegisterInput,
+  handleChangeRegisterInput,
   handleErros,
-  // handleNextPrev,
   handleSubmitting,
 } from "../../_redux/actions/auth-action";
 import { postMethod } from "../../../../utils/api/postMethod";
 import { endPoints } from "../../../../utils/api/route";
-// import type { ResponseType } from "../../../../types";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -128,21 +125,22 @@ export const useDriverCreate = () => {
       const response = await postMethod({
         route: endPoints.auth.register,
         postData: {
+          name: firstname,
+          role: "Driver",
           email: email,
-          password: password,
-          username: firstname,
-          phone: phone,
           image: "",
-          role: "Driver"
-          // strFirstName: firstname,
-          // strLastName: lastname,
-          // strPhone: phone,
-          // intConcernId: 1,
+          phone: phone,
+          password: password,
         },
       });
       if (response?.data?.statusCode === 200) {
-        toast.success(response?.data?.message as string)
+        toast.success(response?.data?.message as string);
         setIsSignup(false);
+        dispatch(handleChangeRegisterInput("firstname", ""));
+        dispatch(handleChangeRegisterInput("phone", ""));
+        dispatch(handleChangeRegisterInput("email", ""));
+        dispatch(handleChangeRegisterInput("password", ""));
+        dispatch(handleChangeRegisterInput("retypepassword", ""));
       } else {
         dispatch(handleErros("SignUpError", response.data.messgae));
         toast.error("Erorr Create Account Try Again", {
@@ -157,49 +155,6 @@ export const useDriverCreate = () => {
       setIsSignup(false);
     }
   };
-
-  // await postMethod({
-  //   route: endPoints.auth.register,
-  //   postData: {
-  //     email: email,
-  //     password: password,
-  //     username: firstname,
-  //     image: "",
-  //     // strFirstName: firstname,
-  //     // strLastName: lastname,
-  //     // strPhone: phone,
-  //     // intConcernId: 1,
-  //   },
-  // })
-  //   .then(async (response) => {
-  //     const responseData = response?.data;
-  //     if (responseData) {
-  //       //  await signIn("credentials", {
-  //       //   ...responseData,
-  //       //   redirect: false,
-  //       // });
-  //       router.push("/login")
-  //     } else {
-  //       dispatch(handleErros("SignUpError", responseData?.error || responseData?.message));
-  //       toast.error(responseData.message, {
-  //         duration: 3000,
-  //         position: "top-center",
-  //       });
-  //     }
-  //     dispatch(handleSubmitting(false));
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //     dispatch(handleSubmitting(false));
-  //   })
-  //   .finally(() => {
-  //     setIsSignup(false);
-  //   });
-
-  // useEffect(() => {
-  //   dispatch(handleNextPrev(0));
-  //   dispatch(handleChangeRegisterInput("otp", 0));
-  // }, [dispatch]);
 
   return {
     isInvalid,
@@ -227,3 +182,6 @@ export const useDriverCreate = () => {
     isVisibleretype,
   };
 };
+function handleChange(name: void, value: any): any {
+  throw new Error("Function not implemented.");
+}

@@ -7,8 +7,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import TextInput from "../../elements/input/index";
 import { handleChangeRegisterInput } from "../../../modules/auth/_redux/actions/auth-action";
 import { useDriverCreate } from "~@/modules/auth/hocs/driverCreate/useDriverCreate";
-// import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
 
 const DriverCreate = () => {
   const {
@@ -37,25 +35,7 @@ const DriverCreate = () => {
     isVisibleretype,
   } = useDriverCreate();
 
-  // const router = useRouter();
-  // const { data: session, status } = useSession();
-
   const isPasswordNotMatched = retypepassword !== password;
-
-  // useEffect(() => {
-  //   if (session?.user) {
-  //     // @ts-expect-error type error is not solved
-  //     if (session?.user?.role === "Customer") {
-  //       router.replace("/userdashboard");
-  //       // @ts-expect-error type error is not solved
-  //     } else if (session?.user?.role === "Admin") {
-  //       router.replace("/admindashboard");
-  //       // @ts-expect-error type error is not solved
-  //     } else if (session?.user?.role === "Service-man") {
-  //       router.replace("/servicemandashboard");
-  //     }
-  //   }
-  // }, [status, session, router]);
 
   return (
     <div className=" w-full bg-white dark:bg-gray-800">
