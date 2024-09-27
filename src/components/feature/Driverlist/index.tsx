@@ -1,210 +1,327 @@
 import React, { useEffect, useState } from "react";
-import { DriverType } from "~@/types";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
-import { Input, Spinner } from "@nextui-org/react";
-import Image from "next/image";
-import { SearchIcon } from "~@/components/elements/searchIcon/Searchincon";
+import {
+  Input,
+  Chip,
+  Card,
+  CardBody,
+  CardFooter,
+  Pagination,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+  Avatar,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Tooltip,
+  Skeleton,
+  CardHeader,
+} from "@nextui-org/react";
+import { FaFilter } from "react-icons/fa";
+import { IoIosInformationCircle, IoIosSearch } from "react-icons/io";
+import { motion } from "framer-motion";
+
+interface User {
+  userId: number;
+  name: string;
+  email: string;
+  phone: string;
+  image: string | null;
+  birthdaydate: string | null;
+  homeaddress: string | null;
+  officeaddress: string | null;
+  role: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const DriverListComponenet = () => {
-  const [driverlist, setDriverList] = useState<DriverType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [driverList, setDriverList] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
-    const fetchDriverList = async () => {
-      setIsLoading(true);
+    const fetchCustomerList = async () => {
       try {
-        const response = await getMethod(endPoints.Admin.getAllDriverList);
+        const response = await getMethod(endPoints.Admin.getAllDriversList);
         if (response?.data?.statusCode === 200) {
-          setDriverList(response?.data?.data as DriverType[]);
-          setIsLoading(false);
+          setDriverList(response?.data?.data as User[]);
+          setTotalPages(Math.ceil(response?.data?.data.length / itemsPerPage));
         } else {
-          setIsLoading(false);
           console.error(response?.data?.message);
         }
       } catch (error) {
-        setIsLoading(false);
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    void fetchDriverList();
+    void fetchCustomerList();
   }, []);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const filteredDriverList = driverlist.filter((driver) => {
-    return (
-      driver.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      driver.phone.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const filtereddriverList = driverList.filter((driver) => {
+    const matchesSearch =
+      driver.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      driver.phone.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesActive =
+      activeFilter === "all" ||
+      (activeFilter === "active" && driver.isActive) ||
+      (activeFilter === "inactive" && !driver.isActive);
+    return matchesSearch && matchesActive;
   });
 
+  const sortedDriverList = [...filtereddriverList].sort((a, b) => {
+    if (sortBy === "newest") {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    } else {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    }
+  });
+
+  const paginatedDriverList = sortedDriverList.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
+  const renderDesktopView = () => (
+    <Table aria-label="Customer list table">
+      <TableHeader>
+        <TableColumn>SL No</TableColumn>
+        <TableColumn>NAME</TableColumn>
+        <TableColumn>PHONE</TableColumn>
+        <TableColumn>EMAIL</TableColumn>
+        <TableColumn>ROLE</TableColumn>
+        <TableColumn>STATUS</TableColumn>
+        <TableColumn>ACTIONS</TableColumn>
+      </TableHeader>
+      <TableBody>
+        {isLoading
+          ? Array(itemsPerPage)
+              .fill(null)
+              .map((_, index) => (
+                <TableRow key={index}>
+                  {Array(7)
+                    .fill(null)
+                    .map((_, cellIndex) => (
+                      <TableCell key={cellIndex}>
+                        <Skeleton className="h-10 w-full rounded-lg" />
+                      </TableCell>
+                    ))}
+                </TableRow>
+              ))
+          : paginatedDriverList.map((driver: User, index) => (
+              <TableRow key={driver.userId}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <Avatar
+                      src={
+                        driver.image || "https://i.ibb.co/dtt67mC/avathar.png"
+                      }
+                      size="sm"
+                    />
+                    <span className="ml-2">{driver.name}</span>
+                  </div>
+                </TableCell>
+                <TableCell>{driver.phone}</TableCell>
+                <TableCell>{driver.email}</TableCell>
+                <TableCell>{driver.role}</TableCell>
+                <TableCell>
+                  <Chip
+                    color={driver.isActive ? "success" : "danger"}
+                    variant="flat"
+                  >
+                    {driver.isActive ? "Active" : "Inactive"}
+                  </Chip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip content="View Details">
+                    <Button isIconOnly size="sm" variant="light">
+                      <IoIosInformationCircle size={20} />
+                    </Button>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))}
+      </TableBody>
+    </Table>
+  );
+
+  const renderMobileView = () => (
+    <div className="space-y-4">
+      {isLoading
+        ? Array(itemsPerPage)
+            .fill(null)
+            .map((_, index) => (
+              <Card key={index}>
+                <CardBody>
+                  <div className="flex items-center space-x-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-3/4 rounded-lg" />
+                      <Skeleton className="h-3 w-1/2 rounded-lg" />
+                      <Skeleton className="h-3 w-1/2 rounded-lg" />
+                      <Skeleton className="h-6 w-20 rounded-lg" />
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            ))
+        : paginatedDriverList.map((driver) => (
+            <Card key={driver.userId}>
+              <CardBody>
+                <div className="flex items-center space-x-4">
+                  <Avatar
+                    src={driver.image || "https://i.ibb.co/dtt67mC/avathar.png"}
+                    size="lg"
+                  />
+                  <div>
+                    <h3 className="text-lg font-semibold">{driver.name}</h3>
+                    <p className="text-sm text-gray-500">{driver.email}</p>
+                    <p className="text-sm text-gray-500">{driver.phone}</p>
+                    <Chip
+                      color={driver.isActive ? "success" : "danger"}
+                      variant="flat"
+                      size="sm"
+                    >
+                      {driver.isActive ? "Active" : "Inactive"}
+                    </Chip>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          ))}
+    </div>
+  );
+
   return (
-    <div className=" min-h-screen bg-white px-2 dark:bg-slate-900 lg:px-10">
-      {isLoading === true ? (
-        <div className=" flex min-h-screen items-center justify-center ">
-          <Spinner size="lg" label="Loading..." color="warning" />
-        </div>
-      ) : (
-        <div>
-          <h1 className=" my-10 text-center text-xl font-semibold text-black dark:text-white">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-white dark:bg-zinc-900 md:px-2 lg:py-2"
+    >
+      <Card shadow="none">
+        <CardHeader className="flex w-full flex-col items-center justify-between space-y-4 sm:space-y-0 lg:flex-row lg:px-6 lg:py-8">
+          <h1 className="my-1 w-full text-2xl text-center lg:text-start font-bold text-gray-800 dark:text-white lg:my-0 xl:text-3xl 2xl:text-4xl">
             Driver List
           </h1>
-          <div className="mx-auto my-3 flex w-[50%] items-center justify-center">
-            <Input
-              label="Search"
-              isClearable
-              radius="lg"
-              classNames={{
-                label: "text-black/50 dark:text-white/90",
-                input: [
-                  "bg-transparent",
-                  "text-black/90 dark:text-white/90",
-                  "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-                ],
-                innerWrapper: "bg-transparent",
-                inputWrapper: [
-                  "shadow-xl",
-                  "bg-default-200/50",
-                  "dark:bg-default/60",
-                  "backdrop-blur-xl",
-                  "backdrop-saturate-200",
-                  "hover:bg-default-200/70",
-                  "dark:hover:bg-default/70",
-                  "group-data-[focus=true]:bg-default-200/50",
-                  "dark:group-data-[focus=true]:bg-default/60",
-                  "!cursor-text",
-                ],
-              }}
-              placeholder="Type to search..."
-              startContent={
-                <SearchIcon className="pointer-events-none mb-0.5 flex-shrink-0 text-black/50 text-slate-400 dark:text-white/90" />
-              }
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </div>
-          <div className=" hidden lg:inline ">
-            <div className=" my-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-500 dark:bg-gray-700 dark:text-white">
-              <p className=" col-span-1 text-center text-black dark:text-white">
-                #Sl No:
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                Name
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                Phone
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                email
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                role
-              </p>
-              <p className=" col-span-2 text-center text-black dark:text-white">
-                Status
-              </p>
-              <p className=" col-span-1 text-center text-black dark:text-white">
-                Pic
-              </p>
+          <div className="flex w-full flex-col justify-between gap-3 lg:flex-row lg:items-center lg:space-x-4">
+            <div className="flex w-full justify-center lg:justify-end">
+              <Input
+                startContent={
+                  <IoIosSearch
+                    className="text-black dark:text-white"
+                    fontSize="1.5rem"
+                  />
+                }
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-64"
+              />
             </div>
-            <div className=" my-4">
-              {filteredDriverList.length > 0 ? (
-                filteredDriverList?.map((data, index) => (
-                  <div
-                    key={index}
-                    className=" mb-2 grid grid-cols-12 rounded-md border border-gray-100 bg-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            <div className="flex justify-between md:gap-3 lg:justify-start">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button color="secondary" endContent={<FaFilter />}>
+                    Filter by Status
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Filter options"
+                  selectedKeys={[activeFilter]}
+                  selectionMode="single"
+                  onSelectionChange={(keys) =>
+                    setActiveFilter(Array.from(keys)[0] as string)
+                  }
+                >
+                  <DropdownItem
+                    className="text-black dark:text-white"
+                    key="all"
                   >
-                    <p className=" col-span-1 text-center text-black dark:text-white">
-                      {index + 1}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.username}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.phone}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.email}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.role}
-                    </p>
-                    <p className=" col-span-2 text-center text-black dark:text-white">
-                      {data?.status}
-                    </p>
-                    <div className=" col-span-1 text-center text-blue-500">
-                      <Image
-                        alt={data?.username}
-                        src={
-                          data?.image
-                            ? data?.image
-                            : "https://i.ibb.co/dtt67mC/avathar.png"
-                        }
-                        width={35}
-                        height={35}
-                      />
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  Driver Data Not Aailable
-                </div>
-              )}
+                    All
+                  </DropdownItem>
+                  <DropdownItem
+                    className="text-black dark:text-white"
+                    key="active"
+                  >
+                    Active
+                  </DropdownItem>
+                  <DropdownItem
+                    className="text-black dark:text-white"
+                    key="inactive"
+                  >
+                    Inactive
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button variant="bordered">Sort by Date</Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Sort options"
+                  selectedKeys={[sortBy]}
+                  selectionMode="single"
+                  onSelectionChange={(keys) =>
+                    setSortBy(Array.from(keys)[0] as string)
+                  }
+                >
+                  <DropdownItem
+                    className="text-black dark:text-white"
+                    key="newest"
+                  >
+                    Newest
+                  </DropdownItem>
+                  <DropdownItem
+                    className="text-black dark:text-white"
+                    key="oldest"
+                  >
+                    Oldest
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </div>
-          <div className=" inline lg:hidden ">
-            <div className=" grid grid-cols-1 text-black dark:text-white md:grid-cols-2 md:gap-2 ">
-              {driverlist.length > 0 ? (
-                driverlist?.map((data, index) => (
-                  <div>
-                    <div
-                      key={index}
-                      className=" mb-3 grid grid-cols-12 rounded-md border dark:border-slate-800 "
-                    >
-                      <div className=" col-span-4 flex flex-col gap-3 border-r px-2 py-2 text-sm dark:border-slate-800 ">
-                        <p className=" text-black dark:text-white">Name:</p>
-                        <p className=" text-black dark:text-white">Phone:</p>
-                        <p className=" text-black dark:text-white">
-                          email
-                        </p>
-                        <p className=" text-black dark:text-white">
-                          role
-                        </p>
-                        <p className=" text-black dark:text-white">Status:</p>
-                      </div>
-                      <div className=" col-span-8 flex flex-col gap-2 py-2 pl-2 text-sm ">
-                        <p className=" text-black dark:text-white">
-                          {data?.username}
-                        </p>
-                        <p className=" text-black dark:text-white">
-                          {data?.phone}
-                        </p>
-                        <p className=" text-black dark:text-white">
-                          {data?.email}
-                        </p>
-                        <p className=" text-black dark:text-white">
-                          {data?.role}
-                        </p>
-                        <p className=" text-green-500">{data?.status}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
+        </CardHeader>
+        <CardBody className="w-full">
+          <div className="mb-4 flex justify-between">
+            <p className="flex items-center justify-start gap-2 text-sm text-gray-700 dark:text-gray-200">
+              Total Drivers:{" "}
+              {isLoading ? (
+                <Skeleton className="inline-block h-6 w-10 rounded-lg" />
               ) : (
-                <div className=" min-h-screen text-xl font-semibold text-red-600 ">
-                  Driver Not Aailable!
-                </div>
+                driverList.length
               )}
-            </div>
+            </p>
           </div>
-        </div>
-      )}
-    </div>
+          <div className="hidden lg:block">{renderDesktopView()}</div>
+          <div className="lg:hidden">{renderMobileView()}</div>
+        </CardBody>
+        <CardFooter className="flex justify-center">
+          <Pagination
+            total={totalPages}
+            page={currentPage}
+            onChange={(page) => setCurrentPage(page)}
+            showControls
+          />
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 
