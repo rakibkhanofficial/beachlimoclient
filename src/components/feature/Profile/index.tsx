@@ -118,7 +118,7 @@ const ProfileComponent = ({
       const imageTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!imageTypes.includes(file.type)) {
         toast.error(
-          "Invalid file type. Please select a JPEG, PNG, or JPG file."
+          "Invalid file type. Please select a JPEG, PNG, or JPG file.",
         );
       } else {
         const imageUrl = URL.createObjectURL(file);
@@ -141,7 +141,7 @@ const ProfileComponent = ({
             Authorization: `Bearer ${session?.user?.accessToken}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       if (uploadResponse?.data?.statusCode === 200) {
         return uploadResponse?.data?.data?.url;
@@ -243,7 +243,7 @@ const ProfileComponent = ({
   const renderField = (
     icon: React.ReactElement,
     viewContent: React.ReactNode,
-    editContent: React.ReactNode
+    editContent: React.ReactNode,
   ) => (
     <motion.div
       className="flex items-center overflow-hidden"
@@ -271,7 +271,7 @@ const ProfileComponent = ({
 
   const renderBirthdayField = () => (
     <div className="flex items-center">
-      <FaBirthdayCake className="text-default-400 mr-2 flex-shrink-0" />
+      <FaBirthdayCake className="mr-2 flex-shrink-0 text-default-400" />
       <AnimatePresence mode="wait">
         {isEdit ? (
           <motion.div
@@ -307,31 +307,31 @@ const ProfileComponent = ({
   );
 
   const ProfileSkeleton = () => (
-    <div className="w-full">
+    <div className="w-full min-h-screen">
       <Card className="w-full shadow-lg">
-        <CardHeader className="justify-between items-start">
+        <CardHeader className="items-start justify-between">
           <div className="flex gap-5">
-            <Skeleton className="rounded-full w-12 h-12" />
+            <Skeleton className="h-12 w-12 rounded-full" />
             <div className="flex flex-col gap-2">
               <Skeleton className="h-3 w-3/5 rounded-lg" />
               <Skeleton className="h-3 w-4/5 rounded-lg" />
             </div>
           </div>
-          <Skeleton className="rounded-full w-8 h-8" />
+          <Skeleton className="h-8 w-8 rounded-full" />
         </CardHeader>
         <Divider />
         <CardBody>
           <div className="space-y-6">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="flex items-center gap-2">
-                <Skeleton className="rounded-full w-5 h-5" />
+                <Skeleton className="h-5 w-5 rounded-full" />
                 <Skeleton className="h-4 w-4/5 rounded-lg" />
               </div>
             ))}
             <Divider />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Skeleton className="rounded-full w-5 h-5" />
+                <Skeleton className="h-5 w-5 rounded-full" />
                 <Skeleton className="h-4 w-24 rounded-lg" />
               </div>
               <Skeleton className="h-6 w-24 rounded-full" />
@@ -347,14 +347,14 @@ const ProfileComponent = ({
   }
 
   return (
-    <div className=" w-full flex justify-center">
+    <div className="flex min-h-screen w-full justify-center">
       <Card className="w-full shadow-lg">
         <motion.div
           variants={headerVariants}
           initial="view"
           animate={isEdit ? "edit" : "view"}
         >
-          <CardHeader className="justify-between items-start">
+          <CardHeader className="items-start justify-between">
             <AnimatePresence mode="wait">
               <motion.div
                 key={isEdit ? "edit" : "view"}
@@ -363,7 +363,7 @@ const ProfileComponent = ({
                 animate={isEdit ? "edit" : "view"}
                 exit="exit"
                 transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="flex gap-4 w-full"
+                className="flex w-full gap-4"
               >
                 <Avatar
                   isBordered
@@ -399,7 +399,7 @@ const ProfileComponent = ({
                     </label>
                   </>
                 )}
-                <div className="flex flex-col gap-1 items-start justify-center">
+                <div className="flex flex-col items-start justify-center gap-1">
                   <AnimatePresence mode="wait">
                     {isEdit ? (
                       <motion.div
@@ -487,35 +487,35 @@ const ProfileComponent = ({
             transition={{ duration: 0.3 }}
           >
             {renderField(
-              <FaPhone className="text-default-400 mr-2 flex-shrink-0" />,
+              <FaPhone className="mr-2 flex-shrink-0 text-default-400" />,
               <p>{userDetails.phone}</p>,
               <Input
                 name="phone"
                 value={selectedPhone}
                 onChange={(e) => setSelectedPhone(e.target.value)}
                 placeholder="Phone"
-              />
+              />,
             )}
             {renderBirthdayField()}
             {renderField(
-              <FaHome className="text-default-400 mr-2 flex-shrink-0" />,
+              <FaHome className="mr-2 flex-shrink-0 text-default-400" />,
               <p>{userDetails.homeaddress || "Not provided"}</p>,
               <Textarea
                 name="homeaddress"
                 value={selectedHomeAddress || ""}
                 onChange={(e) => setSelectedHomeAddress(e.target.value)}
                 placeholder="Home Address"
-              />
+              />,
             )}
             {renderField(
-              <FaBriefcase className="text-default-400 mr-2 flex-shrink-0" />,
+              <FaBriefcase className="mr-2 flex-shrink-0 text-default-400" />,
               <p>{userDetails.officeadress || "Not provided"}</p>,
               <Textarea
                 name="officeadress"
                 value={selectedOfficeAddress || ""}
                 onChange={(e) => setSelectedOfficeAddress(e.target.value)}
                 placeholder="Office Address"
-              />
+              />,
             )}
             <AnimatePresence>
               {isEdit && (
@@ -542,7 +542,7 @@ const ProfileComponent = ({
             <Divider />
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <FaClock className="text-default-400 mr-2" />
+                <FaClock className="mr-2 text-default-400" />
                 <p className="text-small text-default-400">Member since</p>
               </div>
               <Chip color="primary" variant="flat" size="sm">

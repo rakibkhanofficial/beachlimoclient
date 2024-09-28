@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import HeaderLandingPage from "~@/components/feature/Header";
-import FooterComponent from "~@/components/feature/Footer";
 import ProfileComponent from "~@/components/feature/Profile";
 import { useCustomSession } from "~@/hooks/customSessionhook";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
+import { AdminDashboardLayout } from "~@/components/feature/AdminDashboard/layout/layout";
+import { UserDashboardLayout } from "~@/components/feature/UserDashboard/layout/layout";
+import { DriverDashboardLayout } from "~@/components/feature/DriverDashboard/layout/layout";
 
 type UserDetails = {
   name: string;
@@ -57,20 +58,42 @@ const ProfilePage = () => {
 
   return (
     <div className=" bg-gray-100 text-black dark:bg-slate-900 dark:text-gray-100 ">
-      <div className=" h-16 md:h-10 ">
-        <HeaderLandingPage />
-      </div>
-      <div className="w-full min-h-[70vh] px-2 py-4 lg:p-10 lg:grid lg:grid-cols-2">
-      <ProfileComponent
-        isEditing={isEditing}
-        setIsEditing={setIsEditing}
-        userDetails={userDetails}
-        loading={loading}
-      />
-      </div>
-      <footer className="w-full">
-        <FooterComponent />
-      </footer>
+      {session?.user?.role === "Admin" ? (
+        <AdminDashboardLayout
+          children={
+            <ProfileComponent
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+              userDetails={userDetails}
+              loading={loading}
+            />
+          }
+        />
+      ) : session?.user?.role === "Customer" ? (
+        <UserDashboardLayout
+          children={
+            <ProfileComponent
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+              userDetails={userDetails}
+              loading={loading}
+            />
+          }
+        />
+      ) : (
+        session?.user?.role === "Driver" && (
+          <DriverDashboardLayout
+            children={
+              <ProfileComponent
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
+                userDetails={userDetails}
+                loading={loading}
+              />
+            }
+          />
+        )
+      )}
     </div>
   );
 };
