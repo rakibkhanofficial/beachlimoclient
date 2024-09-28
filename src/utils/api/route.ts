@@ -88,6 +88,8 @@ export const endPoints = {
       `car-bookings/admincarbookingdetails/${id}`,
     updateBookingStatusById: (id: number | null | undefined) =>
       `car-bookings/update-status/${id}`,
+    updateAssignDriverById: (id: number | null | undefined) =>
+      `car-bookings/assign-driver/${id}`,
     getAllCustomersList: "user/allcustomerlist",
     getAllDriversList: "user/alldriverlist",
     // old route

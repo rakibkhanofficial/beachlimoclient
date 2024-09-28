@@ -57,9 +57,22 @@ interface Car {
 }
 
 interface User {
+  userId: number;
   name: string;
   email: string;
   phone: string;
+}
+
+interface Driver {
+  userId: number;
+  name: string;
+  email: string;
+  phone: string;
+}
+
+interface DriverListType {
+  userId: number;
+  name: string;
 }
 
 interface BookingData {
@@ -83,6 +96,7 @@ interface BookingData {
   updatedAt: string;
   car: Car;
   user: User;
+  driver: Driver | null;
 }
 
 const AdminBookingDetailsModal = ({
@@ -99,6 +113,33 @@ const AdminBookingDetailsModal = ({
   const [selectedStatus, setSelectedStatus] = useState<
     string | number | boolean | null
   >(null);
+  const [isDriverLoading, setIsDriverLoading] = useState<boolean>(false);
+  const [driverList, setDriverList] = useState<DriverListType[]>([]);
+  const [selectedDriver, setSelectedDriver] = useState<
+    string | number | null | boolean
+  >(null);
+  const [isassigndriver, setIsAssigndriver] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsDriverLoading(true);
+    const fetchDriverList = async () => {
+      try {
+        const response = await getMethod(endPoints?.Admin.getAllDriversList);
+        if (response?.data?.statusCode === 200) {
+          const data = response?.data?.data;
+          setDriverList(data);
+          setIsDriverLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching driver list:", error);
+        setIsDriverLoading(false);
+      } finally {
+        setIsDriverLoading(false);
+      }
+    };
+
+    fetchDriverList();
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -111,6 +152,7 @@ const AdminBookingDetailsModal = ({
           const data = response?.data?.data;
           setBookingDetails(data);
           setSelectedStatus(data.rideStatus);
+          setSelectedDriver(data.driver?.userId);
           setIsLoading(false);
         }
       } catch (error) {
@@ -124,7 +166,7 @@ const AdminBookingDetailsModal = ({
     if (selectedId !== null && selectedId !== undefined) {
       fetchBookingDetails();
     }
-  }, [selectedId]);
+  }, [selectedId, isassigndriver, isStatusUpdate]);
 
   const handleStatusChange = async () => {
     try {
@@ -149,6 +191,29 @@ const AdminBookingDetailsModal = ({
     }
   };
 
+  const handleAssignDriver = async () => {
+    try {
+      setIsAssigndriver(true);
+      const response = await putMethod({
+        route: endPoints?.Admin.updateAssignDriverById(selectedId),
+        updateData: {
+          driverId: selectedDriver,
+        },
+      });
+      if (response?.data?.statusCode === 200) {
+        toast.success("Driver updated successfully!");
+        setIsAssigndriver(false);
+      } else {
+        toast.error("Failed to update Driver. Please try again.");
+        setIsAssigndriver(false);
+      }
+    } catch (error) {
+      console.error("Error updating Driver:", error);
+      toast.error("Failed to update Driver. Please try again.");
+      setIsAssigndriver(false);
+    }
+  };
+
   const BookingInfoTab = () => (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
@@ -169,8 +234,8 @@ const AdminBookingDetailsModal = ({
               {bookingDetails.paymentStatus}
             </p>
           </div>
-          <div className="w-full grid-cols-2 items-center justify-between px-1 lg:grid">
-            <div className="flex gap-3 lg:gap-2">
+          <div className="w-full items-center justify-between px-1 lg:grid">
+            <div className="flex w-full gap-3 lg:gap-2">
               <p className="mb-2 text-lg font-semibold">Ride Status:</p>
               <Chip
                 color={
@@ -184,37 +249,68 @@ const AdminBookingDetailsModal = ({
                 {bookingDetails.rideStatus}
               </Chip>
             </div>
-            <div className="flex w-full flex-col gap-2">
-              <CustomSelect
-                value={selectedStatus}
-                onChange={(newValue) => setSelectedStatus(newValue)}
-                placeholder="Select an option"
-                showSearch={false}
-                allowClear={false}
-                isLoading={false}
-              >
-                {[
-                  "Pending",
-                  "Accepted",
-                  // "Assigned",
-                  "Completed",
-                  "Canceled",
-                ].map((status) => (
-                  <CustomSelect.Option key={status} value={status}>
-                    {status}
-                  </CustomSelect.Option>
-                ))}
-              </CustomSelect>
-              <Button
-                className="w-full"
-                size="sm"
-                color="secondary"
-                disabled={selectedStatus === null}
-                onClick={handleStatusChange}
-                isLoading={isStatusUpdate}
-              >
-                Update Status
-              </Button>
+            <div className="flex w-full gap-2 lg:flex-col">
+              <div className="flex w-full flex-col gap-2">
+                <CustomSelect
+                  value={selectedStatus}
+                  onChange={(newValue) => setSelectedStatus(newValue)}
+                  placeholder="Select an option"
+                  showSearch={false}
+                  allowClear={false}
+                  isLoading={false}
+                >
+                  {[
+                    "Pending",
+                    "Accepted",
+                    "Assigned",
+                    "Completed",
+                    "Canceled",
+                  ].map((status) => (
+                    <CustomSelect.Option key={status} value={status}>
+                      {status}
+                    </CustomSelect.Option>
+                  ))}
+                </CustomSelect>
+                <Button
+                  className="w-full"
+                  size="sm"
+                  color="secondary"
+                  disabled={selectedStatus === null}
+                  onClick={handleStatusChange}
+                  isLoading={isStatusUpdate}
+                >
+                  Update Status
+                </Button>
+              </div>
+              <div className="flex w-full flex-col gap-2">
+                <CustomSelect
+                  value={selectedDriver}
+                  onChange={(newValue) => setSelectedDriver(newValue)}
+                  placeholder="Select Driver"
+                  showSearch={false}
+                  allowClear={false}
+                  isLoading={isDriverLoading}
+                >
+                  {driverList.map((data, index) => (
+                    <CustomSelect.Option
+                      key={data?.userId}
+                      value={data?.userId}
+                    >
+                      {data?.name}
+                    </CustomSelect.Option>
+                  ))}
+                </CustomSelect>
+                <Button
+                  className="w-full"
+                  size="sm"
+                  color="secondary"
+                  disabled={selectedDriver === null}
+                  onClick={handleAssignDriver}
+                  isLoading={isassigndriver}
+                >
+                  Assign Driver
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -274,7 +370,18 @@ const AdminBookingDetailsModal = ({
       </div>
     </div>
   );
-  console.log("ismodalShow", ismodalShow);
+
+  const DriverInfoTab = () => (
+    <div className="space-y-4">
+      <h3 className="mb-4 text-xl font-semibold">Driver Information</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <InfoItem label="Name" value={bookingDetails.driver?.name} />
+        <InfoItem label="Email" value={bookingDetails.driver?.email} />
+        <InfoItem label="Phone" value={bookingDetails.driver?.phone} />
+      </div>
+    </div>
+  );
+
   return (
     <Modal
       backdrop="blur"
@@ -340,6 +447,17 @@ const AdminBookingDetailsModal = ({
                       >
                         <UserInfoTab />
                       </Tab>
+                      <Tab
+                        key="driver"
+                        title={
+                          <div className="flex items-center space-x-2">
+                            <FaUser />
+                            <span>Driver Info</span>
+                          </div>
+                        }
+                      >
+                        <DriverInfoTab />
+                      </Tab>
                     </Tabs>
                   )}
                 </CardBody>
@@ -389,7 +507,7 @@ const InfoCard = ({ icon, title, content, link }: infoCardType) => (
 );
 
 type selectItemProps = {
-  value: string;
+  value: string | undefined;
   label: React.ReactNode;
 };
 
