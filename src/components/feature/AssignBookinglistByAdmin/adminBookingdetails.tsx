@@ -234,7 +234,7 @@ const AdminBookingDetailsModal = ({
               {bookingDetails.paymentStatus}
             </p>
           </div>
-          <div className="w-full items-center justify-between px-1 lg:grid">
+          <div className="w-full items-center justify-between px-1 ">
             <div className="flex w-full gap-3 lg:gap-2">
               <p className="mb-2 text-lg font-semibold">Ride Status:</p>
               <Chip
@@ -249,7 +249,7 @@ const AdminBookingDetailsModal = ({
                 {bookingDetails.rideStatus}
               </Chip>
             </div>
-            <div className="flex w-full gap-2 lg:flex-col">
+            <div className="flex w-full gap-2 lg:flex-row">
               <div className="flex w-full flex-col gap-2">
                 <CustomSelect
                   value={selectedStatus}
