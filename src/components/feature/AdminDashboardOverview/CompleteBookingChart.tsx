@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Chart, { type Props } from "react-apexcharts";
 import { Skeleton } from "@nextui-org/react";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
-import { formatDate } from "~@/utils/formatdate";
+import ChartComponent from "~@/components/elements/CustomChart";
 
 export type completeBookingchartType = {
   id: number;
@@ -12,136 +11,44 @@ export type completeBookingchartType = {
 };
 
 const CompleteBookingChart = () => {
-    const [completeBookingcount, setCompleteBookingcount] = useState<completeBookingchartType[]>(
-      [],
-    );
-    const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => {
-      const fetchDailyCompleteBookingycount = async () => {
-        try {
-          setLoading(true);
-          const response = await getMethod(
-            endPoints.Admin.getTotalCompletebookingDaily,
-          );
-          const responseData = response?.data?.data as completeBookingchartType[];
-          setCompleteBookingcount(responseData);
-        } catch (error) {
-          setLoading(false);
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      };
 
-     void fetchDailyCompleteBookingycount();
-    }, []);
-
-  const seriesData = completeBookingcount?.map((item) => item.count);
-  const categoriesxaxis = completeBookingcount?.length;
-  // const indexArray = [...Array(categoriesxaxis)]?.map((_, index) => index + 1);
-  const DateArray = completeBookingcount?.map((item, index) => formatDate(item?.day))
-
-  const state: Props["series"] = [
-    {
-      data: seriesData,
-    },
+  const monthlySalesData = [
+    { x: "Jan", y: 5000 },
+    { x: "Feb", y: 6200 },
+    { x: "Mar", y: 7800 },
+    { x: "Apr", y: 5500 },
+    { x: "May", y: 6800 },
+    { x: "Jun", y: 7400 },
   ];
 
-  const options: Props["options"] = {
-    chart: {
-      type: "area",
-      animations: {
-        easing: "linear",
-        speed: 300,
-      },
-      sparkline: {
-        enabled: false,
-      },
-      brush: {
-        enabled: false,
-      },
-      id: "basic-bar",
-      fontFamily: "Inter, sans-serif",
-      foreColor: "red",
-      stacked: true,
-      toolbar: {
-        show: false,
-      },
-    },
-
-    xaxis: {
-      categories: DateArray,
-      labels: {
-        style: {
-          colors: "green",
-          fontFamily: "Inter, sans-serif",
-        },
-      },
-      axisBorder: {
-        color: "gray",
-      },
-      axisTicks: {
-        color: "blue",
-      },
-    },
-
-    yaxis: {
-      labels: {
-        style: {
-          colors: "Blue",
-          fontFamily: "Inter, sans-serif",
-        },
-      },
-    },
-
-    tooltip: {
-      enabled: false,
-    },
-
-    subtitle: {
-      align: "center",
-    },
-
-    grid: {
-      show: true,
-      borderColor: "gray",
-      strokeDashArray: 0,
-      position: "back",
-    },
-    stroke: {
-      curve: "smooth",
-      fill: {
-        colors: ["green"],
-      },
-    },
+  const pieDonutData = {
+    labels: ["Category A", "Category B", "Category C"],
+    values: [30, 40, 30],
   };
 
   return (
-    <>
-      <div>
-        <div id="chart">
-          {loading ? (
-            <div>
-              <Skeleton className="mb-2 h-3 w-3/5 rounded-lg" />
-              <Skeleton className="h-3 w-3/5 rounded-lg" />
-            </div>
-          ) : (
-            <div>
-              <Chart
-                options={options}
-                series={state}
-                type="area"
-                height={425}
-              />
-              <h1 className=" text-center ">
-                Complete Booking Last {categoriesxaxis} Days
-              </h1>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+    <div className="w-full lg:flex">
+      <ChartComponent
+        loading={loading}
+        data={monthlySalesData}
+        pieDonutData={pieDonutData}
+        type="area"
+        title="Monthly Sales Performance"
+        xAxisTitle="Month"
+        yAxisTitle="Sales ($)"
+      />
+      <ChartComponent
+        loading={loading}
+        data={monthlySalesData}
+        pieDonutData={pieDonutData}
+        type="pie"
+        title="Monthly Sales Performance"
+        xAxisTitle="Month"
+        yAxisTitle="Sales ($)"
+      />
+    </div>
   );
 };
 

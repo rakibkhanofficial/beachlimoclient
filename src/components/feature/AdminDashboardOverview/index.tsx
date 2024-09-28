@@ -43,7 +43,7 @@ const AdminDashbaordOverView = () => {
   }, []);
 
   return (
-    <div className=" flex flex-col gap-5 bg-white p-4 text-black dark:bg-black dark:text-white ">
+    <div className=" flex w-full flex-col gap-5 bg-white p-4 text-black dark:bg-black dark:text-white ">
       <div className=" my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 ">
         <Card className="w-full bg-[#519921] px-2 py-8 text-white shadow-md shadow-[#afafaf] dark:shadow-slate-700 ">
           <CardBody>
@@ -65,8 +65,7 @@ const AdminDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalCompleteBookingdata}
+                    end={totalBooking?.totalCompleteBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -95,8 +94,7 @@ const AdminDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalAssignedBookingdata}
+                    end={totalBooking?.totalAssignedBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -125,8 +123,7 @@ const AdminDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalCanceledBookingdata}
+                    end={totalBooking?.totalCanceledBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -155,8 +152,7 @@ const AdminDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalPendingBookingdata}
+                    end={totalBooking?.totalPendingBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -166,7 +162,7 @@ const AdminDashbaordOverView = () => {
           </CardBody>
         </Card>
       </div>
-      <div className=" my-4 rounded-lg border border-gray-300">
+      <div className="my-4 w-full">
         <CompleteBookingCharts />
       </div>
     </div>
