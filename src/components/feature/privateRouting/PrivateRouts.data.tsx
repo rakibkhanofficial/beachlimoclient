@@ -7,7 +7,6 @@ import { FaSitemap } from "react-icons/fa6";
 import { FcAcceptDatabase } from "react-icons/fc";
 
 export const routes: any = {
-
   admin: [
     {
       label: "Main menu",
@@ -22,14 +21,6 @@ export const routes: any = {
         },
         {
           id: "2",
-          path: "/adminallrentdata",
-          linkName: "All Booking List",
-          icon: <MdDashboardCustomize fontSize="1rem" />,
-          component: <></>,
-          subRoutes: [],
-        },
-        {
-          id: "3",
           path: "/adminpendingbookinglist",
           linkName: "Pending Booking List",
           icon: <CiBoxList fontSize="1rem" />,
@@ -37,7 +28,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "4",
+          id: "3",
           path: "/acceptedbookinglistbyadmin",
           linkName: "Accepted Booking List",
           icon: <CiBoxList fontSize="1rem" />,
@@ -45,7 +36,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "5",
+          id: "4",
           path: "/assignbookinglistbyadmin",
           linkName: "Assigned Booking List",
           icon: <FcAcceptDatabase fontSize="1rem" />,
@@ -53,7 +44,7 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "6",
+          id: "5",
           path: "/admincompletebookinglist",
           linkName: "Complete Booking List",
           icon: <FcSupport fontSize="1rem" />,
@@ -61,10 +52,18 @@ export const routes: any = {
           subRoutes: [],
         },
         {
-          id: "7",
+          id: "6",
           path: "/admincancelbookinglist",
           linkName: "Cancel Booking List",
           icon: <FcSupport fontSize="1rem" />,
+          component: <></>,
+          subRoutes: [],
+        },
+        {
+          id: "7",
+          path: "/adminallrentdata",
+          linkName: "All Booking List",
+          icon: <MdDashboardCustomize fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
         },
@@ -227,11 +226,10 @@ export const routes: any = {
           icon: <GiAutoRepair fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
-        }
+        },
       ],
     },
   ],
-
 };
 
 export const getRoutesByRole = (role: string) => {

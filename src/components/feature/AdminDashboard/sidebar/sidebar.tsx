@@ -6,16 +6,16 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useSidebarContext } from "../layout/layout-context";
 import { GiAutoRepair } from "react-icons/gi";
-import { useSession } from "next-auth/react";
 import { getRoutesByRole } from "../../privateRouting/PrivateRouts.data";
 import Link from "next/link";
+import { ScrollShadow } from "@nextui-org/react";
+import { useCustomSession } from "~@/hooks/customSessionhook";
 
 const SidebarWrapper = () => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
-  const { data: session } = useSession();
+  const { session } = useCustomSession();
 
- // @ts-expect-error type error is not solved
   const filteredRoutes = getRoutesByRole(session?.user?.role ?? "---");
 
   return (
@@ -28,7 +28,7 @@ const SidebarWrapper = () => {
       ) : null}
       <div
         className={`fixed h-full  transition-transform ${
-          collapsed ? "ml-0 translate-x-0" : "-translate-x-full"
+          collapsed ? "ml-0 translate-x-0 overflow-y-auto" : "-translate-x-full"
         } z-[202] w-64 shrink-0 flex-col border-divider  bg-white px-3  py-6 border-r-1 dark:bg-gray-950 md:static md:ml-0 md:flex md:h-screen md:translate-x-0`}
       >
         <div className="flex items-center justify-center">
@@ -42,8 +42,7 @@ const SidebarWrapper = () => {
           />
         </div>
         <Link href="/" className=" text-center cursor-pointer text-xl text-black dark:text-white font-bold ">Beach Limo</Link>
-        <div className="flex h-full overflow-y-scroll flex-col justify-between">
-          <div className="mt-6 flex flex-col gap-4 px-2">
+        <ScrollShadow className="flex h-full custom-scrollbar flex-col justify-between">
             {filteredRoutes &&
               filteredRoutes?.length > 0 &&
               filteredRoutes.map((item: any, index: number) => (
@@ -72,8 +71,7 @@ const SidebarWrapper = () => {
                   </SidebarMenu>
                 </div>
               ))}
-          </div>
-        </div>
+        </ScrollShadow>
       </div>
     </aside>
   );

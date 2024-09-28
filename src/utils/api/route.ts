@@ -73,7 +73,17 @@ export const endPoints = {
   },
   Admin: {
     getRentAllforAdmin: (page: number, limit: number) =>
-      `car-bookings/admincarBookinlist/${page}/${limit}`,
+      `car-bookings/admincarbookinglist/${page}/${limit}`,
+    getRentAllPendingforAdmin: (page: number, limit: number) =>
+      `car-bookings/admincarbookingpendinglist/${page}/${limit}`,
+    getRentAllAcceptedforAdmin: (page: number, limit: number) =>
+      `car-bookings/admincarbookingacceptedlist/${page}/${limit}`,
+    getRentAllAssignedforAdmin: (page: number, limit: number) =>
+      `car-bookings/admincarbookingassignedlist/${page}/${limit}`,
+    getRentAllCompleteforAdmin: (page: number, limit: number) =>
+      `car-bookings/admincarbookingcompletelist/${page}/${limit}`,
+    getRentAllCanceledforAdmin: (page: number, limit: number) =>
+      `car-bookings/admincarbookingcanceledlist/${page}/${limit}`,
     getBookingDetails: (id: number | null | undefined) =>
       `car-bookings/admincarbookingdetails/${id}`,
     updateBookingStatusById: (id: number | null | undefined) =>
