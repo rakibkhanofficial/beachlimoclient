@@ -106,6 +106,18 @@ export const endPoints = {
     getTotalCompletebookingDaily: "admin/analytics/dailycompletebooking",
   },
   Driver: {
+    getRentAllAssignedforDriver: (page: number, limit: number) =>
+      `car-bookings/carbookingassignedlistfordriver/${page}/${limit}`,
+    getRentAllCompleteforDriver: (page: number, limit: number) =>
+      `car-bookings/carbookingcompletelistfordriver/${page}/${limit}`,
+    getRentAllCanceledforDriver: (page: number, limit: number) =>
+      `car-bookings/carbookingcnceledlistfordriver/${page}/${limit}`,
+    getBookingDetails: (id: number | null | undefined) =>
+      `car-bookings/carbookingdetailsfordriver/${id}`,
+    updateBookingStatusById: (id: number | null | undefined) =>
+      `car-bookings/update-status/${id}`,
+
+    // old api
     getAssignBookingList: (id: string) =>
       `driver/driverassignedrentaldata/${id}`,
     updateStatusByDriver: (id: string) => `driver/driverrental/status/${id}`,

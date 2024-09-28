@@ -107,9 +107,9 @@ export const UserDropdown = () => {
               <DropdownItem href="/admindashboard" key="dashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
-            ) : pathname === "/driverdashboard" &&
-              session?.user?.role !== "Driver" ? (
-              <DropdownItem href="/driverdashboar">
+            ) : pathname !== "/driverdashboard" &&
+              session?.user?.role === "Driver" ? (
+              <DropdownItem href="/driverdashboard">
                 <p className=" text-black dark:text-white "> Go to Dashbaord</p>
               </DropdownItem>
             ) : (

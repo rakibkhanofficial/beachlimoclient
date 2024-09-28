@@ -206,7 +206,7 @@ export const routes: any = {
         {
           id: "2",
           path: "/driverassignbookinglist",
-          linkName: " Assign Booking List",
+          linkName: " Assigned Booking List",
           icon: <GiAutoRepair fontSize="1rem" />,
           component: <></>,
           subRoutes: [],
