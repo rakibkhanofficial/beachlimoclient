@@ -1,52 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { Skeleton } from "@nextui-org/react";
 import { getMethod } from "~@/utils/api/getMethod";
 import { endPoints } from "~@/utils/api/route";
 import ChartComponent from "~@/components/elements/CustomChart";
 
-export type completeBookingchartType = {
-  id: number;
-  day: string;
-  count: number;
+// Type for monthlyBookingData
+type MonthlyBookingData = { x: string; y: number };
+
+// Type for pieDonutData
+type PieDonutData = {
+  labels: string[];
+  values: number[];
 };
 
 const CompleteBookingChart = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [monthlyBookingData, setMonthlyBookingData] = useState<
+    MonthlyBookingData[]
+  >([]);
+  const [pieDonutData, setPieDonutData] = useState<PieDonutData>(
+    {} as PieDonutData,
+  );
 
-
-  const monthlySalesData = [
-    { x: "Jan", y: 5000 },
-    { x: "Feb", y: 6200 },
-    { x: "Mar", y: 7800 },
-    { x: "Apr", y: 5500 },
-    { x: "May", y: 6800 },
-    { x: "Jun", y: 7400 },
-  ];
-
-  const pieDonutData = {
-    labels: ["Category A", "Category B", "Category C"],
-    values: [30, 40, 30],
-  };
+  useEffect(() => {
+    setLoading(true);
+    const fetchBookingData = async () => {
+      try {
+        const response = await getMethod(endPoints.Admin.getBookingData);
+        if (response?.data?.statusCode === 200) {
+          setMonthlyBookingData(response?.data?.data?.monthlyBookingData);
+          setPieDonutData(response?.data?.data?.pieDonutData);
+        }
+      } catch (error) {
+        console.error("Error fetching booking data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    void fetchBookingData();
+  }, []);
 
   return (
     <div className="w-full lg:flex">
       <ChartComponent
         loading={loading}
-        data={monthlySalesData}
+        data={monthlyBookingData}
         pieDonutData={pieDonutData}
         type="area"
-        title="Monthly Sales Performance"
+        title="Monthly Booking Performance"
         xAxisTitle="Month"
-        yAxisTitle="Sales ($)"
+        yAxisTitle="Booking ($)"
       />
       <ChartComponent
         loading={loading}
-        data={monthlySalesData}
+        data={monthlyBookingData}
         pieDonutData={pieDonutData}
         type="pie"
-        title="Monthly Sales Performance"
+        title="Monthly Booking By Service Type"
         xAxisTitle="Month"
-        yAxisTitle="Sales ($)"
+        yAxisTitle="Booking ($)"
       />
     </div>
   );

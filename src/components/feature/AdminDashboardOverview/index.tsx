@@ -9,7 +9,7 @@ const CompleteBookingCharts = dynamic(() => import("./CompleteBookingChart"), {
   ssr: false,
 });
 
-type IuserBookingListType = {
+interface IuserBookingListType  {
   totalPendingBookingdata: number | undefined;
   totalAcceptedBookingdata: number | undefined;
   totalAssignedBookingdata: number | undefined;
@@ -28,7 +28,7 @@ const AdminDashbaordOverView = () => {
     const fetchTotalBookings = async () => {
       try {
         const response = await getMethod(
-          endPoints.Admin.getTotalBookingbyAdmin,
+          endPoints.Admin.getAllTotalBookings,
         );
         if (response?.data?.statusCode === 200) {
           setTotalBooking(response?.data?.data as IuserBookingListType);

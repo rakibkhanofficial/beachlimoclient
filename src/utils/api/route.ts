@@ -92,6 +92,8 @@ export const endPoints = {
       `car-bookings/assign-driver/${id}`,
     getAllCustomersList: "user/allcustomerlist",
     getAllDriversList: "user/alldriverlist",
+    getBookingData: "dashboard/admin",
+    getAllTotalBookings: 'dashboard/admin/booking-list-type',
     // old route
     getAllPendinBooking: "admin/pendingrentadata",
     updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`,
