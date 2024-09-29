@@ -32,8 +32,9 @@ import BookingStatus from "./bookingStatus";
 import ListSkeleton from "../commontableListSkeleton/tableListskeleton";
 import { motion } from "framer-motion";
 import { IoIosSearch } from "react-icons/io";
-import { FaCheckSquare, FaEye, FaFilter } from "react-icons/fa";
+import { FaCarSide, FaCheckSquare, FaEye, FaFilter } from "react-icons/fa";
 import { formatDate } from "~@/utils/formatdate";
+import UserBookingDetailsModal from "./userBookingdetails";
 
 type userBookingListType = {
   id: number;
@@ -63,10 +64,13 @@ const BookingListComponent = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 10;
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [statusmodalShow, setModalShow] = useState(false);
+  const [statusmodalShow, setStausModalShow] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [status, setStatus] = useState("");
   const [sortBy, setSortBy] = useState<string>("newest");
+  // Details modal
+  const [selectedId, setSelectedId] = useState<number | null | undefined>(null);
+  const [ismodalShow, setModalShow] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserBookingList = async () => {
@@ -154,7 +158,7 @@ const BookingListComponent = () => {
 
   const handleOpenStatusModal = (status: string) => {
     setStatus(status);
-    setModalShow(true);
+    setStausModalShow(true);
   };
 
   if (isLoading) {
@@ -318,17 +322,30 @@ const BookingListComponent = () => {
                     </div>
                   </TableCell>
                   <TableCell>${product.totalBookingPrice}</TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-2">
                     <Tooltip content="View Details">
                       <Button
                         color="primary"
+                        size="sm"
+                        onPress={() => {
+                          setSelectedId(product?.id);
+                          setModalShow(true);
+                        }}
+                        isIconOnly
+                      >
+                        <FaEye />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="View Status">
+                      <Button
+                        color="success"
                         size="sm"
                         onPress={() => {
                           handleOpenStatusModal(product?.rideStatus);
                         }}
                         isIconOnly
                       >
-                        <FaEye />
+                        <FaCarSide />
                       </Button>
                     </Tooltip>
                   </TableCell>
@@ -350,7 +367,7 @@ const BookingListComponent = () => {
       <Modal
         backdrop="blur"
         isOpen={statusmodalShow}
-        onOpenChange={() => setModalShow(!statusmodalShow)}
+        onOpenChange={() => setStausModalShow(!statusmodalShow)}
         placement="auto"
         size="4xl"
       >
@@ -366,7 +383,7 @@ const BookingListComponent = () => {
               <Button
                 color="danger"
                 variant="light"
-                onPress={() => setModalShow(!statusmodalShow)}
+                onPress={() => setStausModalShow(!statusmodalShow)}
               >
                 Close
               </Button>
@@ -374,6 +391,11 @@ const BookingListComponent = () => {
           </>
         </ModalContent>
       </Modal>
+      <UserBookingDetailsModal
+        ismodalShow={ismodalShow}
+        setModalShow={setModalShow}
+        selectedId={selectedId}
+      />
     </motion.div>
   );
 };

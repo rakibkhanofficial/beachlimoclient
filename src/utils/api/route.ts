@@ -72,6 +72,8 @@ export const endPoints = {
     confirmPayment: "/payments/confirm-payment",
     getBookingData: "dashboard/user",
     getAllTotalBookings: "dashboard/user/booking-list-type",
+    getCarBookingdetailsById: (Id: number | null | undefined) =>
+      `car-bookings/carbookingdetails/${Id}`,
   },
   Admin: {
     getRentAllforAdmin: (page: number, limit: number) =>
