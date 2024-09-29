@@ -45,6 +45,9 @@ const customerDashbaordOverView = () => {
 
   return (
     <div className=" flex flex-col gap-5 bg-white p-4 text-black dark:bg-black dark:text-white ">
+      <h1 className=" text-center text-2xl font-bold lg:text-3xl 2xl:text-4xl ">
+        Dashboard OverView
+      </h1>
       <div className=" my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 ">
         <Card className="w-full bg-[#519921] px-2 py-8 text-white shadow-md shadow-[#afafaf] dark:shadow-slate-700 ">
           <CardBody>

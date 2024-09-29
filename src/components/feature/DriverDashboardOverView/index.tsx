@@ -1,5 +1,4 @@
 import { Card, CardBody, Skeleton } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
@@ -17,7 +16,6 @@ type IuserBookingListType = {
 };
 
 const DriverDashboardOverview = () => {
-  const { data: session } = useSession();
   const [totalBookings, setTotalBookings] = useState<
     IuserBookingListType | undefined
   >({} as IuserBookingListType);
@@ -25,12 +23,10 @@ const DriverDashboardOverview = () => {
 
   useEffect(() => {
     setLoading(true);
-    // @ts-expect-error type error is not solved
-    const UserId = session?.user?._id;
     const fetchTotalBookings = async () => {
       try {
         const response = await getMethod(
-          endPoints?.Driver?.getTotalBooking(UserId),
+          endPoints?.Driver?.getAllTotalBookings,
         );
         if (response?.data?.statusCode === 200) {
           setTotalBookings(response?.data?.data as IuserBookingListType);
@@ -42,11 +38,13 @@ const DriverDashboardOverview = () => {
       }
     };
     void fetchTotalBookings();
-    // @ts-expect-error type error is not solved
-  }, [session?.user?._id]);
+  }, []);
 
   return (
     <div className=" flex flex-col gap-5 bg-white p-4 text-black dark:bg-black dark:text-white ">
+      <h1 className=" text-center text-2xl font-bold lg:text-3xl 2xl:text-4xl ">
+        Dashboard OverView
+      </h1>
       <div className=" my-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 ">
         <Card className="w-full bg-[#519921] px-2 py-8 text-white shadow-md shadow-[#afafaf] dark:shadow-slate-700 ">
           <CardBody>
@@ -68,8 +66,7 @@ const DriverDashboardOverview = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBookings?.totalCompleteBookingdata}
+                    end={totalBookings?.totalCompleteBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -98,8 +95,7 @@ const DriverDashboardOverview = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBookings?.totalAssignedBookingdata}
+                    end={totalBookings?.totalAssignedBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -128,8 +124,7 @@ const DriverDashboardOverview = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBookings?.totalCanceledBookingdata}
+                    end={totalBookings?.totalCanceledBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -139,7 +134,7 @@ const DriverDashboardOverview = () => {
           </CardBody>
         </Card>
       </div>
-      <div className=" my-4 rounded-lg border border-gray-300 dark:border-gray-700">
+      <div className=" my-4 ">
         <CompleteBookingCharts />
       </div>
     </div>

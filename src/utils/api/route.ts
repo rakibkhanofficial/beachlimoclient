@@ -71,7 +71,7 @@ export const endPoints = {
     createBookingAfterPayment: "/payments/create-booking-after-payment",
     confirmPayment: "/payments/confirm-payment",
     getBookingData: "dashboard/user",
-    getAllTotalBookings: 'dashboard/user/booking-list-type',
+    getAllTotalBookings: "dashboard/user/booking-list-type",
   },
   Admin: {
     getRentAllforAdmin: (page: number, limit: number) =>
@@ -95,7 +95,7 @@ export const endPoints = {
     getAllCustomersList: "user/allcustomerlist",
     getAllDriversList: "user/alldriverlist",
     getBookingData: "dashboard/admin",
-    getAllTotalBookings: 'dashboard/admin/booking-list-type',
+    getAllTotalBookings: "dashboard/admin/booking-list-type",
     // old route
     getAllPendinBooking: "admin/pendingrentadata",
     updatestatusbyrentalid: (id: string) => `admin/rental/${id}/status`,
@@ -120,6 +120,8 @@ export const endPoints = {
       `car-bookings/carbookingdetailsfordriver/${id}`,
     updateBookingStatusById: (id: number | null | undefined) =>
       `car-bookings/update-status/${id}`,
+    getBookingData: "dashboard/driver",
+    getAllTotalBookings: "dashboard/driver/booking-list-type",
 
     // old api
     getAssignBookingList: (id: string) =>

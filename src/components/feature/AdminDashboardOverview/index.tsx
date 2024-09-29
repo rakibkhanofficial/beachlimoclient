@@ -9,13 +9,13 @@ const CompleteBookingCharts = dynamic(() => import("./CompleteBookingChart"), {
   ssr: false,
 });
 
-interface IuserBookingListType  {
+interface IuserBookingListType {
   totalPendingBookingdata: number | undefined;
   totalAcceptedBookingdata: number | undefined;
   totalAssignedBookingdata: number | undefined;
   totalCompleteBookingdata: number | undefined;
   totalCanceledBookingdata: number | undefined;
-};
+}
 
 const AdminDashbaordOverView = () => {
   const [totalBooking, setTotalBooking] = useState<
@@ -27,9 +27,7 @@ const AdminDashbaordOverView = () => {
     setLoading(true);
     const fetchTotalBookings = async () => {
       try {
-        const response = await getMethod(
-          endPoints.Admin.getAllTotalBookings,
-        );
+        const response = await getMethod(endPoints.Admin.getAllTotalBookings);
         if (response?.data?.statusCode === 200) {
           setTotalBooking(response?.data?.data as IuserBookingListType);
         }
@@ -44,6 +42,9 @@ const AdminDashbaordOverView = () => {
 
   return (
     <div className=" flex w-full flex-col gap-5 bg-white p-4 text-black dark:bg-black dark:text-white ">
+      <h1 className=" text-center text-2xl font-bold lg:text-3xl 2xl:text-4xl ">
+        Dashboard OverView
+      </h1>
       <div className=" my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 ">
         <Card className="w-full bg-[#519921] px-2 py-8 text-white shadow-md shadow-[#afafaf] dark:shadow-slate-700 ">
           <CardBody>
