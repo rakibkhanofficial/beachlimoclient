@@ -1,5 +1,4 @@
 import { Card, CardBody, Skeleton } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
@@ -19,7 +18,6 @@ type IuserBookingListType = {
 };
 
 const customerDashbaordOverView = () => {
-  const { data: session } = useSession();
   const [totalBooking, setTotalBooking] = useState<
     IuserBookingListType | undefined
   >({} as IuserBookingListType);
@@ -27,12 +25,10 @@ const customerDashbaordOverView = () => {
 
   useEffect(() => {
     setLoading(true);
-    // @ts-expect-error type error is not solved
-    const UserId = session?.user?._id;
     const fetchTotalBookings = async () => {
       try {
         const response = await getMethod(
-          endPoints.Customer.getAllBooking(UserId),
+          endPoints.Customer.getAllTotalBookings,
         );
         if (response?.data?.statusCode === 200) {
           setTotalBooking(response?.data?.data as IuserBookingListType);
@@ -45,8 +41,7 @@ const customerDashbaordOverView = () => {
       }
     };
     void fetchTotalBookings();
-    // @ts-expect-error type error is not solved
-  }, [session?.user?._id]);
+  }, []);
 
   return (
     <div className=" flex flex-col gap-5 bg-white p-4 text-black dark:bg-black dark:text-white ">
@@ -71,8 +66,7 @@ const customerDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalCompleteBookingdata}
+                    end={totalBooking?.totalCompleteBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -101,8 +95,7 @@ const customerDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalAssignedBookingdata}
+                    end={totalBooking?.totalAssignedBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -131,8 +124,7 @@ const customerDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalCanceledBookingdata}
+                    end={totalBooking?.totalCanceledBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -161,8 +153,7 @@ const customerDashbaordOverView = () => {
                 <div className=" text-end text-5xl font-bold lg:text-center 2xl:text-end ">
                   <CountUp
                     start={0}
-                    // @ts-expect-error type error is not solved
-                    end={totalBooking?.totalPendingBookingdata}
+                    end={totalBooking?.totalPendingBookingdata ?? 0}
                     duration={4}
                     delay={1}
                   />
@@ -172,7 +163,7 @@ const customerDashbaordOverView = () => {
           </CardBody>
         </Card>
       </div>
-      <div className=" my-4 rounded-lg border border-gray-300">
+      <div className=" my-4">
         <CompleteBookingCharts />
       </div>
     </div>

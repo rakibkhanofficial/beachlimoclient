@@ -70,6 +70,8 @@ export const endPoints = {
     createPaymentIntent: "/payments/create-payment-intent",
     createBookingAfterPayment: "/payments/create-booking-after-payment",
     confirmPayment: "/payments/confirm-payment",
+    getBookingData: "dashboard/user",
+    getAllTotalBookings: 'dashboard/user/booking-list-type',
   },
   Admin: {
     getRentAllforAdmin: (page: number, limit: number) =>
