@@ -22,6 +22,7 @@ import {
   Pagination,
   Image,
   Link,
+  Skeleton,
 } from "@nextui-org/react";
 import { convertTo12HourFormat } from "~@/utils/formatetime";
 import ListSkeleton from "../commontableListSkeleton/tableListskeleton";
@@ -260,7 +261,21 @@ const AdminAllBookingListComponent = () => {
               <TableColumn>Booking price</TableColumn>
               <TableColumn>Actions</TableColumn>
             </TableHeader>
-            <TableBody>
+            <TableBody
+              items={paginatedProducts || []}
+              emptyContent={
+                <div className="py-12 text-center">
+                  <p className="text-2xl font-semibold text-gray-500">
+                    Booking Not Available
+                  </p>
+                  <p className="mt-2 text-gray-400">
+                    There are no Booking to display for the selected criteria.
+                  </p>
+                </div>
+              }
+              loadingContent={<Skeleton className="h-12 w-full" />}
+              loadingState={isLoading ? "loading" : "idle"}
+            >
               {paginatedProducts.map((product, index) => (
                 <TableRow
                   key={index}
