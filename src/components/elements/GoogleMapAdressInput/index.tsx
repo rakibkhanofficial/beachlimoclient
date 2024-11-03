@@ -33,7 +33,7 @@ const GoogleMapAddressInput: React.FC<GoogleMapAddressInputProps> = ({
   placeholder,
   onAddressSelect,
   onInputChange,
-  country = "bd",
+  country = "us",
   className = "",
   inputValue,
 }) => {

@@ -164,6 +164,8 @@ const Googlemap = ({
             const marker = new google.maps.Marker({
               position: latLng,
               map: map!,
+              title: "Pickup Location",
+              animation: google.maps.Animation.DROP,
             });
             setPickupMarker(marker);
             handleInputChange("pickupLocation", locationLink);
@@ -172,6 +174,8 @@ const Googlemap = ({
             const marker = new google.maps.Marker({
               position: latLng,
               map: map!,
+              title: "Dropoff Location",
+              animation: google.maps.Animation.DROP,
             });
             setDropoffMarker(marker);
             handleInputChange("dropoffLocation", locationLink);
@@ -210,7 +214,9 @@ const Googlemap = ({
             );
           }
         } else {
-          console.error("Geocode was not successful for the following reason: " + status);
+          console.error(
+            "Geocode was not successful for the following reason: " + status,
+          );
         }
       });
     },
