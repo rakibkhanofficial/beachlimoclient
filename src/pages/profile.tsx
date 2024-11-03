@@ -54,7 +54,7 @@ const ProfilePage = () => {
     if (userId) {
       fetchUserDetails();
     }
-  }, [userId, isEditing]);
+  }, [userId]);
 
   return (
     <div className=" bg-gray-100 text-black dark:bg-slate-900 dark:text-gray-100 ">
