@@ -1,9 +1,9 @@
 import React from "react";
 import { useAppSelector } from "~@/_redux/hooks/hooks";
 import CarSelection from "./step1";
-import LocationSelection from "./step2";
 import OtherInformation from "./step3";
 import CarBookingBycitytovitySucessFull from "./step4";
+import MapSelectLayout from "./step2/Layout";
 
 const SecheduleRideServiceBythehour = () => {
   const step: number = useAppSelector(
@@ -13,7 +13,7 @@ const SecheduleRideServiceBythehour = () => {
   const stepper = () => {
     switch (step) {
       case 1:
-        return <LocationSelection />;
+        return <MapSelectLayout />;
       case 2:
         return <OtherInformation />;
       case 3:

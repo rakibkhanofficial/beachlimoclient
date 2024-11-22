@@ -1,9 +1,9 @@
 import React from "react";
 import { useAppSelector } from "~@/_redux/hooks/hooks";
 import CarSelection from "./step1";
-import LocationSelection from "./step2";
 import OtherInformation from "./step3";
 import CarBookingSucessFull from "./step4";
+import MapSelectLayout from "./step2/Layout";
 
 const AirportTranserServiceComponenet = () => {
   
@@ -14,7 +14,7 @@ const AirportTranserServiceComponenet = () => {
   const stepper = () => {
     switch (step) {
       case 1:
-        return <LocationSelection />;
+        return <MapSelectLayout />;
       case 2:
         return <OtherInformation />;
       case 3:
