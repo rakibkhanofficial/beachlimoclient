@@ -51,13 +51,10 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <HeaderLandingPage />
           <main>
             <Main />
-            <GoToTopButton />
             <WhatsAppChatbot />
           </main>
-          <FooterComponent />
         </>
       )}
     </>
