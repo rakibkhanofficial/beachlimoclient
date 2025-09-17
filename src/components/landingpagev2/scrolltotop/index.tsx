@@ -31,7 +31,7 @@ const ScrollToTop = () => {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       onClick={scrollToTop}
-      className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 flex items-center justify-center"
+      className="fixed bottom-8 left-8 w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 flex items-center justify-center"
       style={{ 
         display: showScrollTop ? 'flex' : 'none'
       }}
